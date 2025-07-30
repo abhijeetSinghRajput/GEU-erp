@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.625rem;
+    --background: 0 0% 100%;
+    --foreground: 0 0.02% 3.94%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0.02% 3.94%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0.02% 3.94%;
+    --primary: 0 0.02% 9.06%;
+    --primary-foreground: 0 0.5% 98.03%;
+    --secondary: 0 0.24% 96.06%;
+    --secondary-foreground: 0 0.02% 9.06%;
+    --muted: 0 0.24% 96.06%;
+    --muted-foreground: 0 0.01% 45.16%;
+    --accent: 0 0.24% 96.06%;
+    --accent-foreground: 0 0.02% 9.06%;
+    --destructive: 351.72 100% 40.53%;
+    --border: 0 0.09% 89.82%;
+    --input: 0 0.09% 89.82%;
+    --ring: 0 0.02% 63.02%;
+    --chart-1: var(--color-blue-300);
+    --chart-2: var(--color-blue-500);
+    --chart-3: var(--color-blue-600);
+    --chart-4: var(--color-blue-700);
+    --chart-5: var(--color-blue-800);
+    --sidebar-background: 0 0.5% 98.03%;
+    --sidebar-foreground: 0 0.02% 3.94%;
+    --sidebar-primary: 0 0.02% 9.06%;
+    --sidebar-primary-foreground: 0 0.5% 98.03%;
+    --sidebar-accent: 0 0.24% 96.06%;
+    --sidebar-accent-foreground: 0 0.02% 9.06%;
+    --sidebar-border: 0 0.09% 89.82%;
+    --sidebar-ring: 0 0.02% 63.02%;
+    --surface: 0 0.37% 97.38%;
+    --surface-foreground: var(--foreground);
+    --code: var(--surface);
+    --code-foreground: var(--surface-foreground);
+    --code-highlight: 0 0.18% 94.76%;
+    --code-number: 0 0.01% 45.61%;
+    --selection: 0 0.02% 3.94%;
+    --selection-foreground: 0 0% 100%;
+  }
+
+  .dark {
+    --background: 0 0.02% 3.94%;
+    --foreground: 0 0.5% 98.03%;
+    --card: 0 0.02% 9.06%;
+    --card-foreground: 0 0.5% 98.03%;
+    --popover: 0 0.01% 14.94%;
+    --popover-foreground: 0 0.5% 98.03%;
+    --primary: 0 0.09% 89.82%;
+    --primary-foreground: 0 0.02% 9.06%;
+    --secondary: 0 0.01% 14.94%;
+    --secondary-foreground: 0 0.5% 98.03%;
+    --muted: 0 0.01% 14.94%;
+    --muted-foreground: 0 0.02% 63.02%;
+    --accent: 0 0.01% 25.05%;
+    --accent-foreground: 0 0.5% 98.03%;
+    --destructive: 358.76deg 100% 69.84%;
+    --border: 0 0% 18.43%;
+    --input: 0 0% 22.75%;
+    --ring: 0 0.01% 45.16%;
+    --chart-1: var(--color-blue-300);
+    --chart-2: var(--color-blue-500);
+    --chart-3: var(--color-blue-600);
+    --chart-4: var(--color-blue-700);
+    --chart-5: var(--color-blue-800);
+    --sidebar-background: 0 0.02% 9.06%;
+    --sidebar-foreground: 0 0.5% 98.03%;
+    --sidebar-primary: 225.34deg 84.1% 48.99%;
+    --sidebar-primary-foreground: 0 0.5% 98.03%;
+    --sidebar-accent: 0 0.01% 14.94%;
+    --sidebar-accent-foreground: 0 0.5% 98.03%;
+    --sidebar-border: 0 0% 18.43%;
+    --sidebar-ring: 0 0.01% 32.2%;
+    --surface: 0 0.02% 8.61%;
+    --surface-foreground: 0 0.02% 63.02%;
+    --code: var(--surface);
+    --code-foreground: var(--surface-foreground);
+    --code-highlight: 0 0.01% 15.04%;
+    --code-number: 0 0.02% 64.48%;
+    --selection: 0 0.09% 89.82%;
+    --selection-foreground: 0 0.02% 9.06%;
+  }
+
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

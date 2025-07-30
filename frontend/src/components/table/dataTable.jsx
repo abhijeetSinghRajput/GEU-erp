@@ -1,0 +1,140 @@
+"use client";
+
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { ChevronDown, ArrowUp, ArrowDown } from "lucide-react"; // Changed imports
+
+const DataTable = ({ data, columns, visibleColumns }) => {
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: 'asc',
+  });
+
+  const requestSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key) {
+      direction = sortConfig.direction === 'asc' ? 'desc' : 'asc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedData = React.useMemo(() => {
+    if (!sortConfig.key) return data;
+    
+    return [...data].sort((a, b) => {
+      // Handle percentage separately as it's a string with % sign
+      if (sortConfig.key === 'Percentage') {
+        const aValue = parseFloat(a[sortConfig.key]);
+        const bValue = parseFloat(b[sortConfig.key]);
+        if (aValue < bValue) {
+          return sortConfig.direction === 'asc' ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return sortConfig.direction === 'asc' ? 1 : -1;
+        }
+        return 0;
+      }
+      
+      if (a[sortConfig.key] < b[sortConfig.key]) {
+        return sortConfig.direction === 'asc' ? -1 : 1;
+      }
+      if (a[sortConfig.key] > b[sortConfig.key]) {
+        return sortConfig.direction === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  }, [data, sortConfig]);
+
+  const getSortIcon = (columnId) => {
+    if (sortConfig.key !== columnId) return null;
+    return sortConfig.direction === 'asc' ? (
+      <ArrowUp className="ml-2 h-3 w-3" />
+    ) : (
+      <ArrowDown className="ml-2 h-3 w-3" />
+    );
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="w-full"
+    >
+      <div className="relative w-full overflow-x-auto">
+        <Table className="border-collapse w-full min-w-min">
+          <TableHeader className="bg-muted/50">
+            <TableRow className="hover:bg-transparent">
+              {columns.map((column) => (
+                <AnimatePresence key={column.id}>
+                  {visibleColumns[column.id] && (
+                    <motion.th
+                      key={column.id}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      transition={{ duration: 0.2 }}
+                      className={`w-min h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0`}
+                    >
+                      {column.sortable ? (
+                        <Button
+                          variant="ghost"
+                          onClick={() => requestSort(column.id)}
+                          className="p-1.5 gap-0.5 h-auto w-full justify-start font-medium"
+                        >
+                          {column.header}
+                          {getSortIcon(column.id)}
+                        </Button>
+                      ) : (
+                        column.header
+                      )}
+                    </motion.th>
+                  )}
+                </AnimatePresence>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {sortedData.map((item, rowIndex) => (
+              <motion.tr
+                key={rowIndex}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: rowIndex * 0.05 }}
+                className="border-t hover:bg-muted/50"
+              >
+                {columns.map((column) => (
+                  <AnimatePresence key={column.id}>
+                    {visibleColumns[column.id] && (
+                      <motion.td
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.2 }}
+                        className={`w-min p-4 align-middle [&:has([role=checkbox])]:pr-0`}
+                      >
+                        {column.id === 'Percentage' 
+                          ? `${item[column.id]}%` 
+                          : item[column.id]}
+                      </motion.td>
+                    )}
+                  </AnimatePresence>
+                ))}
+              </motion.tr>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </motion.div>
+  );
+};
+
+export default DataTable;
