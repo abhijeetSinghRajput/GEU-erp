@@ -9,11 +9,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableFooter,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ArrowUp, ArrowDown } from "lucide-react"; // Changed imports
+import { ChevronDown, ArrowUp, ArrowDown } from "lucide-react";
 
-const DataTable = ({ data, columns, visibleColumns }) => {
+const DataTable = ({ data, columns, visibleColumns, footerData }) => {
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: 'asc',
@@ -31,7 +32,6 @@ const DataTable = ({ data, columns, visibleColumns }) => {
     if (!sortConfig.key) return data;
     
     return [...data].sort((a, b) => {
-      // Handle percentage separately as it's a string with % sign
       if (sortConfig.key === 'Percentage') {
         const aValue = parseFloat(a[sortConfig.key]);
         const bValue = parseFloat(b[sortConfig.key]);
@@ -71,8 +71,8 @@ const DataTable = ({ data, columns, visibleColumns }) => {
       className="w-full"
     >
       <div className="relative w-full overflow-x-auto">
-        <Table className="border-collapse w-full min-w-min">
-          <TableHeader className="bg-muted/50">
+        <Table className="border-collapse w-full">
+          <TableHeader className="bg-muted/50 sticky top-0 z-10">
             <TableRow className="hover:bg-transparent">
               {columns.map((column) => (
                 <AnimatePresence key={column.id}>
@@ -83,13 +83,13 @@ const DataTable = ({ data, columns, visibleColumns }) => {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -20 }}
                       transition={{ duration: 0.2 }}
-                      className={`w-min h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0`}
+                      className={`px-4 py-3 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0`}
                     >
                       {column.sortable ? (
                         <Button
                           variant="ghost"
                           onClick={() => requestSort(column.id)}
-                          className="p-1.5 gap-0.5 h-auto w-full justify-start font-medium"
+                          className="p-1.5 gap-0.5 h-auto w-full justify-start font-medium hover:bg-muted"
                         >
                           {column.header}
                           {getSortIcon(column.id)}
@@ -103,6 +103,7 @@ const DataTable = ({ data, columns, visibleColumns }) => {
               ))}
             </TableRow>
           </TableHeader>
+          
           <TableBody>
             {sortedData.map((item, rowIndex) => (
               <motion.tr
@@ -119,7 +120,7 @@ const DataTable = ({ data, columns, visibleColumns }) => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.2 }}
-                        className={`w-min p-4 align-middle [&:has([role=checkbox])]:pr-0`}
+                        className={`px-4 py-3 align-middle [&:has([role=checkbox])]:pr-0`}
                       >
                         {column.id === 'Percentage' 
                           ? `${item[column.id]}%` 
@@ -131,6 +132,36 @@ const DataTable = ({ data, columns, visibleColumns }) => {
               </motion.tr>
             ))}
           </TableBody>
+          
+          <TableFooter className="bg-muted/50 sticky bottom-0">
+            <TableRow>
+              {columns.map((column) => {
+                if (!visibleColumns[column.id]) return null;
+                
+                if (['TotalLecture', 'TotalPresent', 'TotalLeave', 'Percentage'].includes(column.id)) {
+                  return (
+                    <TableCell 
+                      key={column.id} 
+                      className="px-4 py-3 font-medium"
+                    >
+                      {column.id === 'Percentage'
+                        ? `${footerData.TotalPercentage}%`
+                        : footerData[column.id]}
+                    </TableCell>
+                  );
+                }
+                
+                return (
+                  <TableCell 
+                    key={column.id} 
+                    className="px-4 py-3"
+                  >
+                    {column.id === 'Subject' ? 'Total' : ''}
+                  </TableCell>
+                );
+              })}
+            </TableRow>
+          </TableFooter>
         </Table>
       </div>
     </motion.div>

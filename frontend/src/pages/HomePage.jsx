@@ -1,9 +1,7 @@
+import Circular from '@/components/circular/Circular';
 import { StudentProfile } from '@/components/profile/StudentProfile'
 import AttandanceTable from '@/components/table/AttandanceTable';
-import DataTable from '@/components/table/dataTable';
-import { useAttendanceStore } from '@/stores/useAttendanceStore'
-import { useStudentStore } from '@/stores/useStudentStore';
-import React, { useEffect } from 'react'
+import React from 'react'
 
 const HomePage = () => {
   
@@ -12,6 +10,7 @@ const HomePage = () => {
     <div>
       <StudentProfile/>   
       <AttandanceTable/>  
+      <Circular/>
     </div>
   )
 }

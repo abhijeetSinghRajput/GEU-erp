@@ -16,6 +16,7 @@ const App = () => {
       <Loader className="animate-spin"/>
     </div>
   }
+
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Routes>

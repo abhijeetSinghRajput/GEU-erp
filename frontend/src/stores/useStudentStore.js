@@ -10,7 +10,6 @@ export const useStudentStore = create((set, get) => ({
     try {
       const res = await axiosInstance.get("/");
       set({student: res.data});
-      console.log(student);
     } catch (error) {
       console.log(error);
     } finally {
