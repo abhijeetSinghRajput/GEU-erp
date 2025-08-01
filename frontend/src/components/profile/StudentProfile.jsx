@@ -367,7 +367,7 @@ export function StudentProfile() {
                                 </div>
                               </dt>
                               <dd className="text-sm">
-                                {student.ABCAccountNo}
+                                {student.DOB}
                               </dd>
                             </motion.div>
 
@@ -379,7 +379,7 @@ export function StudentProfile() {
                                 </div>
                               </dt>
                               <dd className="text-sm">
-                                {student.DOB}
+                                {student.ABCAccountNo}
                               </dd>
                             </motion.div>
 

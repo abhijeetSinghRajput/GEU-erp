@@ -1,12 +1,14 @@
 import { axiosInstance } from "@/lib/axios";
+import { toast } from "sonner";
 import { create } from "zustand";
 
 export const useAttendanceStore = create((set, get)=>({
     attendance: null,
-    isLoadingAttendance: false,
+    isLoadingSubjects: false,
+    isLoadingSubjectDetails: false,
 
-    getAttendance: async({RegID})=>{
-        set({isLoadingAttendance: true});
+    getAllAttendanceSubjects: async({RegID})=>{
+        set({isLoadingSubjects: true});
         try {
             const res = await axiosInstance.get("/attendance", {
                 params: {RegID}
@@ -14,9 +16,25 @@ export const useAttendanceStore = create((set, get)=>({
             set({attendance: res.data});
         } catch (error) {
             set({attendance: null});
+            toast.error(error.message);
             console.log(error);
         } finally{
-            set({isLoadingAttendance: false});
+            set({isLoadingSubjects: false});
+        }
+    },
+
+    getAttendanceBySubject: async(SubjectID, data)=>{
+        set({isLoadingSubjectDetails: true});
+        try {
+            const res = await axiosInstance.post(`/attendance/${SubjectID}`, data);
+            return res.data;
+        } catch (error) {
+            set({attendance: null});
+            console.log(error.message);
+            toast.error(error.message);
+            return null;
+        } finally{
+            set({isLoadingSubjectDetails: false});
         }
     }
 }));

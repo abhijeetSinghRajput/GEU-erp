@@ -13,13 +13,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { ChevronDown, Loader2 } from "lucide-react";
+import { ChevronDown, Clipboard, ClipboardCheck, Loader2, User2 } from "lucide-react";
 import { format, isValid, parseISO } from "date-fns";
 import { Badge } from "../ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import AttendanceCalendar from "../attendanceCalendar/AttendanceCalendar";
 
 const AttandanceTable = () => {
-  const { attendance, getAttendance, isLoadingAttendance } =
-    useAttendanceStore();
+  const { attendance, isLoadingSubjects } = useAttendanceStore();
   const { student } = useStudentStore();
   const [visibleColumns, setVisibleColumns] = useState({
     Subject: true,
@@ -30,14 +36,10 @@ const AttandanceTable = () => {
     TotalLeave: true,
     Percentage: true,
   });
+  const [selectedSubject, setSelectedSubject] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  useEffect(() => {
-    if (student?.RegID) {
-      getAttendance({ RegID: student.RegID });
-    }
-  }, [student?.RegID]);
-
-  if (isLoadingAttendance) {
+  if (isLoadingSubjects) {
     return (
       <div className="flex items-center justify-center h-64">
         <Loader2 className="animate-spin h-8 w-8" />
@@ -54,7 +56,8 @@ const AttandanceTable = () => {
     TotalPercentage = 0,
   } = attendance?.data?.[0] ?? {};
 
-  const hasValidDates = isValid(parseISO(DateFrom)) && isValid(parseISO(DateTo));
+  const hasValidDates =
+    isValid(parseISO(DateFrom)) && isValid(parseISO(DateTo));
 
   const columns = [
     { id: "Subject", header: "Subject", sortable: false },
@@ -73,54 +76,58 @@ const AttandanceTable = () => {
     }));
   };
 
+  const handleRowClick = (subject) => {
+    setSelectedSubject(subject);
+    setIsDialogOpen(true);
+  };
+
   return (
     <div className="max-w-screen-lg mx-auto px-4 sm:px-6 md:px-4 py-2">
       <Card className="overflow-hidden">
-          <div className="sticky top-0 z-10 bg-muted">
-            <div className="p-4 border-b flex justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-3">
-                  <h2 className="text-xl font-semibold">Attendance</h2>
-                  <Badge className={"font-bold text-sm"}>
-                    {TotalPercentage}%
-                  </Badge>
-                </div>
-                {hasValidDates && (
-                  <p className="text-sm text-muted-foreground mt-1">
-                    {format(parseISO(DateFrom), "d MMMM yyyy")} -{" "}
-                    {format(parseISO(DateTo), "d MMMM yyyy")}
-                  </p>
-                )}
+        <div className="sticky top-0 z-10 bg-muted">
+          <div className="p-4 border-b flex justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-3">
+                <h2 className="text-xl font-semibold">Attendance</h2>
+                <Badge className={"font-bold text-sm"}>
+                  {TotalPercentage}%
+                </Badge>
               </div>
-              
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="ml-auto gap-1 bg-input"
-                  >
-                    <span>Columns</span>
-                    <ChevronDown className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-[150px]">
-                  {columns.map((column) => (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={visibleColumns[column.id]}
-                      onCheckedChange={() => toggleColumnVisibility(column.id)}
-                    >
-                      {column.header}
-                    </DropdownMenuCheckboxItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {hasValidDates && (
+                <p className="text-sm text-muted-foreground mt-1">
+                  {format(parseISO(DateFrom), "d MMMM yyyy")} -{" "}
+                  {format(parseISO(DateTo), "d MMMM yyyy")}
+                </p>
+              )}
             </div>
-          </div>
-        <ScrollArea className="w-full whitespace-nowrap">
 
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="ml-auto gap-1 bg-input"
+                >
+                  <span>Columns</span>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-[150px]">
+                {columns.map((column) => (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={visibleColumns[column.id]}
+                    onCheckedChange={() => toggleColumnVisibility(column.id)}
+                  >
+                    {column.header}
+                  </DropdownMenuCheckboxItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
+        <ScrollArea className="w-full whitespace-nowrap">
           <DataTable
             data={attendance?.state || []}
             columns={columns}
@@ -131,11 +138,78 @@ const AttandanceTable = () => {
               TotalLeave,
               TotalPercentage,
             }}
+            onRowClick={handleRowClick}
           />
-          
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </Card>
+
+      {/* Dialog for showing subject details */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="text-2xl">{selectedSubject?.Subject || "Subject Details"}</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4">
+            {selectedSubject && (
+              <div className="flex justify-between items-center">
+                {/* Left side - Subject Code and Faculty */}
+                <div className="space-y-2 text-sm">
+                  <div className="flex gap-2 items-center">
+                    <Clipboard className="text-muted-foreground size-5"/>
+                    <p className="font-medium">{selectedSubject.SubjectCode}</p>
+                  </div>
+                  <div className="flex gap-2 items-center">
+                    <User2 className="text-muted-foreground size-5"/>
+                    <p className="font-medium">{selectedSubject.EMPNAME}</p>
+                  </div>
+                </div>
+
+                {/* Right Side - Circular progress bar */}
+                <div className="relative w-[85px] h-[85px]">
+                  <svg className="w-full h-full" viewBox="0 0 100 100">
+                    {/* Background circle */}
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="45"
+                      fill="none"
+                      stroke="#e5e7eb"
+                      strokeWidth="10"
+                    />
+                    {/* Progress circle */}
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="45"
+                      fill="none"
+                      stroke="#3b82f6" // Blue
+                      strokeWidth="10"
+                      strokeLinecap="round"
+                      strokeDasharray="283" // Circumference of the circle
+                      strokeDashoffset={
+                        283 - (283 * selectedSubject.Percentage) / 100
+                      }
+                      transform="rotate(-90 50 50)" // Start progress from top
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <span className="text-base font-bold">
+                      {selectedSubject.Percentage}%
+                    </span>
+                    <span className="text-muted-foreground text-xs">
+                      {selectedSubject.TotalPresent} / {selectedSubject.TotalLecture} 
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Attendance Calendar at the bottom */}
+            <AttendanceCalendar selectedSubject={selectedSubject} />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

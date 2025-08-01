@@ -68,7 +68,7 @@ const Circular = () => {
         <div>
             <h2 className="text-xl font-semibold">Notices </h2>
         </div>
-      <div className="relative h-[500px] w-full overflow-hidden">
+      <div className="relative min-h-[500px] h-full w-full overflow-hidden">
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
           <AnimatePresence mode="popLayout">
             {visibleCirculars.map((circular, index) => (
@@ -115,7 +115,7 @@ const Circular = () => {
                 }}
               >
                 <Card className="w-full rounded-3xl shadow-lg">
-                  <CardHeader className="flex pb-4 gap-2 flex-row items-center">
+                  <CardHeader className="flex pb-4 gap-2 flex-row items-start">
                     <div
                       className="aspect-square size-14 rounded-2xl text-3xl flex items-center justify-center"
                       style={{

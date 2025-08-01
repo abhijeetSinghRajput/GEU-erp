@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import {
   Table,
   TableBody,
@@ -14,11 +15,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ArrowUp, ArrowDown } from "lucide-react";
 
-const DataTable = ({ data, columns, visibleColumns, footerData }) => {
+const DataTable = ({ data, columns, visibleColumns, footerData, onRowClick }) => {
+  const navigate = useNavigate();
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: 'asc',
   });
+
+
 
   const requestSort = (key) => {
     let direction = 'asc';
@@ -111,7 +115,8 @@ const DataTable = ({ data, columns, visibleColumns, footerData }) => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: rowIndex * 0.05 }}
-                className="border-t hover:bg-muted/50"
+                className="border-t hover:bg-muted/50 cursor-pointer"
+                onClick={()=>onRowClick(item)}
               >
                 {columns.map((column) => (
                   <AnimatePresence key={column.id}>

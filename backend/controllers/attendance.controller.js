@@ -1,7 +1,7 @@
 import { fetchGEU } from "../utils/geuApi.js";
 import qs from "qs";
 
-export const attendanceSubjects = async (req, res) => {
+export const getAllAttendanceSubjects = async (req, res) => {
   const {RegID} = req.query;
   if(!RegID) res.status(400).json({message: "RegId required"});
   try {
@@ -21,6 +21,42 @@ export const attendanceSubjects = async (req, res) => {
   }
 };
 
+
+export const getAttendanceBySubject = async (req, res) => {
+  const { SubjectID } = req.params;
+  
+  if (!SubjectID) return res.status(400).json({ message: "SubjectID required" });
+  
+  const payload = {
+    SubjectID,
+    RegID: req.body.RegID || 0,
+    PeriodAssignID: req.body.PeriodAssignID,
+    TTID: req.body.TTID,
+    LectureTypeID: req.body.LectureTypeID,
+    DateFrom: req.body.DateFrom,
+    DateTo: req.body.DateTo,
+  };
+
+  try {
+    const result = await fetchGEU("/Web_StudentAcademic/FillAttendanceDetail_ostulgn", {
+      customHeaders: {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+      },
+      data: qs.stringify(payload),
+    });
+
+    const state = JSON.parse(result.state || "[]");
+    const data = JSON.parse(result.data || "[]")[0] || {};
+    const dtLecture = JSON.parse(result.dtLecture || "[]");
+
+    res.status(200).json({ state, data, dtLecture });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to fetch attendance details by subject",
+      error: error.message,
+    });
+  }
+};
 
 
 

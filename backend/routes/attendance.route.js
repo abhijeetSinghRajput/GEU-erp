@@ -2,14 +2,17 @@ import express from "express";
 import {
   getFullAttendance,         // NEW: returns all data in one shot
   attendanceDates,
-  attendanceSubjects,
+  getAllAttendanceSubjects,
   getAttendanceTable,
   fetchCourseAttendance,
+  getAttendanceBySubject,
 } from "../controllers/attendance.controller.js";
 
 const router = express.Router();
 
-router.get("/", attendanceSubjects);
+router.get("/", getAllAttendanceSubjects);
+router.post("/:SubjectID", getAttendanceBySubject);
+
 router.get("/dates", attendanceDates);
 router.get("/table/:subjectCode/:startDate/:endDate", getAttendanceTable);
 router.post("/course", fetchCourseAttendance);

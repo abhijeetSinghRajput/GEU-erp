@@ -1,4 +1,5 @@
 import { axiosInstance } from "@/lib/axios";
+import { toast } from "sonner";
 import { create } from "zustand";
 
 export const useStudentStore = create((set, get) => ({
@@ -12,6 +13,7 @@ export const useStudentStore = create((set, get) => ({
       set({student: res.data});
     } catch (error) {
       console.log(error);
+      toast.error(error.message);
     } finally {
       set({ isFetchingProfile: false });
     }
