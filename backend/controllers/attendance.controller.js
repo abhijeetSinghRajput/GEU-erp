@@ -5,13 +5,13 @@ export const getAllAttendanceSubjects = async (req, res) => {
   const {RegID} = req.query;
   if(!RegID) res.status(400).json({message: "RegId required"});
   try {
-    const result = await fetchGEU("/Web_StudentAcademic/GetSubjectDetailStudentAcademicFromLive", {
+    const result = await fetchGEU("/Web_StudentAcademic/GetSubjectDetailStudentAcademicFromLive", req, {
       customHeaders: {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
       },
       data: qs.stringify({ RegID }), 
     });
-
+    
     const state = JSON.parse(result.state || "[]");
     const data = JSON.parse(result.data || "[]");
 
@@ -23,6 +23,7 @@ export const getAllAttendanceSubjects = async (req, res) => {
 
 
 export const getAttendanceBySubject = async (req, res) => {
+  console.log("getAttendanceBySubject");
   const { SubjectID } = req.params;
   
   if (!SubjectID) return res.status(400).json({ message: "SubjectID required" });
@@ -38,7 +39,7 @@ export const getAttendanceBySubject = async (req, res) => {
   };
 
   try {
-    const result = await fetchGEU("/Web_StudentAcademic/FillAttendanceDetail_ostulgn", {
+    const result = await fetchGEU("/Web_StudentAcademic/FillAttendanceDetail_ostulgn", req, {
       customHeaders: {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
       },
@@ -61,8 +62,9 @@ export const getAttendanceBySubject = async (req, res) => {
 
 
 export const attendanceDates = async (req, res) => {
+  console.log("attendanceDates");
   try {
-    const data = await fetchGEU("/Web_StudentAcademic/FillDates", {
+    const data = await fetchGEU("/Web_StudentAcademic/FillDates", req, {
       customHeaders: {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
       },
@@ -76,9 +78,10 @@ export const attendanceDates = async (req, res) => {
 };
 
 export const getAttendanceTable = async (req, res) => {
+  console.log("getAttendanceTable");
   const { subjectCode, startDate, endDate } = req.params;
   try {
-    const data = await fetchGEU("/Web_StudentAcademic/GetStudentAttendanceDetail", {
+    const data = await fetchGEU("/Web_StudentAcademic/GetStudentAttendanceDetail", req, {
       customHeaders: {
         "Content-Type": "application/x-www-form-urlencoded",
         "X-Requested-With": "XMLHttpRequest",
@@ -93,11 +96,12 @@ export const getAttendanceTable = async (req, res) => {
 
 // 🔥 NEW: Full Attendance Data — Dates, Subjects, and Tables
 export const getFullAttendance = async (req, res) => {
+  console.log("getFullAttendance");
   const { startDate, endDate } = req.params;
 
   try {
     // 1. Fetch subject list
-    const subjects = await fetchGEU("/Web_StudentAcademic/GetSubjectDetailStudentAcademicFromLive", {
+    const subjects = await fetchGEU("/Web_StudentAcademic/GetSubjectDetailStudentAcademicFromLive", req, {
       customHeaders: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
@@ -109,7 +113,7 @@ export const getFullAttendance = async (req, res) => {
       subjects.map(async (subject) => {
         const { SubjectCode } = subject;
         try {
-          const detail = await fetchGEU("/Web_StudentAcademic/GetStudentAttendanceDetail", {
+          const detail = await fetchGEU("/Web_StudentAcademic/GetStudentAttendanceDetail", req, {
             customHeaders: {
               "Content-Type": "application/x-www-form-urlencoded",
               "X-Requested-With": "XMLHttpRequest",
@@ -135,6 +139,7 @@ export const getFullAttendance = async (req, res) => {
 
 
 export const fetchCourseAttendance = async (req, res) => {
+  console.log("fetchCourseAttendance");
   try {
     const {
       RegID,
@@ -150,7 +155,7 @@ export const fetchCourseAttendance = async (req, res) => {
       return res.status(400).json({ message: "Missing required parameters." });
     }
 
-    const result = await fetchGEU("/Web_StudentAcademic/FillAttendanceDetail_ostulgn", {
+    const result = await fetchGEU("/Web_StudentAcademic/FillAttendanceDetail_ostulgn", req, {
       customHeaders: {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
       },

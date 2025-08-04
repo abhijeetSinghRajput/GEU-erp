@@ -1,7 +1,7 @@
 import { useAttendanceStore } from "@/stores/useAttendanceStore";
 import React, { useEffect, useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
-import { format, parse } from "date-fns";
+import { format, parse, addMonths, constructNow } from "date-fns";
 import { Check, CheckCircle, Circle, Clock, X, XCircle } from "lucide-react";
 import CalendarSkeleton from "./CalendarSkeleton";
 import { cn } from "@/lib/utils";
@@ -15,6 +15,7 @@ const AttendanceCalendar = ({ selectedSubject }) => {
   const { getAttendanceBySubject, isLoadingSubjectDetails } =
     useAttendanceStore();
   const [date, setDate] = useState(new Date());
+  const [currentMonth, setCurrentMonth] = useState(baseDate); // Track current month
   const [attendanceData, setAttendanceData] = useState(null);
   const { SubjectID, RegID, PeriodAssignID, TTID, LectureTypeID } =
     selectedSubject;
@@ -41,14 +42,15 @@ const AttendanceCalendar = ({ selectedSubject }) => {
         PeriodAssignID,
         TTID,
         LectureTypeID,
-        DateFrom: baseDate.toISOString(),
-        DateTo: endDate.toISOString(),
+        DateFrom: currentMonth.toISOString(),
+        DateTo: addMonths(currentMonth, 1).toISOString(),
       };
       const result = await getAttendanceBySubject(SubjectID, data);
+      console.log(result);
       setAttendanceData(result);
     };
     fetchData();
-  }, [selectedSubject, SubjectID, getAttendanceBySubject]);
+  }, [selectedSubject, SubjectID, getAttendanceBySubject, currentMonth]);
 
   if (isLoadingSubjectDetails) {
     return <CalendarSkeleton />;
@@ -85,7 +87,7 @@ const AttendanceCalendar = ({ selectedSubject }) => {
     // Handle outbound and disabled dates
     if (outside || disabled || hidden) {
       return (
-        <td className={cn("text-muted-foreground", baseClasses)}>{date}</td>
+        <td className={cn("text-muted-foreground", baseClasses)}>{}</td>
       );
     }
 
@@ -112,7 +114,6 @@ const AttendanceCalendar = ({ selectedSubject }) => {
       (lecture) => lecture.AttendanceDate === attendance.AttendanceDate
     );
 
-
     let statusIcon = null;
     let statusBg = "";
     
@@ -126,7 +127,6 @@ const AttendanceCalendar = ({ selectedSubject }) => {
         statusBg="dark:bg-red-900/30 bg-red-500/30";
         break;
       case "L":
-
         break;
       default:
         break;
@@ -153,21 +153,22 @@ const AttendanceCalendar = ({ selectedSubject }) => {
   };
 
   return (
-    <Calendar
-      classNames={"bg-input/30"}
-      mode="single"
-      selected={date}
-      onSelect={setDate}
-      className="rounded-md border w-full bg-input/30"
-      month={baseDate}
-      disabled={(date) =>
-        date < new Date(2025, 6, 1) || date > new Date(2025, 7, 31)
-      }
-      components={{
-        Day: CustomDay,
-      }}
-    />
+    <div className="space-y-4">
+      <Calendar
+        classNames={"bg-input/30"}
+        mode="single"
+        selected={date}
+        onSelect={setDate}
+        className="rounded-md border w-full bg-input/30"
+        month={currentMonth}
+        onMonthChange={setCurrentMonth} // Update month when calendar navigation is used
+        disabled={(date) =>
+          date < new Date(2025, 6, 1) || date > new Date(2025, 7, 31)
+        }
+        components={{
+          Day: CustomDay,
+        }}
+      />
+    </div>
   );
 };
-
-export default AttendanceCalendar;

@@ -1,9 +1,10 @@
 import axios from "axios";
 import { fetchGEU } from "../utils/geuApi.js";
+import qs from "qs";
 
 export const profile = async (req, res) => {
   try {
-    const data = await fetchGEU("/Account/GetStudentDetail");
+    const data = await fetchGEU("/Account/GetStudentDetail", req);
     const student = JSON.parse(data.state)[0];
     res.json(student);
   } catch (err) {
@@ -13,7 +14,7 @@ export const profile = async (req, res) => {
 
 export const results = async (req, res) => {
   try {
-    const data = await fetchGEU("/Account/GetResultIntension");
+    const data = await fetchGEU("/Account/GetResultIntension", req);
     res.json(data);
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch results", error: err.message });
@@ -22,7 +23,7 @@ export const results = async (req, res) => {
 
 export const messages = async (req, res) => {
   try {
-    const data = await fetchGEU("/Account/GetStudentMsgHistory");
+    const data = await fetchGEU("/Account/GetStudentMsgHistory", req);
     res.json(data);
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch messages", error: err.message });
@@ -31,7 +32,7 @@ export const messages = async (req, res) => {
 
 export const dashboardCard = async (req, res) => {
   try {
-    const data = await fetchGEU("/Account/GetModalPopUpSetting");
+    const data = await fetchGEU("/Account/GetModalPopUpSetting", req);
     res.json(data);
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch dashboard card", error: err.message });
@@ -40,7 +41,7 @@ export const dashboardCard = async (req, res) => {
 
 export const circulars = async (req, res) => {
   try {
-    const data = await fetchGEU("/Account/GetCircularIntention");
+    const data = await fetchGEU("/Account/GetCircularIntention", req);
     res.json({
       ...data, 
       circular: JSON.parse(data.circular)
@@ -52,7 +53,7 @@ export const circulars = async (req, res) => {
 
 export const workshops = async (req, res) => {
   try {
-    const data = await fetchGEU("/Account/FillWorkShop");
+    const data = await fetchGEU("/Account/FillWorkShop", req);
     res.json(data);
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch workshops", error: err.message });
@@ -61,7 +62,7 @@ export const workshops = async (req, res) => {
 
 export const exams = async (req, res) => {
   try {
-    const data = await fetchGEU("/Account/GetOnlineExamHome");
+    const data = await fetchGEU("/Account/GetOnlineExamHome", req);
     res.json(data);
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch exam data", error: err.message });
@@ -70,7 +71,7 @@ export const exams = async (req, res) => {
 
 export const companies = async (req, res) => {
   try {
-    const data = await fetchGEU("/Web_StudentAcademic/GetUpcomingCompany");
+    const data = await fetchGEU("/Web_StudentAcademic/GetUpcomingCompany", req);
     res.json(data);
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch company info", error: err.message });
@@ -81,21 +82,43 @@ export const companies = async (req, res) => {
 
 export const avatar = async (req, res) => {
   try {
-    const imageResponse = await axios.get("https://student.geu.ac.in/Account/show", {
-      headers: {
-        Cookie: `ASP.NET_SessionId=${process.env.sessionId}; __RequestVerificationToken=${process.env.token}`,
-      },
-      responseType: "arraybuffer",
+    // Extract cookies from the incoming request
+    const sessionId = req.cookies["ASP.NET_SessionId"];
+    const token = req.cookies["__RequestVerificationToken"];
+
+    if (!sessionId || !token) {
+      return res.status(401).send("Authentication cookies missing");
+    }
+
+    // Make the request to GEU's image endpoint
+    const imageResponse = await axios.get(
+      "https://student.geu.ac.in/Account/show", 
+      {
+        headers: {
+          Cookie: `ASP.NET_SessionId=${sessionId}; __RequestVerificationToken=${token}`,
+          Referer: "https://student.geu.ac.in/",
+        },
+        responseType: "arraybuffer",
+        withCredentials: true, // Important for session handling
+      }
+    );
+
+    // Verify we received image data
+    if (!imageResponse.data || imageResponse.data.length === 0) {
+      return res.status(404).send("No image data received");
+    }
+
+    // Set appropriate headers
+    res.set({
+      "Content-Type": imageResponse.headers["content-type"] || "image/png",
+      "Content-Length": imageResponse.headers["content-length"],
     });
 
-    // Set content-type header
-    res.set("Content-Type", "image/png");
-
-    // Send raw image buffer
+    // Send the image data
     res.send(imageResponse.data);
   } catch (err) {
-    console.log(err);
-    res.status(500).send("Failed to fetch profile");
+    console.error("Error fetching profile image:", err);
+    res.status(500).send("Failed to fetch profile image");
   }
 };
 

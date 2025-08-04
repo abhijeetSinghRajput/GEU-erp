@@ -13,7 +13,7 @@ export const useStudentStore = create((set, get) => ({
       set({student: res.data});
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      toast.error(error?.response?.data.message || "something went wrong");
     } finally {
       set({ isFetchingProfile: false });
     }

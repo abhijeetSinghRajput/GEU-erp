@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import DataTable from "./dataTable";
 import { useStudentStore } from "@/stores/useStudentStore";
 import { useAttendanceStore } from "@/stores/useAttendanceStore";
-import { Card } from "../ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import {
   DropdownMenu,
@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { ChevronDown, Clipboard, ClipboardCheck, Loader2, User2 } from "lucide-react";
+import { ChevronDown, Clipboard, User2 } from "lucide-react";
 import { format, isValid, parseISO } from "date-fns";
 import { Badge } from "../ui/badge";
 import {
@@ -23,9 +23,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import AttendanceCalendar from "../attendanceCalendar/AttendanceCalendar";
+import AttendanceTableSkeleton from "./AttandanceTableSkeleton";
+import { useAuthStore } from "@/stores/useAuthStore";
 
-const AttandanceTable = () => {
-  const { attendance, isLoadingSubjects } = useAttendanceStore();
+const AttendanceTable = () => {
+  const { attendance, isLoadingSubjects, getAllAttendanceSubjects } =
+    useAttendanceStore();
   const { student } = useStudentStore();
   const [visibleColumns, setVisibleColumns] = useState({
     Subject: true,
@@ -38,13 +41,17 @@ const AttandanceTable = () => {
   });
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { authenticated } = useAuthStore();
+
+  useEffect(() => {
+    if (authenticated && student?.RegID) {
+      console.log("Fetching attendance for RegID:", student.RegID); 
+      getAllAttendanceSubjects({ RegID: student.RegID });
+    }
+  }, [authenticated, student?.RegID]);
 
   if (isLoadingSubjects) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <Loader2 className="animate-spin h-8 w-8" />
-      </div>
-    );
+    return <AttendanceTableSkeleton />;
   }
 
   const {
@@ -148,7 +155,9 @@ const AttandanceTable = () => {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-2xl">{selectedSubject?.Subject || "Subject Details"}</DialogTitle>
+            <DialogTitle className="text-2xl">
+              {selectedSubject?.Subject || "Subject Details"}
+            </DialogTitle>
           </DialogHeader>
           <div className="grid gap-4">
             {selectedSubject && (
@@ -156,11 +165,11 @@ const AttandanceTable = () => {
                 {/* Left side - Subject Code and Faculty */}
                 <div className="space-y-2 text-sm">
                   <div className="flex gap-2 items-center">
-                    <Clipboard className="text-muted-foreground size-5"/>
+                    <Clipboard className="text-muted-foreground size-5" />
                     <p className="font-medium">{selectedSubject.SubjectCode}</p>
                   </div>
                   <div className="flex gap-2 items-center">
-                    <User2 className="text-muted-foreground size-5"/>
+                    <User2 className="text-muted-foreground size-5" />
                     <p className="font-medium">{selectedSubject.EMPNAME}</p>
                   </div>
                 </div>
@@ -198,7 +207,8 @@ const AttandanceTable = () => {
                       {selectedSubject.Percentage}%
                     </span>
                     <span className="text-muted-foreground text-xs">
-                      {selectedSubject.TotalPresent} / {selectedSubject.TotalLecture} 
+                      {selectedSubject.TotalPresent} /{" "}
+                      {selectedSubject.TotalLecture}
                     </span>
                   </div>
                 </div>
@@ -214,4 +224,4 @@ const AttandanceTable = () => {
   );
 };
 
-export default AttandanceTable;
+export default AttendanceTable;

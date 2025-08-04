@@ -2,11 +2,18 @@ import React, { useState, useEffect, useRef } from "react";
 import { ModeToggle } from "./mode-toggle";
 import { useTheme } from "./theme-provider";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
+import { Loader2, LogOut } from "lucide-react";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 const Header = () => {
   const { theme } = useTheme();
-  const logo = theme === "dark" ? "/geu-logo-white.svg" : "/geu-logo-red.svg";
+  const { logout, loginingOut, authenticated } = useAuthStore();
+
+  const logo =
+    theme === "dark" ? "/graphic-era-light.svg" : "/graphic-era-dark.svg";
+  // const logo = theme === "dark" ? "/geu-logo-white.svg" : "/geu-logo-red.svg";
   const lastScrollY = useRef(0);
   const [hidden, setHidden] = useState(false);
   const y = useMotionValue(0);
@@ -15,8 +22,9 @@ const Header = () => {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      const scrollDirection = currentScrollY > lastScrollY.current ? "down" : "up";
-      
+      const scrollDirection =
+        currentScrollY > lastScrollY.current ? "down" : "up";
+
       if (scrollDirection === "down") {
         setHidden(true);
         animate(y, -60, { duration: 0.3 });
@@ -24,7 +32,7 @@ const Header = () => {
         setHidden(false);
         animate(y, 0, { duration: 0.3 });
       }
-      
+
       lastScrollY.current = currentScrollY;
     };
 
@@ -39,7 +47,7 @@ const Header = () => {
     >
       <Link to="/" className="flex items-center gap-2 h-full">
         <div className="h-full p-1">
-          <img src="/geu-logo.png" className="h-full w-full object-contain"/>
+          <img src="/geu-logo.png" className="h-full w-full object-contain" />
         </div>
         <div className="w-32">
           <img
@@ -49,7 +57,19 @@ const Header = () => {
           />
         </div>
       </Link>
-      <ModeToggle />
+      <div className="flex gap-2 items-center">
+        <ModeToggle />
+        {authenticated && (
+          <Button
+            variant="ghost"
+            disabled={loginingOut}
+            onClick={logout}
+            className="size-8"
+          >
+            {loginingOut ? <Loader2 className="animate-spin" /> : <LogOut />}
+          </Button>
+        )}
+      </div>
     </motion.nav>
   );
 };

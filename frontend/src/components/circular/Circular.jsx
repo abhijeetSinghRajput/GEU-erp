@@ -1,27 +1,17 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn, formatRelativeDate } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import React, { useEffect, useMemo, useState } from "react";
 import { useNoticeStore } from "@/stores/useNoticeStore";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { format, parse } from "date-fns";
 import { Badge } from "../ui/badge";
+import CircularSkeleton from "./CircularSkeleton";
 
 const icons = {
   "Information Cell": { icon: "🗞️", color: "#1e86ff" },
   "Fee Cell": { icon: "💸", color: "#00c9a7" },
-};
-
-const formatDate = (dateString) => {
-  try {
-    // Parse the date string in dd/MM/yyyy format
-    const parsedDate = parse(dateString, "dd/MM/yyyy", new Date());
-    return format(parsedDate, "MMM dd, yyyy");
-  } catch (error) {
-    console.error("Error formatting date:", error);
-    return dateString; // Return the original string if formatting fails
-  }
+  "Examination Cell": {icon: "🎓", color: "#f9a825"},
 };
 
 const Circular = () => {
@@ -34,16 +24,15 @@ const Circular = () => {
 
   // Automatically cycle through circulars
   useEffect(() => {
-    if (circulars.length <= 3) return; // Don't animate if we don't have enough items
+    if (circulars.length <= 3) return;
 
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % circulars.length);
-    }, 5000); // Change every 3 seconds
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [circulars.length]);
 
-  // Get the current 3 cards to display
   const visibleCirculars = useMemo(() => {
     if (circulars.length <= 3) return circulars;
 
@@ -56,7 +45,7 @@ const Circular = () => {
   }, [currentIndex, circulars]);
 
   if (isLoadingCirculars) {
-    return <div>Loading circulars...</div>;
+    return <CircularSkeleton/>;
   }
 
   if (!circulars || circulars.length === 0) {
@@ -130,7 +119,7 @@ const Circular = () => {
                         {circular.Subject}
                       </CardTitle>
                       <div className="text-sm flex gap-2 text-muted-foreground">
-                        {formatDate(circular.DateFrom)}
+                        {formatRelativeDate(circular.DateFrom)}
                         <Badge variant="secondary">{circular.ByDepartment}</Badge>
                       </div>
                     </div>

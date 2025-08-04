@@ -1,31 +1,31 @@
 import React, { useEffect } from "react";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import { useStudentStore } from "./stores/useStudentStore";
 import { Loader } from "lucide-react";
 import AttendancePage from "./pages/AttendancePage";
-import { useAttendanceStore } from "./stores/useAttendanceStore";
 import { TooltipProvider } from "./components/ui/tooltip";
 import { Toaster } from "sonner";
+import { useAuthStore } from "./stores/useAuthStore";
+import useOnlineStatus from "./hooks/useOnlineStatus";
+import NoInternet from "./components/emptyState.jsx/NoInternet";
+import { LoginPage } from "./pages/LoginPage";
 
 const App = () => {
-  const { isFetchingProfile, fetchProfile, student } = useStudentStore();
-  const { getAllAttendanceSubjects } = useAttendanceStore();
+  const { checkingAuth, authenticated, checkAuth } = useAuthStore();
+  const {isOnline, isOffline} = useOnlineStatus();
 
   useEffect(() => {
-    fetchProfile();
+    if(isOnline) checkAuth();
   }, []);
 
-  useEffect(() => {
-    if (student?.RegID) {
-      getAllAttendanceSubjects({ RegID: student.RegID });
-    }
-  }, [student?.RegID]);
+  if(isOffline){
+    return <NoInternet/>
+  }
 
-  if (isFetchingProfile || !student) {
+  if (checkingAuth) {
     return (
-      <div className="w-full h-svh flex items-center justify-center">
+      <div className="flex items-center justify-center h-screen">
         <Loader className="animate-spin" />
       </div>
     );
@@ -35,11 +35,18 @@ const App = () => {
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <TooltipProvider>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/attendance/:SubjectID" element={<AttendancePage />} />
+          <Route path="/login" element={!authenticated ? <LoginPage /> : <Navigate to="/" replace />} />
+          <Route 
+            path="/" 
+            element={authenticated ? <HomePage /> : <Navigate to="/login" replace />} 
+          />
+          <Route 
+            path="/attendance/:SubjectID" 
+            element={authenticated ? <AttendancePage /> : <Navigate to="/login" replace />} 
+          />
         </Routes>
       </TooltipProvider>
-      <Toaster/>
+      <Toaster />
     </ThemeProvider>
   );
 };

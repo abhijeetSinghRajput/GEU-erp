@@ -1,4 +1,5 @@
 import { axiosInstance } from "@/lib/axios";
+import { toast } from "sonner";
 import { create } from "zustand";
 
 export const useNoticeStore = create((set) => ({
@@ -12,6 +13,7 @@ export const useNoticeStore = create((set) => ({
         set({circulars: circular || []})
     } catch (error) {
         console.log(error);
+        toast.error(error?.response?.data.message || "failed to fetch circular");
         set({circular: []});
     } finally {
       set({ isLoadingCirculars: false });

@@ -1,14 +1,15 @@
 import express from "express";
+import { checkSession } from "../middlewares/checkSession.middleware.js";
 import {
-  getFullAttendance,         // NEW: returns all data in one shot
   attendanceDates,
-  getAllAttendanceSubjects,
-  getAttendanceTable,
   fetchCourseAttendance,
+  getAllAttendanceSubjects,
   getAttendanceBySubject,
+  getAttendanceTable,
+  getFullAttendance,
 } from "../controllers/attendance.controller.js";
-
 const router = express.Router();
+router.use(checkSession);
 
 router.get("/", getAllAttendanceSubjects);
 router.post("/:SubjectID", getAttendanceBySubject);
@@ -21,4 +22,3 @@ router.post("/course", fetchCourseAttendance);
 router.get("/full/:startDate/:endDate", getFullAttendance);
 
 export default router;
-
