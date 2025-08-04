@@ -216,7 +216,7 @@ const AttendanceTable = () => {
             )}
 
             {/* Attendance Calendar at the bottom */}
-            <AttendanceCalendar selectedSubject={selectedSubject} />
+            <AttendanceCalendar selectedSubject={selectedSubject} data={attendance?.data[0]}/>
           </div>
         </DialogContent>
       </Dialog>

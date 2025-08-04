@@ -1,40 +1,52 @@
 import { useAttendanceStore } from "@/stores/useAttendanceStore";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { Calendar } from "@/components/ui/calendar";
-import { format, parse, addMonths, constructNow } from "date-fns";
-import { Check, CheckCircle, Circle, Clock, X, XCircle } from "lucide-react";
+import {
+  startOfMonth,
+  endOfMonth,
+  parse,
+  startOfWeek,
+  endOfWeek,
+} from "date-fns";
+import { CheckCircle, X, Clock } from "lucide-react";
 import CalendarSkeleton from "./CalendarSkeleton";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 
-const baseDate = new Date(2025, 6, 17); // July 17, 2025
-const endDate = new Date(baseDate);
-endDate.setMonth(baseDate.getMonth() + 1);
-
-const AttendanceCalendar = ({ selectedSubject }) => {
+const AttendanceCalendar = ({ selectedSubject, data }) => {
   const { getAttendanceBySubject, isLoadingSubjectDetails } =
     useAttendanceStore();
   const [date, setDate] = useState(new Date());
-  const [currentMonth, setCurrentMonth] = useState(baseDate); // Track current month
+  const [currentMonth, setCurrentMonth] = useState(startOfMonth(new Date()));
   const [attendanceData, setAttendanceData] = useState(null);
   const { SubjectID, RegID, PeriodAssignID, TTID, LectureTypeID } =
     selectedSubject;
 
-  // Parse date from "dd/MM/yyyy" format to Date object
-  const parseAttendanceDate = (dateString) => {
-    return parse(dateString, "dd/MM/yyyy", new Date());
-  };
+  // 🔁 Memoized map for fast lookup
+  const attendanceMap = useMemo(() => {
+    if (!attendanceData?.state) return new Map();
 
-  // Get attendance status for a specific date
+    const map = new Map();
+    attendanceData.state.forEach((item) => {
+      if (item.AttendanceType === "N/A") return;
+
+      const dateKey = parse(item.AttendanceDate, "dd/MM/yyyy", new Date()).getTime();
+      map.set(dateKey, item);
+    });
+    return map;
+  }, [attendanceData]);
+
   const getAttendanceForDate = (date) => {
-    if (!attendanceData?.state) return null;
-    const dateStr = format(date, "dd/MM/yyyy");
-    return attendanceData.state.find((item) => item.AttendanceDate === dateStr);
+    return attendanceMap.get(date.getTime());
   };
 
+  // 🗓️ Fetch attendance for full visible calendar range
   useEffect(() => {
     const fetchData = async () => {
       if (!selectedSubject) return;
+
+      const visibleStart = startOfWeek(startOfMonth(currentMonth), { weekStartsOn: 0 });
+      const visibleEnd = endOfWeek(endOfMonth(currentMonth), { weekStartsOn: 0 });
 
       const data = {
         RegID,
@@ -42,19 +54,22 @@ const AttendanceCalendar = ({ selectedSubject }) => {
         PeriodAssignID,
         TTID,
         LectureTypeID,
-        DateFrom: currentMonth.toISOString(),
-        DateTo: addMonths(currentMonth, 1).toISOString(),
+        DateFrom: visibleStart.toISOString(),
+        DateTo: visibleEnd.toISOString(),
       };
-      const result = await getAttendanceBySubject(SubjectID, data);
-      console.log(result);
-      setAttendanceData(result);
+
+      try {
+        const result = await getAttendanceBySubject(SubjectID, data);
+        setAttendanceData(result);
+      } catch (error) {
+        console.error("Error fetching attendance data:", error);
+      }
     };
+
     fetchData();
   }, [selectedSubject, SubjectID, getAttendanceBySubject, currentMonth]);
 
-  if (isLoadingSubjectDetails) {
-    return <CalendarSkeleton />;
-  }
+  if (isLoadingSubjectDetails) return <CalendarSkeleton />;
 
   if (!attendanceData) {
     return (
@@ -63,6 +78,9 @@ const AttendanceCalendar = ({ selectedSubject }) => {
       </div>
     );
   }
+
+  const startMonth = data?.DateFrom ? startOfMonth(new Date(data.DateFrom)) : undefined;
+  const endMonth = data?.DateTo ? endOfMonth(new Date(data.DateTo)) : undefined;
 
   const CustomDay = (props) => {
     const {
@@ -76,77 +94,63 @@ const AttendanceCalendar = ({ selectedSubject }) => {
       onMouseEnter,
       onMouseLeave,
     } = props;
+
     const { disabled, outside, hidden } = modifiers;
     const attendance = getAttendanceForDate(day.date);
-    const date = day.date.getDate();
+    const dateNum = day.date.getDate();
 
-    // Base shadcn classes
-    const baseClasses =
-      "p-0 aspect-square flex items-center justify-center h-9 w-full rounded-md overflow-hidden";
-
-    // Handle outbound and disabled dates
-    if (outside || disabled || hidden) {
-      return (
-        <td className={cn("text-muted-foreground", baseClasses)}>{}</td>
-      );
-    }
+    const baseClasses = "p-0 aspect-square flex items-center justify-center h-9 w-full rounded-md overflow-hidden";
+    const buttonProps = {
+      onClick,
+      onFocus,
+      onBlur,
+      onKeyDown,
+      onKeyUp,
+      onMouseEnter,
+      onMouseLeave,
+      title: day.date.toDateString(),
+    };
 
     if (!attendance || attendance.AttendanceType === "N/A") {
       return (
-        <td className={baseClasses}>
-          <button
-            className={`w-full h-full hover:bg-accent hover:text-accent-foreground`}
-            onClick={onClick}
-            onFocus={onFocus}
-            onBlur={onBlur}
-            onKeyDown={onKeyDown}
-            onKeyUp={onKeyUp}
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
+        <td className={cn(baseClasses)}>
+          <Button
+            variant="ghost"
+            className={cn("w-full", outside && "opacity-50")}
+            {...buttonProps}
           >
-            {date}
-          </button>
+            {dateNum}
+          </Button>
         </td>
       );
     }
 
-    const detail = attendanceData.dtLecture?.find(
-      (lecture) => lecture.AttendanceDate === attendance.AttendanceDate
-    );
+    const statusStyles = {
+      P: {
+        icon: <CheckCircle strokeWidth={3} className="text-green-500" />,
+        bg: "dark:bg-green-800/30 bg-green-500/30",
+      },
+      A: {
+        icon: <X strokeWidth={3} className="text-red-500" />,
+        bg: "dark:bg-red-900/30 bg-red-500/30",
+      },
+      L: {
+        icon: <Clock strokeWidth={3} className="text-yellow-500" />,
+        bg: "dark:bg-yellow-800/30 bg-yellow-500/30",
+      },
+    };
 
-    let statusIcon = null;
-    let statusBg = "";
-    
-    switch (attendance.AttendanceType) {
-      case "P":
-        statusIcon = <CheckCircle strokeWidth={3} className="text-green-500"/>;
-        statusBg="dark:bg-green-800/30 bg-green-500/30";
-        break;
-      case "A":
-        statusIcon = <X strokeWidth={3} className="text-red-500"/>;
-        statusBg="dark:bg-red-900/30 bg-red-500/30";
-        break;
-      case "L":
-        break;
-      default:
-        break;
-    }
+    const status = statusStyles[attendance.AttendanceType] || {};
 
     return (
       <td className={cn("relative", baseClasses)}>
         <Button
           variant="secondary"
-          className={cn("w-full block", statusBg)}
-          onClick={onClick}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          onKeyDown={onKeyDown}
-          onKeyUp={onKeyUp}
-          onMouseEnter={onMouseEnter}
-          onMouseLeave={onMouseLeave}
+          className={cn("w-full block", status.bg, outside && "opacity-50")}
+          {...buttonProps}
         >
-          <span className="absolute bottom-0.5 right-0.5">{statusIcon}</span>
-          {date}
+          <span className="absolute bottom-0.5 right-0.5">{status.icon}</span>
+          {dateNum}
         </Button>
       </td>
     );
@@ -155,20 +159,23 @@ const AttendanceCalendar = ({ selectedSubject }) => {
   return (
     <div className="space-y-4">
       <Calendar
-        classNames={"bg-input/30"}
         mode="single"
         selected={date}
         onSelect={setDate}
         className="rounded-md border w-full bg-input/30"
         month={currentMonth}
-        onMonthChange={setCurrentMonth} // Update month when calendar navigation is used
-        disabled={(date) =>
-          date < new Date(2025, 6, 1) || date > new Date(2025, 7, 31)
-        }
-        components={{
-          Day: CustomDay,
+        onMonthChange={(month) => {
+          setCurrentMonth(startOfMonth(month));
         }}
+        components={{ Day: CustomDay }}
+        fixedWeeks
+        showOutsideDays
+        defaultMonth={startMonth || new Date()}
+        startMonth={startMonth}
+        endMonth={endMonth}
       />
     </div>
   );
 };
+
+export default AttendanceCalendar;
