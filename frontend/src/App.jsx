@@ -36,6 +36,7 @@ const App = () => {
       <TooltipProvider>
         <Routes>
           <Route path="/login" element={!authenticated ? <LoginPage /> : <Navigate to="/" replace />} />
+          {/* <Route path="/" element={<HomePage/>}/> */}
           <Route 
             path="/" 
             element={authenticated ? <HomePage /> : <Navigate to="/login" replace />} 

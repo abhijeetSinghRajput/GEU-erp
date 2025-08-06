@@ -22,6 +22,7 @@ import { Link } from "react-router-dom";
 import ProfileSkeleton from "./ProfileSkeleton";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import ProfileError from "./ProfileError";
 
 const textVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -77,7 +78,7 @@ export function StudentProfile() {
 
   if (!student) {
     return (
-      <div className="text-destructive font-medium">something went wrong</div>
+      <ProfileError onReload={fetchProfile}/>
     );
   }
 

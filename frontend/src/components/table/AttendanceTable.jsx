@@ -25,6 +25,7 @@ import {
 import AttendanceCalendar from "../attendanceCalendar/AttendanceCalendar";
 import AttendanceTableSkeleton from "./AttandanceTableSkeleton";
 import { useAuthStore } from "@/stores/useAuthStore";
+import AttendanceTableError from "./AttandanceTableError";
 
 const AttendanceTable = () => {
   const { attendance, isLoadingSubjects, getAllAttendanceSubjects } =
@@ -45,13 +46,16 @@ const AttendanceTable = () => {
 
   useEffect(() => {
     if (authenticated && student?.RegID) {
-      console.log("Fetching attendance for RegID:", student.RegID); 
+      console.log("Fetching attendance for RegID:", student.RegID);
       getAllAttendanceSubjects({ RegID: student.RegID });
     }
   }, [authenticated, student?.RegID]);
 
   if (isLoadingSubjects) {
     return <AttendanceTableSkeleton />;
+  }
+  if (!attendance) {
+    return <AttendanceTableError onReload={getAllAttendanceSubjects} />;
   }
 
   const {
@@ -216,7 +220,10 @@ const AttendanceTable = () => {
             )}
 
             {/* Attendance Calendar at the bottom */}
-            <AttendanceCalendar selectedSubject={selectedSubject} data={attendance?.data[0]}/>
+            <AttendanceCalendar
+              selectedSubject={selectedSubject}
+              data={attendance?.data[0]}
+            />
           </div>
         </DialogContent>
       </Dialog>

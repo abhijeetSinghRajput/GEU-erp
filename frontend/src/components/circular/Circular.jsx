@@ -7,6 +7,8 @@ import { useNoticeStore } from "@/stores/useNoticeStore";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "../ui/badge";
 import CircularSkeleton from "./CircularSkeleton";
+import CircularDetailsDrawer from "./CircularDetailsDrawer";
+import CircularError from "./CircularError";
 
 const icons = {
   "Information Cell": { icon: "🗞️", color: "#1e86ff" },
@@ -15,11 +17,12 @@ const icons = {
 };
 
 const Circular = () => {
-  const { circulars, isLoadingCirculars, getCirculars } = useNoticeStore();
+  const { circulars, isLoadingCirculars, getCirculars, getCircularsDetails } = useNoticeStore();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     getCirculars();
+    getCircularsDetails();
   }, []);
 
   // Automatically cycle through circulars
@@ -49,13 +52,14 @@ const Circular = () => {
   }
 
   if (!circulars || circulars.length === 0) {
-    return <div>No circulars available</div>;
+    return <CircularError onReload={getCirculars}/>
   }
 
   return (
     <div className="max-w-screen-lg mx-auto p-6">
-        <div>
+        <div className="flex justify-between items-center gap-2 py-2">
             <h2 className="text-xl font-semibold">Notices </h2>
+            <CircularDetailsDrawer/>
         </div>
       <div className="relative min-h-[500px] h-full w-full overflow-hidden">
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">

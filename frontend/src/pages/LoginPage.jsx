@@ -170,7 +170,7 @@ export function LoginPage({ className, ...props }) {
                       value={formData.captcha}
                       onChange={handleInput}
                       placeholder="Fill the Captcha"
-                      disabled={loadingCaptcha}
+                      disabled={loadingCaptcha || !captchaImage}
                       autoComplete="off"
                       className={`focus-visible:ring-2 pl-9 bg-input/30 ${
                         errors.captcha ? "ring-2 ring-destructive" : ""
@@ -195,7 +195,7 @@ export function LoginPage({ className, ...props }) {
 
                 <Button
                   type="submit"
-                  disabled={loadingCaptcha || logningIn}
+                  disabled={loadingCaptcha || logningIn || !captchaImage}
                   className="w-full"
                 >
                   Login

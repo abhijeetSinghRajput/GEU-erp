@@ -34,6 +34,7 @@ export const useAuthStore = create((set, get) => ({
       set({ captchaImage: image, formToken });
     } catch (err) {
       console.error("Error fetching auth data:", err);
+      toast.error(err?.response?.data.message || "failed to load captcha");
       set({ captchaImage: null, formToken: "" });
     } finally {
       set({ loadingCaptcha: false });

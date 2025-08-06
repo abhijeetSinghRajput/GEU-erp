@@ -193,18 +193,6 @@ const ProfileSkeleton = () => {
                         <Skeleton className="h-5 w-20" />
                       </div>
 
-                      {student.AlternateMobileNO && (
-                        <div className="flex items-start">
-                          <dt className="w-40 flex-shrink-0 text-sm font-medium text-muted-foreground">
-                            <div className="flex items-center gap-2">
-                              <Phone className="h-4 w-4" />
-                              Alternate Mobile
-                            </div>
-                          </dt>
-                          <Skeleton className="h-5 w-20" />
-                        </div>
-                      )}
-
                       <div className="flex items-start">
                         <dt className="w-40 flex-shrink-0 text-sm font-medium text-muted-foreground">
                           <div className="flex items-center gap-2">
