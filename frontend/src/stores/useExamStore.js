@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { create } from "zustand";
 
 export const useExamStore = create((set, get) => ({
-  examSummary: null,
+  examSummary: [],
   loadingExamSummary: false,
   loadingDetail: 0,
 
@@ -17,6 +17,7 @@ export const useExamStore = create((set, get) => ({
       toast.error(
         error?.response?.data.message || "Failed to fetch exam summary"
       );
+      set({ examSummary: [] });
       console.log(error);
     } finally {
       set({ loadingExamSummary: false });

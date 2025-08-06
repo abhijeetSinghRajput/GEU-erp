@@ -17,38 +17,6 @@ const ExamSummary = () => {
     getExamDetails,
   } = useExamStore();
 
-
-  const mockData = [
-    {
-      ExamType: 1,
-      YearSem: "1",
-      TotalObtained: "710",
-      TotalMarks: "900",
-      Marks: "710/900",
-      percnt: 8.71,
-      Result: "Pass",
-      TotalSubject: 9,
-      TotalBack: 0,
-      CGPA: "8.84",
-      StuName: "ABHIJEET KUMAR",
-      IsStart: 1,
-    },
-    {
-      ExamType: 1,
-      YearSem: "2",
-      TotalObtained: "958",
-      TotalMarks: "1150",
-      Marks: "958/1150",
-      percnt: 8.96,
-      Result: "Pass",
-      TotalSubject: 11,
-      TotalBack: 0,
-      CGPA: "8.84",
-      StuName: "ABHIJEET KUMAR",
-      IsStart: 1,
-    },
-  ];
-
   useEffect(() => {
     getExamSummary();
   }, []);
@@ -69,8 +37,8 @@ const ExamSummary = () => {
         className="flex justify-between items-center gap-2 py-2"
       >
         <h2 className="text-xl font-semibold">Exam Summary</h2>
-        {mockData[0].CGPA && (
-          <div className="font-semibold">CGPA {mockData[0].CGPA}</div>
+        {Array.isArray(examSummary) && examSummary[0]?.CGPA && (
+          <div className="font-semibold">CGPA {examSummary[0].CGPA}</div>
         )}
       </motion.div>
 
@@ -80,7 +48,7 @@ const ExamSummary = () => {
         transition={{ staggerChildren: 0.1 }}
         className="space-y-4"
       >
-        {mockData.map((exam, index) => (
+        {examSummary.map((exam, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, y: 20 }}
@@ -100,13 +68,15 @@ const ExamSummary = () => {
                   </Badge>
                 </div>
                 <TooltipWrapper content="Download Marksheet">
-                  <Button className="size-8 p-0"
-                    onClick={()=>getExamDetails(exam.YearSem)}
+                  <Button
+                    className="size-8 p-0"
+                    onClick={() => getExamDetails(exam.YearSem)}
                   >
-                    {loadingDetail === exam.YearSem
-                      ? <Loader2 className="animate-spin" /> 
-                      : <Download />
-                    }
+                    {loadingDetail === exam.YearSem ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      <Download />
+                    )}
                   </Button>
                 </TooltipWrapper>
               </CardHeader>
