@@ -28,7 +28,6 @@ export const useNoticeStore = create((set) => ({
     try {
       const res = await axiosInstance.get("/circulars-detail");
       const { circulars } = res.data;
-      console.log(circulars);
       set({ allCirculars: circulars || [] });
     } catch (error) {
       set({ allCirculars: [] });

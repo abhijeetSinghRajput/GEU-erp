@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import DataTable from "./dataTable";
 import { useStudentStore } from "@/stores/useStudentStore";
 import { useAttendanceStore } from "@/stores/useAttendanceStore";
-import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
+import { Card } from "../ui/card";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import {
   DropdownMenu,
@@ -26,6 +26,7 @@ import AttendanceCalendar from "../attendanceCalendar/AttendanceCalendar";
 import AttendanceTableSkeleton from "./AttandanceTableSkeleton";
 import { useAuthStore } from "@/stores/useAuthStore";
 import AttendanceTableError from "./AttandanceTableError";
+import CircularProgress from "../ui/circular-progress";
 
 const AttendanceTable = () => {
   const { attendance, isLoadingSubjects, getAllAttendanceSubjects } =
@@ -178,44 +179,13 @@ const AttendanceTable = () => {
                   </div>
                 </div>
 
-                {/* Right Side - Circular progress bar */}
-                <div className="relative w-[85px] h-[85px]">
-                  <svg className="w-full h-full" viewBox="0 0 100 100">
-                    {/* Background circle */}
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="45"
-                      fill="none"
-                      stroke="#e5e7eb"
-                      strokeWidth="10"
-                    />
-                    {/* Progress circle */}
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="45"
-                      fill="none"
-                      stroke="#3b82f6" // Blue
-                      strokeWidth="10"
-                      strokeLinecap="round"
-                      strokeDasharray="283" // Circumference of the circle
-                      strokeDashoffset={
-                        283 - (283 * selectedSubject.Percentage) / 100
-                      }
-                      transform="rotate(-90 50 50)" // Start progress from top
-                    />
-                  </svg>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-base font-bold">
-                      {selectedSubject.Percentage}%
-                    </span>
-                    <span className="text-muted-foreground text-xs">
-                      {selectedSubject.TotalPresent} /{" "}
-                      {selectedSubject.TotalLecture}
-                    </span>
-                  </div>
-                </div>
+                <CircularProgress
+                  value={selectedSubject.Percentage}
+                  label={`${selectedSubject.Percentage}%`}
+                  subLabel={`${selectedSubject.TotalPresent} / ${selectedSubject.TotalLecture}`}
+                  size={85}
+                  strokeWidth={10}
+                />
               </div>
             )}
 

@@ -10,13 +10,16 @@ import { useAuthStore } from "./stores/useAuthStore";
 import useOnlineStatus from "./hooks/useOnlineStatus";
 import NoInternet from "./components/emptyState.jsx/NoInternet";
 import { LoginPage } from "./pages/LoginPage";
+import { useExamStore } from "./stores/useExamStore";
 
 const App = () => {
   const { checkingAuth, authenticated, checkAuth } = useAuthStore();
   const {isOnline, isOffline} = useOnlineStatus();
 
   useEffect(() => {
-    if(isOnline) checkAuth();
+    if(isOnline) {
+      checkAuth();
+    }
   }, []);
 
   if(isOffline){

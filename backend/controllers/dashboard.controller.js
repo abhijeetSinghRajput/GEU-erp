@@ -56,7 +56,6 @@ export const getCircularDetails = async (req, res) => {
   try {
     const data = await fetchGEU("/Web_Teaching/GetCircularDetails", req, {
       method: "post",
-      data: {},
       referer: "https://student.geu.ac.in/Web_StudentAcademic/Cyborg_studentCircular?id=Circular/Notice"
     });
 

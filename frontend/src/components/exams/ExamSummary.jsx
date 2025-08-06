@@ -1,0 +1,143 @@
+import { useExamStore } from "@/stores/useExamStore";
+import { Download, Loader2 } from "lucide-react";
+import React, { useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Badge } from "../ui/badge";
+import { motion } from "framer-motion";
+import CircularProgress from "../ui/circular-progress";
+import { Button } from "../ui/button";
+import TooltipWrapper from "../TooltipWrapper";
+
+const ExamSummary = () => {
+  const {
+    getExamSummary,
+    examSummary,
+    loadingExamSummary,
+    loadingDetail,
+    getExamDetails,
+  } = useExamStore();
+
+
+  const mockData = [
+    {
+      ExamType: 1,
+      YearSem: "1",
+      TotalObtained: "710",
+      TotalMarks: "900",
+      Marks: "710/900",
+      percnt: 8.71,
+      Result: "Pass",
+      TotalSubject: 9,
+      TotalBack: 0,
+      CGPA: "8.84",
+      StuName: "ABHIJEET KUMAR",
+      IsStart: 1,
+    },
+    {
+      ExamType: 1,
+      YearSem: "2",
+      TotalObtained: "958",
+      TotalMarks: "1150",
+      Marks: "958/1150",
+      percnt: 8.96,
+      Result: "Pass",
+      TotalSubject: 11,
+      TotalBack: 0,
+      CGPA: "8.84",
+      StuName: "ABHIJEET KUMAR",
+      IsStart: 1,
+    },
+  ];
+
+  useEffect(() => {
+    getExamSummary();
+  }, []);
+
+  if (loadingExamSummary) {
+    return (
+      <div className="max-w-screen-lg mx-auto p-6 flex justify-center">
+        <Loader2 className="animate-spin h-6 w-6" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-screen-lg mx-auto p-6">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex justify-between items-center gap-2 py-2"
+      >
+        <h2 className="text-xl font-semibold">Exam Summary</h2>
+        {mockData[0].CGPA && (
+          <div className="font-semibold">CGPA {mockData[0].CGPA}</div>
+        )}
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ staggerChildren: 0.1 }}
+        className="space-y-4"
+      >
+        {mockData.map((exam, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Card className="rounded-3xl">
+              <CardHeader className="pb-0 justify-between items-center flex-row">
+                <div className="flex gap-2 items-center">
+                  <CardTitle className="text-lg">
+                    Year/Sem {exam.YearSem}
+                  </CardTitle>
+                  <Badge
+                    variant={exam.Result === "Pass" ? "default" : "destructive"}
+                  >
+                    {exam.Result}
+                  </Badge>
+                </div>
+                <TooltipWrapper content="Download Marksheet">
+                  <Button className="size-8 p-0"
+                    onClick={()=>getExamDetails(exam.YearSem)}
+                  >
+                    {loadingDetail === exam.YearSem
+                      ? <Loader2 className="animate-spin" /> 
+                      : <Download />
+                    }
+                  </Button>
+                </TooltipWrapper>
+              </CardHeader>
+              <CardContent className="flex p-6 justify-between items-start">
+                <div>
+                  {/* Exam Details */}
+                  <div className="">
+                    <div className="flex gap-2 items-center">
+                      <p className="text-sm text-muted-foreground">Subjects</p>
+                      <p className="font-medium">{exam.TotalSubject}</p>
+                    </div>
+                    <div className="flex gap-2 items-center">
+                      <p className="text-sm text-muted-foreground">Backlogs</p>
+                      <p className="font-medium">{exam.TotalBack}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <CircularProgress
+                  value={exam.percnt}
+                  maxValue={10}
+                  label={exam.percnt}
+                  subLabel={exam.Marks}
+                />
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </motion.div>
+    </div>
+  );
+};
+
+export default ExamSummary;

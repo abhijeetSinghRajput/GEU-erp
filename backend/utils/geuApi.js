@@ -27,7 +27,7 @@ export const fetchGEU = async (endpoint, req, options = {}) => {
     "X-Requested-With": "XMLHttpRequest",
     Origin: "https://student.geu.ac.in",
     Referer: referer,
-    Cookie: `ASP.NET_SessionId=${sessionId}; __RequestVerificationToken=${token}`,
+    Cookie: req.headers.cookie || `ASP.NET_SessionId=${sessionId}; __RequestVerificationToken=${token}`,
     ...customHeaders,
   };
 

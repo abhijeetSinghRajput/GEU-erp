@@ -1,4 +1,5 @@
 import Circular from "@/components/circular/Circular";
+import ExamSummary from "@/components/exams/ExamSummary";
 import Header from "@/components/Header";
 import { StudentProfile } from "@/components/profile/StudentProfile";
 import AttendanceTable from "@/components/table/AttendanceTable";
@@ -11,6 +12,7 @@ const HomePage = () => {
       <StudentProfile />
       <AttendanceTable />
       <Circular />
+      <ExamSummary/>
     </div>
   );
 };
