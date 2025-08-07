@@ -172,7 +172,6 @@ const AttendancePage = () => {
       };
       const result = await getAttendanceBySubject(SubjectID, data);
       setAttendanceData(result);
-      console.log(data);
     };
     fetchData();
   }, [selectedSubject]);

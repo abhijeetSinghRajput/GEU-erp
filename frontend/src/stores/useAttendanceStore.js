@@ -1,6 +1,7 @@
 import { axiosInstance } from "@/lib/axios";
 import { toast } from "sonner";
 import { create } from "zustand";
+import { useStudentStore } from "./useStudentStore";
 
 export const useAttendanceStore = create((set, get) => ({
   attendance: null,
@@ -9,7 +10,11 @@ export const useAttendanceStore = create((set, get) => ({
   isLoadingSubjectDetails: false,
 
   getAllAttendanceSubjects: async ({ RegID }) => {
-    console.log("all subject attendance fetching...");
+    if(!RegID) {
+      toast.error("Registration ID is required to fetch attendance.");
+      return;
+    }
+
     set({ isLoadingSubjects: true });
     try {
       const res = await axiosInstance.get("/attendance", {
@@ -31,7 +36,8 @@ export const useAttendanceStore = create((set, get) => ({
     try {
       // Check cache first
       const { subjectAttendanceCache } = get();
-      const cacheKey = `${SubjectID}-${data.DateFrom}-${data.DateTo}`;
+      const { student } = useStudentStore.getState();
+      const cacheKey = `${student?.RegID}-${SubjectID}-${data.DateFrom}-${data.DateTo}`;
       
       if (subjectAttendanceCache[cacheKey]) {
         return subjectAttendanceCache[cacheKey];

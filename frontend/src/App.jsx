@@ -16,12 +16,10 @@ import { useFeeStore } from "./stores/useFeeStore";
 const App = () => {
   const { checkingAuth, authenticated, checkAuth } = useAuthStore();
   const {isOnline, isOffline} = useOnlineStatus();
-  const {getFeeSubmissions} = useFeeStore();
 
   useEffect(() => {
     if(isOnline) {
       checkAuth();
-      getFeeSubmissions();
     }
   }, []);
 

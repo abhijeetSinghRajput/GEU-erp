@@ -14,7 +14,7 @@ import { AlertTriangle, RefreshCw } from "lucide-react";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 
-const AttendanceTableError = ({
+const TableError = ({
   variant = "destructive",
   heading = "Data Loading Failed",
   description,
@@ -134,4 +134,4 @@ const AttendanceTableError = ({
   );
 };
 
-export default AttendanceTableError;
+export default TableError;

@@ -23,9 +23,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import AttendanceCalendar from "../attendanceCalendar/AttendanceCalendar";
-import AttendanceTableSkeleton from "./AttandanceTableSkeleton";
+import TableSkeleton from "./TableSkeleton";
 import { useAuthStore } from "@/stores/useAuthStore";
-import AttendanceTableError from "./AttandanceTableError";
+import TableError from "./TableError";
 import CircularProgress from "../ui/circular-progress";
 
 const AttendanceTable = () => {
@@ -50,13 +50,16 @@ const AttendanceTable = () => {
       console.log("Fetching attendance for RegID:", student.RegID);
       getAllAttendanceSubjects({ RegID: student.RegID });
     }
-  }, [authenticated, student?.RegID]);
+  }, [student?.RegID]);
 
   if (isLoadingSubjects) {
-    return <AttendanceTableSkeleton />;
+    return <TableSkeleton />;
   }
+
   if (!attendance) {
-    return <AttendanceTableError onReload={getAllAttendanceSubjects} />;
+    return <TableError onReload={()=>{
+      getAllAttendanceSubjects({ RegID: student?.RegID });
+    }} />;
   }
 
   const {
@@ -94,13 +97,13 @@ const AttendanceTable = () => {
   };
 
   return (
-    <div className="max-w-screen-lg mx-auto px-4 sm:px-6 md:px-4 py-2">
+    <div className="max-w-screen-lg mx-auto px-4 sm:px-6 md:px-4 py-2 mt-6">
+      <h2 className="text-3xl font-bold mb-6">Attendance</h2>
       <Card className="overflow-hidden">
         <div className="sticky top-0 z-10 bg-muted">
           <div className="p-4 border-b flex justify-between gap-4">
             <div>
               <div className="flex items-center gap-3">
-                <h2 className="text-xl font-semibold">Attendance</h2>
                 <Badge className={"font-bold text-sm"}>
                   {TotalPercentage}%
                 </Badge>
@@ -139,6 +142,7 @@ const AttendanceTable = () => {
             </DropdownMenu>
           </div>
         </div>
+
         <ScrollArea className="w-full whitespace-nowrap">
           <DataTable
             data={attendance?.state || []}

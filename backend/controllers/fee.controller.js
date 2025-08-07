@@ -3,7 +3,7 @@ import { fetchGEU } from "../utils/geuApi.js"
 import qs from "qs";
 
 export const getFeeSubmissions = async (req, res) => {
-  const { feeType = 1, duration = 0 } = req.query;
+  const { feeType = 2, duration = 0 } = req.query;
 
   try {
     const payload = qs.stringify({ FeeType: feeType, duration });

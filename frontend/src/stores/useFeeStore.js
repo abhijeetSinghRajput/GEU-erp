@@ -9,10 +9,9 @@ export const useFeeStore = create((set, get) => ({
     set({ loadingFeeSubmitions: true });
     try {
       const res = await axiosInstance.get("/fee");
-      console.log(res);
       const { feeSubmitions } = res.data;
       set({ feeSubmitions });
-      set();
+      // console.log("Fee submissions fetched successfully:", feeSubmitions);
     } catch (error) {
       set({ feeSubmitions : null});
       console.error("Error fetching fee submissions:", error);
