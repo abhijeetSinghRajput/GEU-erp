@@ -36,7 +36,8 @@ const ExamSummary = () => {
         animate={{ opacity: 1, y: 0 }}
         className="flex justify-between items-center gap-2 py-2"
       >
-        <h2 className="text-xl font-semibold">Exam Summary</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold mb-2">Exam Summary</h2>
+
         {Array.isArray(examSummary) && examSummary[0]?.CGPA && (
           <div className="font-semibold">CGPA {examSummary[0].CGPA}</div>
         )}

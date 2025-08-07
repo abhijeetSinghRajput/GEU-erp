@@ -11,14 +11,17 @@ import useOnlineStatus from "./hooks/useOnlineStatus";
 import NoInternet from "./components/emptyState.jsx/NoInternet";
 import { LoginPage } from "./pages/LoginPage";
 import { useExamStore } from "./stores/useExamStore";
+import { useFeeStore } from "./stores/useFeeStore";
 
 const App = () => {
   const { checkingAuth, authenticated, checkAuth } = useAuthStore();
   const {isOnline, isOffline} = useOnlineStatus();
+  const {getFeeSubmissions} = useFeeStore();
 
   useEffect(() => {
     if(isOnline) {
       checkAuth();
+      getFeeSubmissions();
     }
   }, []);
 

@@ -13,7 +13,7 @@ import {
   TableFooter,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ArrowUp, ArrowDown } from "lucide-react";
+import { ChevronDown, ArrowUp, ArrowDown, ChevronUp } from "lucide-react";
 
 const DataTable = ({ data, columns, visibleColumns, footerData, onRowClick }) => {
   const navigate = useNavigate();
@@ -61,9 +61,9 @@ const DataTable = ({ data, columns, visibleColumns, footerData, onRowClick }) =>
   const getSortIcon = (columnId) => {
     if (sortConfig.key !== columnId) return null;
     return sortConfig.direction === 'asc' ? (
-      <ArrowUp className="ml-2 h-3 w-3" />
+      <ChevronUp className="ml-2 h-3 w-3" />
     ) : (
-      <ArrowDown className="ml-2 h-3 w-3" />
+      <ChevronDown className="ml-2 h-3 w-3" />
     );
   };
 

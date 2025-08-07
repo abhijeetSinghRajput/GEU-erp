@@ -1,12 +1,13 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
+import freeRouter from "./routes/free.route.js";
 import examRouter from "./routes/exam.route.js";
 import dashboardRouter from "./routes/dashboard.route.js";
 import attendanceRouter from "./routes/attendance.route.js";
 import authRouter from "./routes/auth.route.js";
-import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.get("/", (req, res) => {
   res.status(200).json({ message: "Hello from server" });
 });
 
+app.use("/api/fee", freeRouter);
 app.use("/api/exam", examRouter);
 app.use("/api/attendance", attendanceRouter);
 app.use("/api/auth", authRouter);

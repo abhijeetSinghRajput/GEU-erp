@@ -13,11 +13,12 @@ import CircularError from "./CircularError";
 const icons = {
   "Information Cell": { icon: "🗞️", color: "#1e86ff" },
   "Fee Cell": { icon: "💸", color: "#00c9a7" },
-  "Examination Cell": {icon: "🎓", color: "#f9a825"},
+  "Examination Cell": { icon: "🎓", color: "#f9a825" },
 };
 
 const Circular = () => {
-  const { circulars, isLoadingCirculars, getCirculars, getCircularsDetails } = useNoticeStore();
+  const { circulars, isLoadingCirculars, getCirculars, getCircularsDetails } =
+    useNoticeStore();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -48,19 +49,20 @@ const Circular = () => {
   }, [currentIndex, circulars]);
 
   if (isLoadingCirculars) {
-    return <CircularSkeleton/>;
+    return <CircularSkeleton />;
   }
 
   if (!circulars || circulars.length === 0) {
-    return <CircularError onReload={getCirculars}/>
+    return <CircularError onReload={getCirculars} />;
   }
 
   return (
     <div className="max-w-screen-lg mx-auto p-6">
-        <div className="flex justify-between items-center gap-2 py-2">
-            <h2 className="text-xl font-semibold">Notices </h2>
-            <CircularDetailsDrawer/>
-        </div>
+      <div className="flex justify-between items-center gap-2 py-2">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-2">Notices </h2>
+
+        <CircularDetailsDrawer />
+      </div>
       <div className="relative min-h-[500px] h-full w-full overflow-hidden">
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
           <AnimatePresence mode="popLayout">
@@ -124,7 +126,9 @@ const Circular = () => {
                       </CardTitle>
                       <div className="text-sm flex gap-2 text-muted-foreground">
                         {formatRelativeDate(circular.DateFrom)}
-                        <Badge variant="secondary">{circular.ByDepartment}</Badge>
+                        <Badge variant="secondary">
+                          {circular.ByDepartment}
+                        </Badge>
                       </div>
                     </div>
                   </CardHeader>
