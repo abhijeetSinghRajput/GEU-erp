@@ -46,10 +46,7 @@ const AttendanceTable = () => {
   const { authenticated } = useAuthStore();
 
   useEffect(() => {
-    if (authenticated && student?.RegID) {
-      console.log("Fetching attendance for RegID:", student.RegID);
-      getAllAttendanceSubjects({ RegID: student.RegID });
-    }
+    getAllAttendanceSubjects({ RegID: student.RegID });
   }, [student?.RegID]);
 
   if (isLoadingSubjects) {
@@ -57,9 +54,13 @@ const AttendanceTable = () => {
   }
 
   if (!attendance) {
-    return <TableError onReload={()=>{
-      getAllAttendanceSubjects({ RegID: student?.RegID });
-    }} />;
+    return (
+      <TableError
+        onReload={() => {
+          getAllAttendanceSubjects({ RegID: student?.RegID });
+        }}
+      />
+    );
   }
 
   const {
