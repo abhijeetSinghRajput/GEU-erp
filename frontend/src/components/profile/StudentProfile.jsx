@@ -83,7 +83,7 @@ export function StudentProfile() {
   }
 
   return (
-    <div className="max-w-screen-lg mx-auto px-4 sm:px-6 md:px-4 py-2">
+    <div className="max-w-screen-lg mx-auto px-2 sm:px-4 md:px-6 py-2">
       <motion.div
         initial="hidden"
         animate="visible"
@@ -162,7 +162,7 @@ export function StudentProfile() {
             >
               <div className="flex p-2 gap-2 justify-center">
                 {TABS.map((tab) => (
-                  <motion.button
+                  <motion.Button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={`rounded-md px-3 py-2 text-sm font-medium flex items-center gap-2 ${
@@ -178,7 +178,7 @@ export function StudentProfile() {
                   >
                     {tab.icon}
                     {tab.title}
-                  </motion.button>
+                  </motion.Button>
                 ))}
               </div>
             </motion.div>

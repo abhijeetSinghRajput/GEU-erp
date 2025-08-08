@@ -104,7 +104,7 @@ const FeeSubmissions = () => {
   };
 
   return (
-    <div className="max-w-screen-lg mx-auto p-6">
+    <div className="max-w-screen-lg mx-auto px-2 sm:px-4 md:px-6 py-2">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

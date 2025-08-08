@@ -105,7 +105,7 @@ const AttendanceTable = () => {
   };
 
   return (
-    <div className="max-w-screen-lg mx-auto px-4 sm:px-6 md:px-4 py-2 mt-6">
+    <div className="max-w-screen-lg mx-auto px-2 sm:px-4 md:px-6 py-2 mt-6">
       <h2 className="text-3xl font-bold mb-6">Attendance</h2>
       <Card className="overflow-hidden">
         <div className="sticky top-0 z-10 bg-muted">

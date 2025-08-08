@@ -57,7 +57,7 @@ const Circular = () => {
   }
 
   return (
-    <div className="max-w-screen-lg mx-auto p-6">
+    <div className="max-w-screen-lg mx-auto px-2 sm:px-4 md:px-6 py-2">
       <div className="flex justify-between items-center gap-2 py-2">
         <h2 className="text-2xl sm:text-3xl font-bold mb-b">Notices </h2>
 

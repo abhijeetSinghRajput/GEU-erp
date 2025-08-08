@@ -10,11 +10,13 @@ const HomePage = () => {
   return (
     <div>
       <Header />
-      <StudentProfile />
-      <AttendanceTable />
-      <Circular />
-      <ExamSummary/>
-      <FeeSubmitions/>
+      <div className="space-y-6">
+        <StudentProfile />
+        <AttendanceTable />
+        <Circular />
+        <ExamSummary />
+        <FeeSubmitions />
+      </div>
     </div>
   );
 };
