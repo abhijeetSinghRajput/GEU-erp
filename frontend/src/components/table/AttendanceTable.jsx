@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import DataTable from "./dataTable";
 import { useStudentStore } from "@/stores/useStudentStore";
 import { useAttendanceStore } from "@/stores/useAttendanceStore";
 import { Card } from "../ui/card";
@@ -27,6 +26,7 @@ import TableSkeleton from "./TableSkeleton";
 import { useAuthStore } from "@/stores/useAuthStore";
 import TableError from "./TableError";
 import CircularProgress from "../ui/circular-progress";
+import DataTable from "../exams/fees/DataTable";
 
 const AttendanceTable = () => {
   const { attendance, isLoadingSubjects, getAllAttendanceSubjects } =
@@ -46,7 +46,7 @@ const AttendanceTable = () => {
   const { authenticated } = useAuthStore();
 
   useEffect(() => {
-    getAllAttendanceSubjects({ RegID: student.RegID });
+    getAllAttendanceSubjects({ RegID: student?.RegID });
   }, [student?.RegID]);
 
   if (isLoadingSubjects) {
@@ -82,8 +82,15 @@ const AttendanceTable = () => {
     { id: "TotalLecture", header: "Lectures", sortable: true },
     { id: "TotalPresent", header: "Present", sortable: true },
     { id: "TotalLeave", header: "Leave", sortable: true },
-    { id: "Percentage", header: "Percentage", sortable: true },
+    { id: "Percentage", header: "Percentage", sortable: true, suffix: "%" },
   ];
+
+  const numericColumns = [
+    "TotalLecture",
+    "TotalPresent",
+    "TotalLeave",
+    "Percentage",
+  ]
 
   const toggleColumnVisibility = (columnId) => {
     setVisibleColumns((prev) => ({
@@ -143,20 +150,22 @@ const AttendanceTable = () => {
             </DropdownMenu>
           </div>
         </div>
-
         <ScrollArea className="w-full whitespace-nowrap">
           <DataTable
-            data={attendance?.state || []}
+            data={attendance.state}
             columns={columns}
             visibleColumns={visibleColumns}
             footerData={{
+              Subject: "Total",
               TotalLecture,
               TotalPresent,
               TotalLeave,
-              TotalPercentage,
+              Percentage: TotalPercentage
             }}
             onRowClick={handleRowClick}
+            numericColumns={numericColumns}
           />
+          
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </Card>

@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import CircularProgress from "../ui/circular-progress";
 import { Button } from "../ui/button";
 import TooltipWrapper from "../TooltipWrapper";
+import ExamSkeleton from "./ExamSkeleton";
 
 const ExamSummary = () => {
   const {
@@ -22,11 +23,7 @@ const ExamSummary = () => {
   }, []);
 
   if (loadingExamSummary) {
-    return (
-      <div className="max-w-screen-lg mx-auto p-6 flex justify-center">
-        <Loader2 className="animate-spin h-6 w-6" />
-      </div>
-    );
+    return <ExamSkeleton />;
   }
 
   return (
@@ -86,12 +83,14 @@ const ExamSummary = () => {
                   {/* Exam Details */}
                   <div className="">
                     <div className="flex gap-2 items-center">
-                      <p className="text-sm text-muted-foreground">Subjects</p>
-                      <p className="font-medium">{exam.TotalSubject}</p>
+                      <p className="text-muted-foreground">Subjects</p>
+                      <p className="font-medium text-xl ">
+                        {exam.TotalSubject}
+                      </p>
                     </div>
                     <div className="flex gap-2 items-center">
-                      <p className="text-sm text-muted-foreground">Backlogs</p>
-                      <p className="font-medium">{exam.TotalBack}</p>
+                      <p className="text-muted-foreground">Backlogs</p>
+                      <p className="font-medium text-xl ">{exam.TotalBack}</p>
                     </div>
                   </div>
                 </div>

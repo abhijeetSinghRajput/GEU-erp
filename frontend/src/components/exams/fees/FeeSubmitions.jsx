@@ -25,9 +25,12 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import TableError from "@/components/table/TableError";
 import FeeSkeleton from "./FeeSkeleton";
+import CourseFee from "./CourseFee";
+import HostelFee from "./HostelFee";
 
 const FeeSubmissions = () => {
-  const { getFeeSubmissions, feeSubmitions, loadingFeeSubmitions } = useFeeStore();
+  const { getFeeSubmissions, feeSubmitions, loadingFeeSubmitions } =
+    useFeeStore();
   const [visibleColumns, setVisibleColumns] = useState({
     FeeHead: true,
     DueAmount: true,
@@ -36,17 +39,15 @@ const FeeSubmissions = () => {
     status: true,
   });
 
-  useEffect(()=>{
+  useEffect(() => {
     getFeeSubmissions();
-  }, [])
+  }, []);
 
   if (loadingFeeSubmitions) {
-    return (
-      <FeeSkeleton header={"Fee Submissions"}/>
-    );
+    return <FeeSkeleton header={"Fee Submissions"} />;
   }
   if (!feeSubmitions) {
-    return <TableError onReload={getFeeSubmissions}/>;
+    return <TableError onReload={getFeeSubmissions} />;
   }
 
   // Calculate totals
@@ -76,9 +77,14 @@ const FeeSubmissions = () => {
   // Columns configuration
   const feeColumns = [
     { id: "FeeHead", header: "Fee Head", sortable: false },
-    { id: "DueAmount", header: "Due (₹)", sortable: true },
-    { id: "ReceivedAmount", header: "Received (₹)", sortable: true },
-    { id: "BalanceAmount", header: "Balance (₹)", sortable: true },
+    { id: "DueAmount", header: "Due", sortable: true, prefix: "₹" },
+    {
+      id: "ReceivedAmount",
+      header: "Received",
+      sortable: true,
+      prefix: "₹",
+    },
+    { id: "BalanceAmount", header: "Balance", sortable: true, prefix: "₹" },
     { id: "status", header: "Status", sortable: true },
   ];
 
@@ -124,91 +130,12 @@ const FeeSubmissions = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.1 }}
             >
-              <Card className="rounded-2xl overflow-hidden">
-                <CardHeader className="border bg-muted">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <CardTitle>Course Fee Details</CardTitle>
-                      <CardDescription>
-                        {feeSubmitions.headdata[0]?.YS || "Current Year"} Fee
-                        Breakdown
-                      </CardDescription>
-                    </div>
-                    <div className="flex gap-2">
-                      <Badge
-                        variant={
-                          courseTotals.BalanceAmount > 0
-                            ? "destructive"
-                            : "success"
-                        }
-                      >
-                        {courseTotals.BalanceAmount > 0 ? "Pending" : "Paid"}
-                      </Badge>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="ml-auto gap-1 bg-input"
-                          >
-                            <span>Columns</span>
-                            <ChevronDown className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-[150px]">
-                          {feeColumns.map((column) => (
-                            <DropdownMenuCheckboxItem
-                              key={column.id}
-                              className="capitalize"
-                              checked={visibleColumns[column.id]}
-                              onCheckedChange={() =>
-                                toggleColumnVisibility(column.id)
-                              }
-                            >
-                              {column.header}
-                            </DropdownMenuCheckboxItem>
-                          ))}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </div>
-                </CardHeader>
-
-                <CardContent className="border p-0">
-                  {feeSubmitions.headdata.length > 0 ? (
-                    <div className="space-y-6">
-                      <DataTable
-                        data={prepareTableData(feeSubmitions.headdata)}
-                        columns={feeColumns}
-                        visibleColumns={visibleColumns}
-                        footerData={{
-                          FeeHead: "Total",
-                          DueAmount: courseTotals.DueAmount,
-                          ReceivedAmount: courseTotals.ReceivedAmount,
-                          BalanceAmount: courseTotals.BalanceAmount,
-                          status:
-                            courseTotals.BalanceAmount > 0 ? "Pending" : "Paid",
-                        }}
-                        numericColumns={[
-                          "DueAmount",
-                          "ReceivedAmount",
-                          "BalanceAmount",
-                        ]}
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center py-12">
-                      <InfoIcon className="w-12 h-12 text-muted-foreground mb-4" />
-                      <h3 className="text-lg font-medium mb-1">
-                        No Course Fees Found
-                      </h3>
-                      <p className="text-muted-foreground text-center max-w-md">
-                        There are no course fees associated with your account.
-                      </p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+              <CourseFee
+                data={prepareTableData(feeSubmitions.headdata)}
+                totals={courseTotals}
+                columns={feeColumns}
+                visibleColumns={visibleColumns}
+              />
 
               <FeeSummaryCards totals={courseTotals} />
             </motion.div>
@@ -220,89 +147,13 @@ const FeeSubmissions = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.1 }}
             >
-              <Card className="rounded-2xl overflow-hidden">
-                <CardHeader className="bg-muted">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <CardTitle>Hostel Fee Details</CardTitle>
-                      <CardDescription>
-                        Accommodation and meal charges
-                      </CardDescription>
-                    </div>
-                    <div className="flex gap-2">
-                      <Badge
-                        variant={
-                          hostelTotals.BalanceAmount > 0
-                            ? "destructive"
-                            : "success"
-                        }
-                      >
-                        {hostelTotals.BalanceAmount > 0 ? "Pending" : "Paid"}
-                      </Badge>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="ml-auto gap-1 bg-input"
-                          >
-                            <span>Columns</span>
-                            <ChevronDown className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-[150px]">
-                          {feeColumns.map((column) => (
-                            <DropdownMenuCheckboxItem
-                              key={column.id}
-                              className="capitalize"
-                              checked={visibleColumns[column.id]}
-                              onCheckedChange={() =>
-                                toggleColumnVisibility(column.id)
-                              }
-                            >
-                              {column.header}
-                            </DropdownMenuCheckboxItem>
-                          ))}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="p-0">
-                  {hasHostelFees ? (
-                    <div className="space-y-6">
-                      <DataTable
-                        data={prepareTableData(feeSubmitions.headdatahostel)}
-                        columns={feeColumns}
-                        visibleColumns={visibleColumns}
-                        footerData={{
-                          FeeHead: "Total",
-                          DueAmount: hostelTotals.DueAmount,
-                          ReceivedAmount: hostelTotals.ReceivedAmount,
-                          BalanceAmount: hostelTotals.BalanceAmount,
-                          status:
-                            hostelTotals.BalanceAmount > 0 ? "Pending" : "Paid",
-                        }}
-                        numericColumns={[
-                          "DueAmount",
-                          "ReceivedAmount",
-                          "BalanceAmount",
-                        ]}
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex h-[60vh] flex-col items-center justify-center py-12">
-                      <HomeIcon className="w-12 h-12 text-muted-foreground mb-4" />
-                      <h3 className="text-lg font-medium mb-1">
-                        No Hostel Fees Found
-                      </h3>
-                      <p className="text-muted-foreground text-center max-w-md">
-                        You don't have any hostel fees in your account records.
-                      </p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+              <HostelFee
+                data={prepareTableData(feeSubmitions.headdata)}
+                totals={courseTotals}
+                columns={feeColumns}
+                visibleColumns={visibleColumns}
+                hasHostelFees={hasHostelFees}
+              />
 
               <FeeSummaryCards totals={hostelTotals} />
             </motion.div>

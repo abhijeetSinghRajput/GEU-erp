@@ -1,4 +1,3 @@
-// components/DataTable.jsx
 "use client";
 
 import React, { useState } from "react";
@@ -27,10 +26,7 @@ const DataTable = ({
   onRowClick,
   statusConfig = {
     accessor: "status",
-    positiveValue: "Paid",
-    negativeValue: "Pending",
-    positiveVariant: "success",
-    negativeVariant: "destructive",
+    validator: null,
   },
   numericColumns = [],
 }) => {
@@ -47,9 +43,7 @@ const DataTable = ({
   // Sort data
   const sortedData = React.useMemo(() => {
     if (!sortConfig.key) return data;
-
     return [...data].sort((a, b) => {
-      // Handle numeric columns
       if (numericColumns.includes(sortConfig.key)) {
         const aValue = parseFloat(a[sortConfig.key]);
         const bValue = parseFloat(b[sortConfig.key]);
@@ -57,8 +51,6 @@ const DataTable = ({
         if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
         return 0;
       }
-
-      // Handle string columns
       if (a[sortConfig.key] < b[sortConfig.key]) {
         return sortConfig.direction === "asc" ? -1 : 1;
       }
@@ -78,45 +70,27 @@ const DataTable = ({
   };
 
   const getSortIcon = (columnId) => {
-    if (sortConfig.key !== columnId) return null;
+    const opacity = sortConfig.key !== columnId ? "opacity-0" : "opacity-1";
     return sortConfig.direction === "asc" ? (
-      <ChevronUp className="ml-2 h-3 w-3" />
+      <ChevronUp className={cn("h-3 w-3", opacity)} />
     ) : (
-      <ChevronDown className="ml-2 h-3 w-3" />
+      <ChevronDown className={cn("h-3 w-3", opacity)} />
     );
   };
 
   const renderCellContent = (row, column) => {
-    // Handle status badge rendering
-    if (column.id === statusConfig.accessor) {
-      const isPositive = row.BalanceAmount === 0 || row.Percentage >= 75;
+    if (column.id === statusConfig.accessor && statusConfig.validator) {
+      const status = statusConfig.validator(row);
       return (
-        <Badge
-          variant={
-            isPositive
-              ? statusConfig.positiveVariant
-              : statusConfig.negativeVariant
-          }
-        >
-          {isPositive ? statusConfig.positiveValue : statusConfig.negativeValue}
+        <Badge variant={status.variant}>
+          {status.value}
         </Badge>
       );
     }
-
-    // Handle numeric formatting
-    if (
-      numericColumns.includes(column.id) &&
-      typeof row[column.id] === "number"
-    ) {
-      const prefix = column.id.includes("Amount") ? "₹" : "";
-      const suffix = column.id === "Percentage" ? "%" : "";
-      return `${prefix}${row[column.id].toLocaleString()}${suffix}`;
-    }
-
-    return row[column.id];
+    const { prefix = "", suffix = "" } = column;
+    return `${prefix}${row[column.id]?.toLocaleString()}${suffix}`;
   };
 
-  console.log(numericColumns);
   return (
     <ScrollArea className="w-full whitespace-nowrap">
       <motion.div
@@ -145,7 +119,7 @@ const DataTable = ({
                           className={cn(
                             "px-4 py-3 gap-0.5 h-auto w-full rounded-none justify-start font-medium hover:bg-muted",
                             numericColumns.includes(column.id) &&
-                              "text-right justify-end"
+                              "text-right justify-end flex-row-reverse"
                           )}
                         >
                           {column.header}
@@ -178,7 +152,7 @@ const DataTable = ({
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.2 }}
                     className={`px-4 py-3 align-middle [&:has([role=checkbox])]:pr-0 ${
-                      numericColumns.includes(column.id) ? "text-right" : ""
+                      numericColumns.includes(column.id) ? "text-right font-medium" : ""
                     }`}
                   >
                     {renderCellContent(item, column)}
@@ -193,21 +167,23 @@ const DataTable = ({
               <TableRow>
                 {filteredColumns.map((column) => {
                   const footerValue = footerData[column.id];
-                  if (footerValue === undefined) return null;
+                  const columnConfig = columns.find(c => c.id === column.id) || {};
+                  const { prefix = "", suffix = "" } = columnConfig;
 
                   return (
                     <TableCell
                       key={column.id}
+                      colSpan={1}
                       className={cn(
                         "px-4 py-3",
-                        numericColumns.includes(column.id) &&
-                          "text-right font-medium"
+                        numericColumns.includes(column.id) && "text-right font-medium",
+                        footerValue === undefined && "opacity-0" // Hide but maintain layout
                       )}
                     >
-                      {numericColumns.includes(column.id) &&
-                      column.id.includes("Amount")
-                        ? `₹${footerValue.toLocaleString()}`
-                        : footerValue}
+                      {footerValue !== undefined 
+                        ? `${prefix}${footerValue.toLocaleString()}${suffix}`
+                        : '\u00A0' // Non-breaking space to maintain cell height
+                      }
                     </TableCell>
                   );
                 })}

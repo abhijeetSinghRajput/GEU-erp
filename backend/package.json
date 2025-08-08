@@ -19,6 +19,7 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
+    "geu-erp": "file:..",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.17.0",
     "ora": "^8.2.0",

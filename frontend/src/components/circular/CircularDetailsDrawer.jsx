@@ -103,7 +103,7 @@ const CircularDetailsDrawer = () => {
   return (
     <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
       <DrawerTrigger asChild>
-        <Button variant="outline">View All Notices</Button>
+        <Button variant="secondary">View All Notices</Button>
       </DrawerTrigger>
       <DrawerContent className="h-[90vh]">
         <ScrollArea>
