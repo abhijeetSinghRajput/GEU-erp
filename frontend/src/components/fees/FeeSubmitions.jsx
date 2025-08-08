@@ -13,7 +13,7 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { InfoIcon, HomeIcon, FileTextIcon } from "lucide-react";
 import { useFeeStore } from "@/stores/useFeeStore";
-import DataTable from "./DataTable";
+import DataTable from "../table/DataTable";
 
 import {
   DropdownMenu,

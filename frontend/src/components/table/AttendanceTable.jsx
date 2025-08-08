@@ -26,7 +26,7 @@ import TableSkeleton from "./TableSkeleton";
 import { useAuthStore } from "@/stores/useAuthStore";
 import TableError from "./TableError";
 import CircularProgress from "../ui/circular-progress";
-import DataTable from "../exams/fees/DataTable";
+import DataTable from "./DataTable";
 
 const AttendanceTable = () => {
   const { attendance, isLoadingSubjects, getAllAttendanceSubjects } =
@@ -35,10 +35,10 @@ const AttendanceTable = () => {
   const [visibleColumns, setVisibleColumns] = useState({
     Subject: true,
     SubjectCode: false,
-    EMPNAME: false,
+    EMPNAME: false, 
     TotalLecture: true,
     TotalPresent: true,
-    TotalLeave: true,
+    TotalLeave: false,
     Percentage: true,
   });
   const [selectedSubject, setSelectedSubject] = useState(null);
@@ -78,7 +78,7 @@ const AttendanceTable = () => {
   const columns = [
     { id: "Subject", header: "Subject", sortable: false },
     { id: "SubjectCode", header: "Subject Code", sortable: false },
-    { id: "EMPNAME", header: "Faculty", sortable: false },
+    { id: "EMPNAME", header: "Faculty", sortable: true },
     { id: "TotalLecture", header: "Lectures", sortable: true },
     { id: "TotalPresent", header: "Present", sortable: true },
     { id: "TotalLeave", header: "Leave", sortable: true },

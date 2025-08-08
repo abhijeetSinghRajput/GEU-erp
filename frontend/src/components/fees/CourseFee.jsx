@@ -13,24 +13,20 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, HomeIcon } from "lucide-react";
+import { ChevronDown, InfoIcon } from "lucide-react";
 import React from "react";
-import DataTable from "./DataTable";
+import DataTable from "../table/DataTable";
 
-const HostelFee = ({
-  data,
-  totals,
-  columns,
-  visibleColumns,
-  hasHostelFees = false,
-}) => {
+const CourseFee = ({ data, totals, columns, visibleColumns }) => {
   return (
     <Card className="rounded-2xl overflow-hidden">
-      <CardHeader className="bg-muted">
+      <CardHeader className="border bg-muted">
         <div className="flex justify-between items-start">
           <div>
-            <CardTitle>Hostel Fee Details</CardTitle>
-            <CardDescription>Accommodation and meal charges</CardDescription>
+            <CardTitle>Course Fee Details</CardTitle>
+            <CardDescription>
+              {data[0]?.YS || "Current Year"} Fee Breakdown
+            </CardDescription>
           </div>
           <div className="flex gap-2">
             <Badge
@@ -65,8 +61,9 @@ const HostelFee = ({
           </div>
         </div>
       </CardHeader>
-      <CardContent className="p-0">
-        {hasHostelFees ? (
+
+      <CardContent className="border p-0">
+        {data.length > 0 ? (
           <div className="space-y-6">
             <DataTable
               data={data}
@@ -91,11 +88,11 @@ const HostelFee = ({
             />
           </div>
         ) : (
-          <div className="flex h-[60vh] flex-col items-center justify-center py-12">
-            <HomeIcon className="w-12 h-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium mb-1">No Hostel Fees Found</h3>
+          <div className="flex flex-col items-center justify-center py-12">
+            <InfoIcon className="w-12 h-12 text-muted-foreground mb-4" />
+            <h3 className="text-lg font-medium mb-1">No Course Fees Found</h3>
             <p className="text-muted-foreground text-center max-w-md">
-              You don't have any hostel fees in your account records.
+              There are no course fees associated with your account.
             </p>
           </div>
         )}
@@ -104,4 +101,4 @@ const HostelFee = ({
   );
 };
 
-export default HostelFee;
+export default CourseFee;
