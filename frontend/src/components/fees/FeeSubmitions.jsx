@@ -10,37 +10,28 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { motion } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
-import { InfoIcon, HomeIcon, FileTextIcon } from "lucide-react";
+import {HomeIcon, FileTextIcon, WalletIcon } from "lucide-react";
 import { useFeeStore } from "@/stores/useFeeStore";
-import DataTable from "../table/DataTable";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-  DropdownMenuCheckboxItem,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react";
 import TableError from "@/components/table/TableError";
 import FeeSkeleton from "./FeeSkeleton";
 import CourseFee from "./CourseFee";
 import HostelFee from "./HostelFee";
+import FeeReceipts from "./FeeReceipts";
 
 const FeeSubmissions = () => {
-  const { getFeeSubmissions, feeSubmitions, loadingFeeSubmitions } =
-    useFeeStore();
-  const [visibleColumns, setVisibleColumns] = useState({
-    FeeHead: true,
-    DueAmount: true,
-    ReceivedAmount: true,
-    BalanceAmount: true,
-    status: true,
-  });
+  const {
+    getFeeSubmissions,
+    feeSubmitions,
+    loadingFeeSubmitions,
+    getFeeReceipts,
+    feeReceipts,
+  } = useFeeStore();
+  
 
   useEffect(() => {
     getFeeSubmissions();
+    getFeeReceipts();
   }, []);
 
   if (loadingFeeSubmitions) {
@@ -52,6 +43,8 @@ const FeeSubmissions = () => {
 
   // Calculate totals
   const calculateTotals = (data) => {
+    if(!Array.isArray(data)) return;
+    
     return data.reduce(
       (acc, item) => ({
         DueAmount: acc.DueAmount + item.DueAmount,
@@ -78,22 +71,10 @@ const FeeSubmissions = () => {
   const feeColumns = [
     { id: "FeeHead", header: "Fee Head", sortable: false },
     { id: "DueAmount", header: "Due", sortable: true, prefix: "₹" },
-    {
-      id: "ReceivedAmount",
-      header: "Received",
-      sortable: true,
-      prefix: "₹",
-    },
+    { id: "ReceivedAmount", header: "Received", sortable: true, prefix: "₹"},
     { id: "BalanceAmount", header: "Balance", sortable: true, prefix: "₹" },
     { id: "status", header: "Status", sortable: true },
   ];
-
-  const toggleColumnVisibility = (columnId) => {
-    setVisibleColumns((prev) => ({
-      ...prev,
-      [columnId]: !prev[columnId],
-    }));
-  };
 
   // Prepare data with status field
   const prepareTableData = (data) => {
@@ -113,7 +94,7 @@ const FeeSubmissions = () => {
         <h2 className="text-3xl font-bold mb-6">Fee Submissions</h2>
 
         <Tabs defaultValue="course" className="w-full">
-          <TabsList className="grid w-full h-10 grid-cols-2 max-w-xs">
+          <TabsList className="grid w-full h-10 grid-cols-3 max-w-xs">
             <TabsTrigger value="course" className="h-full">
               <FileTextIcon className="w-4 h-4 mr-2" />
               Course Fees
@@ -121,6 +102,10 @@ const FeeSubmissions = () => {
             <TabsTrigger value="hostel" className="h-full">
               <HomeIcon className="w-4 h-4 mr-2" />
               Hostel Fees
+            </TabsTrigger>
+            <TabsTrigger value="receipts" className="h-full">
+              <WalletIcon className="w-4 h-4 mr-2" />
+              Receipts Fees
             </TabsTrigger>
           </TabsList>
 
@@ -134,7 +119,6 @@ const FeeSubmissions = () => {
                 data={prepareTableData(feeSubmitions.headdata)}
                 totals={courseTotals}
                 columns={feeColumns}
-                visibleColumns={visibleColumns}
               />
 
               <FeeSummaryCards totals={courseTotals} />
@@ -151,11 +135,20 @@ const FeeSubmissions = () => {
                 data={prepareTableData(feeSubmitions.headdata)}
                 totals={courseTotals}
                 columns={feeColumns}
-                visibleColumns={visibleColumns}
                 hasHostelFees={hasHostelFees}
               />
 
               <FeeSummaryCards totals={hostelTotals} />
+            </motion.div>
+          </TabsContent>
+
+          <TabsContent value="receipts">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.1 }}
+            >
+              <FeeReceipts data={feeReceipts} />
             </motion.div>
           </TabsContent>
         </Tabs>

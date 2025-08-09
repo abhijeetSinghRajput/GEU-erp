@@ -1,9 +1,14 @@
 import { axiosInstance } from "@/lib/axios";
+import axios from "axios";
+import { toast } from "sonner";
 import { create } from "zustand";
 
 export const useFeeStore = create((set, get) => ({
   feeSubmitions: null,
+  feeReceipts: null,
   loadingFeeSubmitions: false,
+  loadingFeeSubmitions: false,
+  downloadingReceipt: null,
 
   getFeeSubmissions: async () => {
     set({ loadingFeeSubmitions: true });
@@ -13,7 +18,7 @@ export const useFeeStore = create((set, get) => ({
       set({ feeSubmitions });
       // console.log("Fee submissions fetched successfully:", feeSubmitions);
     } catch (error) {
-      set({ feeSubmitions : null});
+      set({ feeSubmitions: null });
       console.error("Error fetching fee submissions:", error);
       toast.error(
         error?.response?.data.message || "Failed to load fee submissions"
@@ -22,367 +27,61 @@ export const useFeeStore = create((set, get) => ({
       set({ loadingFeeSubmitions: false });
     }
   },
-}));
 
-// "feeSubmitions" = {
-//     "headdata": [
-//         {
-//             "FeeHeadID": 95,
-//             "LID": 56275,
-//             "IsSeparate": true,
-//             "IsFine": true,
-//             "IsHostel": 0,
-//             "IsRegistration": false,
-//             "IsTuitionFee": false,
-//             "IsSociety": false,
-//             "FeeHead": "PREVIOUS MAIN FEE FINE",
-//             "DueAmount": 1800,
-//             "ReceivedAmount": 1800,
-//             "RefundAmount": 0,
-//             "BalanceAmount": 0,
-//             "DepositAmount": 0,
-//             "PreExcess": 0,
-//             "SCAmount": 0,
-//             "NetDues": 1800,
-//             "YearSem": 2,
-//             "FeeHeadPriority": 0,
-//             "FeeSYID": 28,
-//             "YS": "2nd yr",
-//             "ExcessFeeAmount": 0,
-//             "BookID": 10,
-//             "SecurityAdjusted": 3000,
-//             "FineAmount": 0
-//         },
-//         {
-//             "FeeHeadID": 5,
-//             "LID": 56210,
-//             "IsSeparate": false,
-//             "IsFine": false,
-//             "IsHostel": 0,
-//             "IsRegistration": false,
-//             "IsTuitionFee": false,
-//             "IsSociety": false,
-//             "FeeHead": "Examination Fee",
-//             "DueAmount": 9000,
-//             "ReceivedAmount": 9000,
-//             "RefundAmount": 0,
-//             "BalanceAmount": 0,
-//             "DepositAmount": 0,
-//             "PreExcess": 0,
-//             "SCAmount": 0,
-//             "NetDues": 9000,
-//             "YearSem": 2,
-//             "FeeHeadPriority": 5,
-//             "FeeSYID": 28,
-//             "YS": "2nd yr",
-//             "ExcessFeeAmount": 0,
-//             "BookID": 10,
-//             "SecurityAdjusted": 3000,
-//             "FineAmount": 0
-//         },
-//         {
-//             "FeeHeadID": 6,
-//             "LID": 56213,
-//             "IsSeparate": false,
-//             "IsFine": false,
-//             "IsHostel": 0,
-//             "IsRegistration": false,
-//             "IsTuitionFee": false,
-//             "IsSociety": false,
-//             "FeeHead": "Library Fee",
-//             "DueAmount": 5000,
-//             "ReceivedAmount": 5000,
-//             "RefundAmount": 0,
-//             "BalanceAmount": 0,
-//             "DepositAmount": 0,
-//             "PreExcess": 0,
-//             "SCAmount": 0,
-//             "NetDues": 5000,
-//             "YearSem": 2,
-//             "FeeHeadPriority": 6,
-//             "FeeSYID": 28,
-//             "YS": "2nd yr",
-//             "ExcessFeeAmount": 0,
-//             "BookID": 10,
-//             "SecurityAdjusted": 3000,
-//             "FineAmount": 0
-//         },
-//         {
-//             "FeeHeadID": 7,
-//             "LID": 56212,
-//             "IsSeparate": false,
-//             "IsFine": false,
-//             "IsHostel": 0,
-//             "IsRegistration": false,
-//             "IsTuitionFee": false,
-//             "IsSociety": false,
-//             "FeeHead": "Insurance Cover",
-//             "DueAmount": 1000,
-//             "ReceivedAmount": 1000,
-//             "RefundAmount": 0,
-//             "BalanceAmount": 0,
-//             "DepositAmount": 0,
-//             "PreExcess": 0,
-//             "SCAmount": 0,
-//             "NetDues": 1000,
-//             "YearSem": 2,
-//             "FeeHeadPriority": 7,
-//             "FeeSYID": 28,
-//             "YS": "2nd yr",
-//             "ExcessFeeAmount": 0,
-//             "BookID": 10,
-//             "SecurityAdjusted": 3000,
-//             "FineAmount": 0
-//         },
-//         {
-//             "FeeHeadID": 8,
-//             "LID": 56219,
-//             "IsSeparate": false,
-//             "IsFine": false,
-//             "IsHostel": 0,
-//             "IsRegistration": false,
-//             "IsTuitionFee": false,
-//             "IsSociety": false,
-//             "FeeHead": "Student Welfare Fee",
-//             "DueAmount": 1500,
-//             "ReceivedAmount": 1500,
-//             "RefundAmount": 0,
-//             "BalanceAmount": 0,
-//             "DepositAmount": 0,
-//             "PreExcess": 0,
-//             "SCAmount": 0,
-//             "NetDues": 1500,
-//             "YearSem": 2,
-//             "FeeHeadPriority": 8,
-//             "FeeSYID": 28,
-//             "YS": "2nd yr",
-//             "ExcessFeeAmount": 0,
-//             "BookID": 10,
-//             "SecurityAdjusted": 3000,
-//             "FineAmount": 0
-//         },
-//         {
-//             "FeeHeadID": 9,
-//             "LID": 56218,
-//             "IsSeparate": false,
-//             "IsFine": false,
-//             "IsHostel": 0,
-//             "IsRegistration": false,
-//             "IsTuitionFee": false,
-//             "IsSociety": false,
-//             "FeeHead": "Sport Fee",
-//             "DueAmount": 1000,
-//             "ReceivedAmount": 1000,
-//             "RefundAmount": 0,
-//             "BalanceAmount": 0,
-//             "DepositAmount": 0,
-//             "PreExcess": 0,
-//             "SCAmount": 0,
-//             "NetDues": 1000,
-//             "YearSem": 2,
-//             "FeeHeadPriority": 9,
-//             "FeeSYID": 28,
-//             "YS": "2nd yr",
-//             "ExcessFeeAmount": 0,
-//             "BookID": 10,
-//             "SecurityAdjusted": 3000,
-//             "FineAmount": 0
-//         },
-//         {
-//             "FeeHeadID": 10,
-//             "LID": 56215,
-//             "IsSeparate": false,
-//             "IsFine": false,
-//             "IsHostel": 0,
-//             "IsRegistration": false,
-//             "IsTuitionFee": false,
-//             "IsSociety": false,
-//             "FeeHead": "Online",
-//             "DueAmount": 1000,
-//             "ReceivedAmount": 1000,
-//             "RefundAmount": 0,
-//             "BalanceAmount": 0,
-//             "DepositAmount": 0,
-//             "PreExcess": 0,
-//             "SCAmount": 0,
-//             "NetDues": 1000,
-//             "YearSem": 2,
-//             "FeeHeadPriority": 10,
-//             "FeeSYID": 28,
-//             "YS": "2nd yr",
-//             "ExcessFeeAmount": 0,
-//             "BookID": 10,
-//             "SecurityAdjusted": 3000,
-//             "FineAmount": 0
-//         },
-//         {
-//             "FeeHeadID": 11,
-//             "LID": 56221,
-//             "IsSeparate": false,
-//             "IsFine": false,
-//             "IsHostel": 0,
-//             "IsRegistration": false,
-//             "IsTuitionFee": false,
-//             "IsSociety": false,
-//             "FeeHead": "Transport Fee",
-//             "DueAmount": 3300,
-//             "ReceivedAmount": 3300,
-//             "RefundAmount": 0,
-//             "BalanceAmount": 0,
-//             "DepositAmount": 0,
-//             "PreExcess": 0,
-//             "SCAmount": 0,
-//             "NetDues": 3300,
-//             "YearSem": 2,
-//             "FeeHeadPriority": 11,
-//             "FeeSYID": 28,
-//             "YS": "2nd yr",
-//             "ExcessFeeAmount": 0,
-//             "BookID": 10,
-//             "SecurityAdjusted": 3000,
-//             "FineAmount": 0
-//         },
-//         {
-//             "FeeHeadID": 12,
-//             "LID": 56216,
-//             "IsSeparate": false,
-//             "IsFine": false,
-//             "IsHostel": 0,
-//             "IsRegistration": false,
-//             "IsTuitionFee": false,
-//             "IsSociety": false,
-//             "FeeHead": "PDP",
-//             "DueAmount": 2600,
-//             "ReceivedAmount": 2600,
-//             "RefundAmount": 0,
-//             "BalanceAmount": 0,
-//             "DepositAmount": 0,
-//             "PreExcess": 0,
-//             "SCAmount": 0,
-//             "NetDues": 2600,
-//             "YearSem": 2,
-//             "FeeHeadPriority": 12,
-//             "FeeSYID": 28,
-//             "YS": "2nd yr",
-//             "ExcessFeeAmount": 0,
-//             "BookID": 10,
-//             "SecurityAdjusted": 3000,
-//             "FineAmount": 0
-//         },
-//         {
-//             "FeeHeadID": 15,
-//             "LID": 56208,
-//             "IsSeparate": false,
-//             "IsFine": false,
-//             "IsHostel": 0,
-//             "IsRegistration": false,
-//             "IsTuitionFee": false,
-//             "IsSociety": false,
-//             "FeeHead": "Degree Fee",
-//             "DueAmount": 1500,
-//             "ReceivedAmount": 1500,
-//             "RefundAmount": 0,
-//             "BalanceAmount": 0,
-//             "DepositAmount": 0,
-//             "PreExcess": 0,
-//             "SCAmount": 0,
-//             "NetDues": 1500,
-//             "YearSem": 2,
-//             "FeeHeadPriority": 15,
-//             "FeeSYID": 28,
-//             "YS": "2nd yr",
-//             "ExcessFeeAmount": 0,
-//             "BookID": 10,
-//             "SecurityAdjusted": 3000,
-//             "FineAmount": 0
-//         },
-//         {
-//             "FeeHeadID": 18,
-//             "LID": 56214,
-//             "IsSeparate": false,
-//             "IsFine": false,
-//             "IsHostel": 0,
-//             "IsRegistration": false,
-//             "IsTuitionFee": false,
-//             "IsSociety": false,
-//             "FeeHead": "Memoriable Charges",
-//             "DueAmount": 1500,
-//             "ReceivedAmount": 1500,
-//             "RefundAmount": 0,
-//             "BalanceAmount": 0,
-//             "DepositAmount": 0,
-//             "PreExcess": 0,
-//             "SCAmount": 0,
-//             "NetDues": 1500,
-//             "YearSem": 2,
-//             "FeeHeadPriority": 18,
-//             "FeeSYID": 28,
-//             "YS": "2nd yr",
-//             "ExcessFeeAmount": 0,
-//             "BookID": 10,
-//             "SecurityAdjusted": 3000,
-//             "FineAmount": 0
-//         },
-//         {
-//             "FeeHeadID": 16,
-//             "LID": 56206,
-//             "IsSeparate": false,
-//             "IsFine": false,
-//             "IsHostel": 0,
-//             "IsRegistration": false,
-//             "IsTuitionFee": false,
-//             "IsSociety": false,
-//             "FeeHead": "Alumni Fee",
-//             "DueAmount": 3000,
-//             "ReceivedAmount": 3000,
-//             "RefundAmount": 0,
-//             "BalanceAmount": 0,
-//             "DepositAmount": 0,
-//             "PreExcess": 0,
-//             "SCAmount": 0,
-//             "NetDues": 3000,
-//             "YearSem": 2,
-//             "FeeHeadPriority": 100,
-//             "FeeSYID": 28,
-//             "YS": "2nd yr",
-//             "ExcessFeeAmount": 0,
-//             "BookID": 10,
-//             "SecurityAdjusted": 3000,
-//             "FineAmount": 0
-//         },
-//         {
-//             "FeeHeadID": 1,
-//             "LID": 56223,
-//             "IsSeparate": false,
-//             "IsFine": false,
-//             "IsHostel": 0,
-//             "IsRegistration": false,
-//             "IsTuitionFee": true,
-//             "IsSociety": false,
-//             "FeeHead": "Tution Fee",
-//             "DueAmount": 168000,
-//             "ReceivedAmount": 134900,
-//             "RefundAmount": 0,
-//             "BalanceAmount": 0,
-//             "DepositAmount": 0,
-//             "PreExcess": 0,
-//             "SCAmount": 33100,
-//             "NetDues": 134900,
-//             "YearSem": 2,
-//             "FeeHeadPriority": 156,
-//             "FeeSYID": 28,
-//             "YS": "2nd yr",
-//             "ExcessFeeAmount": 0,
-//             "BookID": 10,
-//             "SecurityAdjusted": 3000,
-//             "FineAmount": 0
-//         }
-//     ],
-//     "headdatahostel": [],
-//     "totaldue": "0",
-//     "totalreceive": "0",
-//     "totalbalance": "0",
-//     "adjust": "0",
-//     "excessfee": "0",
-//     "scholarshipSem": 0
-// }
+  getFeeReceipts: async () => {
+    set({ loadingFeeReceipts: true });
+    try {
+      const res = await axiosInstance.get("/fee/receipts");
+      const { feeReceipts } = res.data;
+      set({ feeReceipts });
+    } catch (error) {
+      set({ feeReceipts: null });
+      console.error("Error fetching fee receipts:", error);
+      toast.error(
+        error?.response?.data.message || "Failed to load fee receipts"
+      );
+    } finally {
+      set({ loadingFeeReceipts: false });
+    }
+  },
+
+  downloadReceipt: async (ReceiptModeID, BookID, CombineReceiptNo) => {
+    set({ downloadingReceipt: CombineReceiptNo });
+    try {
+      const res = await axiosInstance.get("/fee/download", {
+        params: { ReceiptModeID, BookID, CombineReceiptNo },
+        responseType: "blob", // important!
+      });
+
+      // Create a download link
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement("a");
+      link.href = url;
+
+      // Optional: Try to grab filename from headers, else fallback
+      const contentDisposition = res.headers["content-disposition"];
+      let filename = `${CombineReceiptNo}-fee-receipt.pdf`;
+      if (contentDisposition) {
+        const match = contentDisposition.match(/filename="?(.+)"?/);
+        if (match) filename = match[1];
+      }
+      link.setAttribute("download", filename);
+
+      // Append to DOM, click, remove
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      // Cleanup object URL
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading receipt:", error);
+      toast.error(
+        error?.response?.data.message || "Failed to download receipt"
+      );
+    } finally {
+      set({ downloadingReceipt: false });
+    }
+  },
+  
+}));

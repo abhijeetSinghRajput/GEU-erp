@@ -1,4 +1,6 @@
 import { fetchGEU } from "../utils/geuApi.js";
+import {errorMap} from "../constants/error.js";
+
 import qs from "qs";
 
 export const getAllAttendanceSubjects = async (req, res) => {
@@ -16,8 +18,8 @@ export const getAllAttendanceSubjects = async (req, res) => {
     const data = JSON.parse(result.data || "[]");
 
     res.json({ state, data });
-  } catch (err) {
-    res.status(500).json({ message: "Failed to fetch attendance subjects", error: err.message });
+  } catch (error) {
+    res.status(500).json({ message: errorMap[error.code] || "Failed to fetch attendance subjects" });
   }
 };
 
@@ -53,8 +55,7 @@ export const getAttendanceBySubject = async (req, res) => {
     res.status(200).json({ state, data, dtLecture });
   } catch (error) {
     res.status(500).json({
-      message: "Failed to fetch attendance details by subject",
-      error: error.message,
+      message: errorMap[error.code] || "Failed to fetch attendance details by subject",
     });
   }
 };
@@ -72,8 +73,8 @@ export const attendanceDates = async (req, res) => {
       referer: "https://student.geu.ac.in/Web_StudentAcademic/Cyborg_StudentAttendanceAcademic?id=Attendance",
     });
     res.json(data);
-  } catch (err) {
-    res.status(500).json({ message: "Failed to fetch attendance dates", error: err.message });
+  } catch (error) {
+    res.status(500).json({ message: errorMap[error.code] || "Failed to fetch attendance dates" });
   }
 };
 
@@ -89,8 +90,8 @@ export const getAttendanceTable = async (req, res) => {
       data: `id=Attendance&SubjectCode=${subjectCode}&StartDate=${startDate}&EndDate=${endDate}`,
     });
     res.json(data);
-  } catch (err) {
-    res.status(500).json({ message: "Failed to fetch attendance data", error: err.message });
+  } catch (error) {
+    res.status(500).json({ message: errorMap[error] || "Failed to fetch attendance data" });
   }
 };
 
@@ -121,7 +122,7 @@ export const getFullAttendance = async (req, res) => {
             data: `id=Attendance&SubjectCode=${SubjectCode}&StartDate=${startDate}&EndDate=${endDate}`,
           });
           return { ...subject, attendance: detail };
-        } catch (err) {
+        } catch (error) {
           return { ...subject, error: "Failed to fetch attendance" };
         }
       })
@@ -132,8 +133,8 @@ export const getFullAttendance = async (req, res) => {
       totalSubjects: subjects.length,
       subjects: tableData,
     });
-  } catch (err) {
-    res.status(500).json({ message: "Failed to fetch full attendance", error: err.message });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch full attendance" });
   }
 };
 
@@ -178,8 +179,8 @@ export const fetchCourseAttendance = async (req, res) => {
     const dtLecture = JSON.parse(result.dtLecture || "[]");
 
     res.json({ state, data, dtLecture });
-  } catch (err) {
+  } catch (error) {
     console.error("❌ Error fetching course attendance:", err.message);
-    res.status(500).json({ message: "Failed to fetch course attendance", error: err.message });
+    res.status(500).json({ message: errorMap[error.code] || "Failed to fetch course attendance" });
   }
 };

@@ -8,6 +8,7 @@ import CircularProgress from "../ui/circular-progress";
 import { Button } from "../ui/button";
 import TooltipWrapper from "../TooltipWrapper";
 import ExamSkeleton from "./ExamSkeleton";
+import ExamError from "./ExamError";
 
 const ExamSummary = () => {
   const {
@@ -24,6 +25,10 @@ const ExamSummary = () => {
 
   if (loadingExamSummary) {
     return <ExamSkeleton />;
+  }
+
+  if(!Array.isArray(examSummary) || examSummary.length === 0 ) {
+    return <ExamError onReload={getExamSummary}/>
   }
 
   return (

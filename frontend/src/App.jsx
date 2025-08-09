@@ -51,7 +51,7 @@ const App = () => {
           />
         </Routes>
       </TooltipProvider>
-      <Toaster />
+      <Toaster expand={true} richColors/>
     </ThemeProvider>
   );
 };

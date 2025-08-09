@@ -10,10 +10,7 @@ export const useAttendanceStore = create((set, get) => ({
   isLoadingSubjectDetails: false,
 
   getAllAttendanceSubjects: async ({ RegID }) => {
-    if(!RegID) {
-      toast.error("Registration ID is required to fetch attendance.");
-      return;
-    }
+    if(!RegID) return;
 
     set({ isLoadingSubjects: true });
     try {

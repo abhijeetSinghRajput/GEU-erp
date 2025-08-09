@@ -19,9 +19,10 @@ const TableError = ({
   heading = "Data Loading Failed",
   description,
   onReload,
+  className,
 }) => {
   return (
-    <div className="max-w-screen-lg mx-auto px-4 sm:px-6 md:px-4 py-2">
+    <div className={cn("max-w-screen-lg mx-auto px-4 sm:px-6 md:px-4 py-2", className)}>
       <Card className="overflow-hidden relative">
         <div className="absolute z-20 inset-0 bg-background/70 flex items-center justify-center p-4">
           <div className="text-center space-y-4">

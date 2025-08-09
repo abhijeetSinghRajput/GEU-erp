@@ -162,7 +162,7 @@ export function StudentProfile() {
             >
               <div className="flex p-2 gap-2 justify-center">
                 {TABS.map((tab) => (
-                  <motion.Button
+                  <motion.button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={`rounded-md px-3 py-2 text-sm font-medium flex items-center gap-2 ${
@@ -178,7 +178,7 @@ export function StudentProfile() {
                   >
                     {tab.icon}
                     {tab.title}
-                  </motion.Button>
+                  </motion.button>
                 ))}
               </div>
             </motion.div>

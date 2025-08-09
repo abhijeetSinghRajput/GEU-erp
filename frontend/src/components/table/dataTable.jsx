@@ -79,6 +79,12 @@ const DataTable = ({
   };
 
   const renderCellContent = (row, column) => {
+    // custome cell renderer
+    if(column.cell) {
+      return column.cell(row);
+    }
+    
+    // Handle status column with custom validator
     if (column.id === statusConfig.accessor && statusConfig.validator) {
       const status = statusConfig.validator(row);
       return (
@@ -87,6 +93,8 @@ const DataTable = ({
         </Badge>
       );
     }
+
+    // Handle numeric columns with prefix and suffix
     const { prefix = "", suffix = "" } = column;
     return `${prefix}${row[column.id]?.toLocaleString()}${suffix}`;
   };

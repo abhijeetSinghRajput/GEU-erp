@@ -14,10 +14,25 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown, InfoIcon } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import DataTable from "../table/DataTable";
 
-const CourseFee = ({ data, totals, columns, visibleColumns }) => {
+const CourseFee = ({ data, totals, columns }) => {
+  const [visibleColumns, setVisibleColumns] = useState({
+    FeeHead: true,
+    DueAmount: true,
+    ReceivedAmount: true,
+    BalanceAmount: true,
+    status: true,
+  });
+
+  const toggleColumnVisibility = (columnId) => {
+    setVisibleColumns((prev) => ({
+      ...prev,
+      [columnId]: !prev[columnId],
+    }));
+  };
+
   return (
     <Card className="rounded-2xl overflow-hidden">
       <CardHeader className="border bg-muted">
