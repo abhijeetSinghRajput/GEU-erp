@@ -25,7 +25,7 @@ import AttendanceCalendar from "../attendanceCalendar/AttendanceCalendar";
 import TableSkeleton from "./TableSkeleton";
 import TableError from "./TableError";
 import CircularProgress from "../ui/circular-progress";
-import DataTable from "./DataTable";
+import DataTable from "./DataTable.jsx";
 
 const AttendanceTable = () => {
   const { attendance, isLoadingSubjects, getAllAttendanceSubjects, errors } =
