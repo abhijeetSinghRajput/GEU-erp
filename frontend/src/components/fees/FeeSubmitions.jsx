@@ -10,7 +10,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { motion } from "framer-motion";
-import { HomeIcon, FileTextIcon, WalletIcon, AlertCircleIcon } from "lucide-react";
+import { HomeIcon, FileTextIcon, WalletIcon, AlertCircleIcon, CheckCircleIcon } from "lucide-react";
 import { useFeeStore } from "@/stores/useFeeStore";
 
 import TableError from "@/components/table/TableError";
