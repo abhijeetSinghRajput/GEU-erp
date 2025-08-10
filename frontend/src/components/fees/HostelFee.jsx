@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown, HomeIcon } from "lucide-react";
 import React, { useState } from "react";
-import DataTable from "../table/DataTable";
+import DataTable from "../table/Table";
 
 const HostelFee = ({ data, totals, columns, hasHostelFees = false }) => {
   const [visibleColumns, setVisibleColumns] = useState({

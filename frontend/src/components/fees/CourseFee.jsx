@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown, InfoIcon } from "lucide-react";
 import React, { useState } from "react";
-import DataTable from "../table/DataTable";
+import DataTable from "../table/Table";
 import FeeError from "./FeeError";
 
 const CourseFee = ({ data, totals, columns }) => {

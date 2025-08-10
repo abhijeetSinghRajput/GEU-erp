@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown, InfoIcon, Download, Loader2 } from "lucide-react";
 import React, { useState } from "react";
-import DataTable from "../table/DataTable";
+import DataTable from "../table/Table";
 import TooltipWrapper from "../TooltipWrapper";
 import { useFeeStore } from "@/stores/useFeeStore";
 import TableError from "../table/TableError";
