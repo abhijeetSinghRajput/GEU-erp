@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { ChevronDown, Clipboard, User2 } from "lucide-react";
+import { ChevronDown, Clipboard, RotateCwIcon, User2 } from "lucide-react";
 import { format, isValid, parseISO } from "date-fns";
 import { Badge } from "../ui/badge";
 import {
@@ -23,19 +23,18 @@ import {
 } from "@/components/ui/dialog";
 import AttendanceCalendar from "../attendanceCalendar/AttendanceCalendar";
 import TableSkeleton from "./TableSkeleton";
-import { useAuthStore } from "@/stores/useAuthStore";
 import TableError from "./TableError";
 import CircularProgress from "../ui/circular-progress";
 import DataTable from "./DataTable";
 
 const AttendanceTable = () => {
-  const { attendance, isLoadingSubjects, getAllAttendanceSubjects } =
+  const { attendance, isLoadingSubjects, getAllAttendanceSubjects, errors } =
     useAttendanceStore();
   const { student } = useStudentStore();
   const [visibleColumns, setVisibleColumns] = useState({
     Subject: true,
     SubjectCode: false,
-    EMPNAME: false, 
+    EMPNAME: false,
     TotalLecture: true,
     TotalPresent: true,
     TotalLeave: false,
@@ -43,7 +42,6 @@ const AttendanceTable = () => {
   });
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { authenticated } = useAuthStore();
 
   useEffect(() => {
     getAllAttendanceSubjects({ RegID: student?.RegID });
@@ -53,9 +51,10 @@ const AttendanceTable = () => {
     return <TableSkeleton />;
   }
 
-  if (!attendance) {
+  if (errors.getAllAttendanceSubjects || !attendance) {
     return (
       <TableError
+        description={errors.getAllAttendanceSubjects}
         onReload={() => {
           getAllAttendanceSubjects({ RegID: student?.RegID });
         }}
@@ -90,7 +89,7 @@ const AttendanceTable = () => {
     "TotalPresent",
     "TotalLeave",
     "Percentage",
-  ]
+  ];
 
   const toggleColumnVisibility = (columnId) => {
     setVisibleColumns((prev) => ({
@@ -106,7 +105,7 @@ const AttendanceTable = () => {
 
   return (
     <div className="max-w-screen-lg mx-auto px-2 sm:px-4 md:px-6 py-2 mt-6">
-      <h2 className="text-3xl font-bold mb-6">Attendance</h2>
+      <h2 className="text-2xl sm:text-3xl font-bold mb-b">Attendance</h2>
       <Card className="overflow-hidden">
         <div className="sticky top-0 z-10 bg-muted">
           <div className="p-4 border-b flex justify-between gap-4">
@@ -124,30 +123,42 @@ const AttendanceTable = () => {
               )}
             </div>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="ml-auto gap-1 bg-input"
-                >
-                  <span>Columns</span>
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-[150px]">
-                {columns.map((column) => (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={visibleColumns[column.id]}
-                    onCheckedChange={() => toggleColumnVisibility(column.id)}
+            <div className="flex gap-2">
+              {!Array.isArray(attendance.state) || attendance.state.length === 0 && (<Button
+                size="icon"
+                variant="outline"
+                className="bg-input size-8"
+                onClick={() => {
+                  getAllAttendanceSubjects({ RegID: student?.RegID });
+                }}
+              >
+                <RotateCwIcon/>
+              </Button>)}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="ml-auto gap-1 bg-input"
                   >
-                    {column.header}
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                    <span>Columns</span>
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-[150px]">
+                  {columns.map((column) => (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={visibleColumns[column.id]}
+                      onCheckedChange={() => toggleColumnVisibility(column.id)}
+                    >
+                      {column.header}
+                    </DropdownMenuCheckboxItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
         </div>
         <ScrollArea className="w-full whitespace-nowrap">
@@ -160,12 +171,12 @@ const AttendanceTable = () => {
               TotalLecture,
               TotalPresent,
               TotalLeave,
-              Percentage: TotalPercentage
+              Percentage: TotalPercentage,
             }}
             onRowClick={handleRowClick}
             numericColumns={numericColumns}
           />
-          
+
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </Card>

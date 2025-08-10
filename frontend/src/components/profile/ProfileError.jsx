@@ -5,20 +5,19 @@ import { AlertTriangle, RefreshCw } from "lucide-react";
 import { Button } from "../ui/button";
 
 const ProfileError = ({
-  heading = "Something went wrong",
-  description,
+  heading = "Failed to load data",
+  description = "Something went wrong",
   onReload,
 }) => {
   return (
-    <div className="max-w-screen-lg mx-auto px-4 sm:px-6 md:px-4 py-2">
+    <div className="max-w-screen-lg mx-auto px-2 sm:px-4 md:px-6 py-2">
       <Card className="relative overflow-hidden bg-destructive/10">
         <div className="absolute inset-0 bg-background/70 flex items-center justify-center">
           <div className="text-center space-y-4">
             <AlertTriangle className="h-12 w-12 mx-auto text-destructive" />
             <h3 className="text-3xl font-medium text-destructive">{heading}</h3>
             <p className="max-w-[380px] text-destructive">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi
-              molestias soluta animi totam.
+              {description}
             </p>
             {onReload && (
               <Button onClick={onReload} className="mt-4 gap-2">

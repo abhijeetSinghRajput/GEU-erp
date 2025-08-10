@@ -10,7 +10,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { motion } from "framer-motion";
-import {HomeIcon, FileTextIcon, WalletIcon } from "lucide-react";
+import { HomeIcon, FileTextIcon, WalletIcon, AlertCircleIcon } from "lucide-react";
 import { useFeeStore } from "@/stores/useFeeStore";
 
 import TableError from "@/components/table/TableError";
@@ -18,33 +18,41 @@ import FeeSkeleton from "./FeeSkeleton";
 import CourseFee from "./CourseFee";
 import HostelFee from "./HostelFee";
 import FeeReceipts from "./FeeReceipts";
+import FeeError from "./FeeError";
+import { Progress } from "../ui/progress";
 
 const FeeSubmissions = () => {
   const {
     getFeeSubmissions,
-    feeSubmitions,
-    loadingFeeSubmitions,
+    feeSubmissions,
+    loadingFeeSubmissions,
     getFeeReceipts,
     feeReceipts,
+    errors,
   } = useFeeStore();
-  
 
   useEffect(() => {
     getFeeSubmissions();
     getFeeReceipts();
   }, []);
 
-  if (loadingFeeSubmitions) {
+  if (loadingFeeSubmissions) {
     return <FeeSkeleton header={"Fee Submissions"} />;
   }
-  if (!feeSubmitions) {
-    return <TableError onReload={getFeeSubmissions} />;
+
+  if (errors.getFeeSubmissions || !feeSubmissions) {
+    return (
+      <FeeError
+        description={errors.getFeeSubmissions}
+        onReload={getFeeSubmissions}
+      />
+    );
   }
 
   // Calculate totals
   const calculateTotals = (data) => {
-    if(!Array.isArray(data)) return;
-    
+    if (!Array.isArray(data)) return;
+
     return data.reduce(
       (acc, item) => ({
         DueAmount: acc.DueAmount + item.DueAmount,
@@ -63,15 +71,15 @@ const FeeSubmissions = () => {
     );
   };
 
-  const courseTotals = calculateTotals(feeSubmitions.headdata);
-  const hostelTotals = calculateTotals(feeSubmitions.headdatahostel);
-  const hasHostelFees = feeSubmitions.headdatahostel.length > 0;
+  const courseTotals = calculateTotals(feeSubmissions.headdata);
+  const hostelTotals = calculateTotals(feeSubmissions.headdatahostel);
+  const hasHostelFees = feeSubmissions.headdatahostel.length > 0;
 
   // Columns configuration
   const feeColumns = [
     { id: "FeeHead", header: "Fee Head", sortable: false },
     { id: "DueAmount", header: "Due", sortable: true, prefix: "₹" },
-    { id: "ReceivedAmount", header: "Received", sortable: true, prefix: "₹"},
+    { id: "ReceivedAmount", header: "Received", sortable: true, prefix: "₹" },
     { id: "BalanceAmount", header: "Balance", sortable: true, prefix: "₹" },
     { id: "status", header: "Status", sortable: true },
   ];
@@ -91,7 +99,7 @@ const FeeSubmissions = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h2 className="text-3xl font-bold mb-6">Fee Submissions</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold mb-2">Fee Submissions</h2>
 
         <Tabs defaultValue="course" className="w-full">
           <TabsList className="grid w-full h-10 grid-cols-3 max-w-xs">
@@ -116,7 +124,7 @@ const FeeSubmissions = () => {
               transition={{ delay: 0.1 }}
             >
               <CourseFee
-                data={prepareTableData(feeSubmitions.headdata)}
+                data={prepareTableData(feeSubmissions.headdata)}
                 totals={courseTotals}
                 columns={feeColumns}
               />
@@ -132,13 +140,13 @@ const FeeSubmissions = () => {
               transition={{ delay: 0.1 }}
             >
               <HostelFee
-                data={prepareTableData(feeSubmitions.headdata)}
-                totals={courseTotals}
+                data={prepareTableData(feeSubmissions.headdata)}
+                totals={hostelTotals}
                 columns={feeColumns}
                 hasHostelFees={hasHostelFees}
               />
 
-              <FeeSummaryCards totals={hostelTotals} />
+              {hasHostelFees && <FeeSummaryCards totals={hostelTotals} />}
             </motion.div>
           </TabsContent>
 
@@ -164,9 +172,8 @@ const FeeSubmissions = () => {
               <CardTitle>Payment Summary</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <h4 className="font-medium mb-3">Payment Details</h4>
+              <div className="flex  gap-6">
+                <div className="flex-1">
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">
@@ -205,7 +212,7 @@ const FeeSubmissions = () => {
                   </div>
                 </div>
                 {hasHostelFees && (
-                  <div>
+                  <div className="flex-1">
                     <h4 className="font-medium mb-3">Hostel Payment Details</h4>
                     <div className="space-y-2">
                       <div className="flex justify-between">
@@ -236,7 +243,7 @@ const FeeSubmissions = () => {
                   </div>
                 )}
               </div>
-              {(hasHostelFees || courseTotals.DueAmount > 0) && (
+              {(hasHostelFees) && (
                 <div className="border-t mt-4 pt-4">
                   <div className="flex justify-between text-lg font-bold">
                     <span>Grand Total Paid:</span>
@@ -259,43 +266,99 @@ const FeeSubmissions = () => {
 };
 
 const FeeSummaryCards = ({ totals }) => {
+  const paymentProgress = (totals.ReceivedAmount / totals.DueAmount) * 100;
+  const isFullyPaid = totals.BalanceAmount <= 0;
+
   return (
-    <Card className="rounded-2xl mt-6 p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-      <Card className="bg-muted">
-        <CardHeader className="p-4">
-          <CardDescription>Total Due</CardDescription>
-          <CardTitle className="text-2xl">
-            ₹{totals.DueAmount.toLocaleString()}
-          </CardTitle>
-        </CardHeader>
-      </Card>
-      <Card className="bg-muted">
-        <CardHeader className="p-4">
-          <CardDescription>Total Received</CardDescription>
-          <CardTitle
-            className={`text-2xl ${
-              totals.ReceivedAmount === totals.DueAmount
-                ? "text-green-600"
-                : "text-amber-600"
-            }`}
-          >
-            ₹{totals.ReceivedAmount.toLocaleString()}
-          </CardTitle>
-        </CardHeader>
-      </Card>
-      <Card className="bg-muted">
-        <CardHeader className="p-4">
-          <CardDescription>Total Balance</CardDescription>
-          <CardTitle
-            className={`text-2xl ${
-              totals.BalanceAmount > 0 ? "text-red-500" : "text-green-600"
-            }`}
-          >
-            ₹{totals.BalanceAmount.toLocaleString()}
-          </CardTitle>
-        </CardHeader>
-      </Card>
-    </Card>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+      {/* Total Fees Card */}
+      <motion.div 
+        whileHover={{ y: -2 }}
+        transition={{ type: "spring", stiffness: 300 }}
+      >
+        <Card className="h-full border border-blue-100 dark:border-blue-900/50 bg-blue-50/50 dark:bg-blue-900/10">
+          <CardHeader className="pb-2">
+            <CardDescription className="flex items-center gap-2 text-blue-600 dark:text-blue-300">
+              <FileTextIcon className="w-4 h-4" />
+              Total Fees
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-end justify-between">
+              <CardTitle className="text-2xl font-bold">
+                ₹{totals.DueAmount.toLocaleString()}
+              </CardTitle>
+              <div className="text-sm text-muted-foreground">
+                {totals.SCAmount > 0 && (
+                  <span className="text-green-600 line-through">
+                    ₹{(totals.DueAmount + totals.SCAmount).toLocaleString()}
+                  </span>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Paid Fees Card */}
+      <motion.div 
+        whileHover={{ y: -2 }}
+        transition={{ type: "spring", stiffness: 300 }}
+      >
+        <Card className="h-full border border-emerald-100 dark:border-emerald-900/50 bg-emerald-50/50 dark:bg-emerald-900/10">
+          <CardHeader className="pb-2">
+            <CardDescription className="flex items-center gap-2 text-emerald-600 dark:text-emerald-300">
+              <WalletIcon className="w-4 h-4" />
+              Paid Amount
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              <CardTitle className={`text-2xl font-bold ${isFullyPaid ? 'text-emerald-600' : 'text-amber-600'}`}>
+                ₹{totals.ReceivedAmount.toLocaleString()}
+              </CardTitle>
+              <Progress value={paymentProgress} indicatorClass={`rounded-full ${isFullyPaid ? 'bg-emerald-500' : 'bg-amber-500'}`}/>
+              <p className="text-sm text-muted-foreground">
+                {paymentProgress.toFixed(0)}% of total fees paid
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Balance Card */}
+      <motion.div 
+        whileHover={{ y: -2 }}
+        transition={{ type: "spring", stiffness: 300 }}
+      >
+        <Card className="h-full border border-rose-100 dark:border-rose-900/50 bg-rose-50/50 dark:bg-rose-900/10">
+          <CardHeader className="pb-2">
+            <CardDescription className="flex items-center gap-2 text-rose-600 dark:text-rose-300">
+              <AlertCircleIcon className="w-4 h-4" />
+              {isFullyPaid ? 'Fully Paid' : 'Pending Amount'}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <CardTitle className={`text-2xl font-bold ${isFullyPaid ? 'text-emerald-600' : 'text-rose-600'}`}>
+              {isFullyPaid ? (
+                <span className="flex items-center gap-1">
+                  <CheckCircleIcon className="w-5 h-5" />
+                  ₹0
+                </span>
+              ) : (
+                `₹${totals.BalanceAmount.toLocaleString()}`
+              )}
+            </CardTitle>
+            {totals.SecurityAdjusted > 0 && (
+              <div className="mt-2 text-sm">
+                <span className="text-muted-foreground">Security adjusted: </span>
+                <span className="text-emerald-600">₹{totals.SecurityAdjusted.toLocaleString()}</span>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </motion.div>
+    </div>
   );
 };
 

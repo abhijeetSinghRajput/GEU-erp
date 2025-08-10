@@ -1,6 +1,6 @@
 import Circular from "@/components/circular/Circular";
 import ExamSummary from "@/components/exams/ExamSummary";
-import FeeSubmitions from "@/components/fees/FeeSubmitions";
+import FeeSubmissions from "@/components/fees/FeeSubmitions";
 import Header from "@/components/Header";
 import { StudentProfile } from "@/components/profile/StudentProfile";
 import AttendanceTable from "@/components/table/AttendanceTable";
@@ -15,7 +15,7 @@ const HomePage = () => {
         <AttendanceTable />
         <Circular />
         <ExamSummary />
-        <FeeSubmitions />
+        <FeeSubmissions />
       </div>
     </div>
   );

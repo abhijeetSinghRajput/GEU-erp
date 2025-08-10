@@ -1,87 +1,95 @@
 import { axiosInstance } from "@/lib/axios";
-import axios from "axios";
 import { toast } from "sonner";
 import { create } from "zustand";
 
 export const useFeeStore = create((set, get) => ({
-  feeSubmitions: null,
+  feeSubmissions: null,
   feeReceipts: null,
-  loadingFeeSubmitions: false,
-  loadingFeeSubmitions: false,
+  loadingFeeSubmissions: false,
+  loadingFeeReceipts: false,
   downloadingReceipt: null,
+  errors: {
+    getFeeSubmissions: null,
+    getFeeReceipts: null,
+    downloadReceipt: null,
+  },
 
+  // Fetch fee submissions
   getFeeSubmissions: async () => {
-    set({ loadingFeeSubmitions: true });
+    set({
+      loadingFeeSubmissions: true,
+      errors: { ...get().errors, getFeeSubmissions: null },
+    });
     try {
       const res = await axiosInstance.get("/fee");
-      const { feeSubmitions } = res.data;
-      set({ feeSubmitions });
-      // console.log("Fee submissions fetched successfully:", feeSubmitions);
+      set({ feeSubmissions: res.data.feeSubmissions });
+      // console.log(get().feeSubmissions);
     } catch (error) {
-      set({ feeSubmitions: null });
-      console.error("Error fetching fee submissions:", error);
-      toast.error(
-        error?.response?.data.message || "Failed to load fee submissions"
-      );
+      const message =
+        error?.response?.data?.message || "Failed to load fee submissions";
+      set({ errors: { ...get().errors, getFeeSubmissions: message } });
+      toast.error(message);
+      console.error("Fee submissions error:", error);
     } finally {
-      set({ loadingFeeSubmitions: false });
+      set({ loadingFeeSubmissions: false });
     }
   },
 
+  // Fetch fee receipts
   getFeeReceipts: async () => {
-    set({ loadingFeeReceipts: true });
+    set({
+      loadingFeeReceipts: true,
+      errors: { ...get().errors, getFeeReceipts: null },
+    });
     try {
       const res = await axiosInstance.get("/fee/receipts");
-      const { feeReceipts } = res.data;
-      set({ feeReceipts });
+      set({ feeReceipts: res.data.feeReceipts });
     } catch (error) {
-      set({ feeReceipts: null });
-      console.error("Error fetching fee receipts:", error);
-      toast.error(
-        error?.response?.data.message || "Failed to load fee receipts"
-      );
+      const message =
+        error?.response?.data?.message || "Failed to load fee receipts";
+      set({ errors: { ...get().errors, getFeeReceipts: message } });
+      toast.error(message);
+      console.error("Fee receipts error:", error);
     } finally {
       set({ loadingFeeReceipts: false });
     }
   },
 
+  // Download receipt
   downloadReceipt: async (ReceiptModeID, BookID, CombineReceiptNo) => {
-    set({ downloadingReceipt: CombineReceiptNo });
+    set({
+      downloadingReceipt: CombineReceiptNo,
+      errors: { ...get().errors, downloadReceipt: null },
+    });
     try {
       const res = await axiosInstance.get("/fee/download", {
         params: { ReceiptModeID, BookID, CombineReceiptNo },
-        responseType: "blob", // important!
+        responseType: "blob",
       });
 
-      // Create a download link
+      // Extract filename from headers or fallback
+      const contentDisposition = res.headers["content-disposition"];
+      const filename =
+        contentDisposition?.match(/filename="?(.+)"?/)?.[1] ||
+        `${CombineReceiptNo}-receipt.pdf`;
+
+      // Trigger download
       const url = window.URL.createObjectURL(new Blob([res.data]));
       const link = document.createElement("a");
       link.href = url;
-
-      // Optional: Try to grab filename from headers, else fallback
-      const contentDisposition = res.headers["content-disposition"];
-      let filename = `${CombineReceiptNo}-fee-receipt.pdf`;
-      if (contentDisposition) {
-        const match = contentDisposition.match(/filename="?(.+)"?/);
-        if (match) filename = match[1];
-      }
       link.setAttribute("download", filename);
-
-      // Append to DOM, click, remove
       document.body.appendChild(link);
       link.click();
       link.remove();
-
-      // Cleanup object URL
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error("Error downloading receipt:", error);
-      toast.error(
-        error?.response?.data.message || "Failed to download receipt"
-      );
+      const message =
+        error?.response?.data?.message || "Failed to download receipt";
+      set({ errors: { ...get().errors, downloadReceipt: message } });
+      toast.error(message);
+      console.error("Download error:", error);
     } finally {
-      set({ downloadingReceipt: false });
+      set({ downloadingReceipt: null });
     }
   },
-  
 }));

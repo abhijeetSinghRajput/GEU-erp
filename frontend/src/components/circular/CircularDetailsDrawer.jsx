@@ -34,7 +34,7 @@ const icons = {
 };
 
 const CircularDetailsDrawer = () => {
-  const { isLoadingCircularDetails, allCirculars, getCircularsDetails } =
+  const { isLoadingCircularDetails, allCirculars, getAllCirculars } =
     useNoticeStore();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
@@ -153,7 +153,7 @@ const CircularDetailsDrawer = () => {
               {isLoadingCircularDetails ? (
                 <CircularSkeleton />
               ) : !allCirculars.length ? (
-                <CircularError onReload={getCircularsDetails} />
+                <CircularError onReload={getAllCirculars} />
               ) : filteredAndSortedCirculars.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
                   No notices found matching your criteria

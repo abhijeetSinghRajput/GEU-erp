@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev" : "npm run dev --prefix frontend && npm run dev --prefix backend",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "npm run dev --prefix frontend && npm run dev --prefix backend",
+    "build" : "npm install --prefix frontend && npm install --prefix backend npm run build --prefix frontend",
+    "start" : "npm run start --prefix backend"
   },
   "keywords": [],
   "author": "",
@@ -14,5 +15,8 @@
     "framer-motion": "^12.23.12",
     "react-icons": "^5.5.0",
     "styled-components": "^6.1.19"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
   }
 }

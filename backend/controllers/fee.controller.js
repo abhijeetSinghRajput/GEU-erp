@@ -17,12 +17,12 @@ export const getFeeSubmissions = async (req, res) => {
       },
       body: payload,
     });
-    const feeSubmitions = {
+    const feeSubmissions = {
         ...response ,
         headdata : JSON.parse(response.headdata),
         headdatahostel : JSON.parse(response.headdatahostel),
     };
-    return res.status(200).json({feeSubmitions});
+    return res.status(200).json({feeSubmissions});
   } catch (error) {
     console.error("Error fetching fee submission:", error);
     return res.status(500).json({ message: errorMap[error.code] || "Failed to fetch fee data" });
@@ -81,7 +81,7 @@ export const downloadReceipt = async (req, res) => {
       }
     );
 
-    console.log(pdfStream);
+    // console.log(pdfStream);
     // 3️⃣ Forward headers & pipe directly to client
     res.setHeader(
       "Content-Disposition",

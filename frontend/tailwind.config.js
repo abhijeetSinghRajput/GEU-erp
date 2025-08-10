@@ -7,6 +7,11 @@ module.exports = {
   ],
   theme: {
   	extend: {
+		backdropBlur: {
+			xs: '2px',
+			sm: '4px',
+			md: '8px',
+		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',

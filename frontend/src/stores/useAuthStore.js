@@ -19,7 +19,7 @@ export const useAuthStore = create((set, get) => ({
       const { authenticated } = res.data;
       set({ authenticated });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       set({ authenticated: false });
     } finally {
       set({ checkingAuth: false });
@@ -70,7 +70,7 @@ export const useAuthStore = create((set, get) => ({
       set({ authenticated: false });
     } catch (error) {
       toast.error(error?.response?.data.message || "failed to logout");
-      console.log(error);
+      // console.log(error);
     } finally {
       set({ loginingOut: false });
     }

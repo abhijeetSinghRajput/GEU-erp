@@ -21,7 +21,13 @@ import TableError from "../table/TableError";
 import FeeSkeleton from "./FeeSkeleton";
 
 const FeeReceipts = ({ data }) => {
-  const {downloadReceipt, getFeeReceipts, downloadingReceipt, loadingFeeReceipts} = useFeeStore();
+  const {
+    downloadReceipt,
+    getFeeReceipts,
+    downloadingReceipt,
+    loadingFeeReceipts,
+    errors,
+  } = useFeeStore();
 
   // Process data to fill empty remarks
   const [visibleColumns, setVisibleColumns] = useState({
@@ -33,15 +39,20 @@ const FeeReceipts = ({ data }) => {
     Remarks: false,
     TotalAmount: true,
   });
-  
+
   if (loadingFeeReceipts) {
     return <FeeSkeleton header={"Fee Submissions"} />;
   }
 
-  if(!Array.isArray(data)) {
-    return <TableError className={"px-0 sm:px-0 md:px-0"} onReload={getFeeReceipts} />;
+  if (errors.getFeeReceipts || !Array.isArray(data)) {
+    return (
+      <TableError
+        className={"px-0 sm:px-0 md:px-0"}
+        description={errors.getFeeReceipts}
+        onReload={getFeeReceipts}
+      />
+    );
   }
-
 
   const toggleColumnVisibility = (columnId) => {
     setVisibleColumns((prev) => ({
@@ -81,10 +92,11 @@ const FeeReceipts = ({ data }) => {
               )
             }
           >
-            {downloadingReceipt === row.CombineReceiptNo
-              ? <Loader2 className="animate-spin"/>
-              : <Download />
-            }
+            {downloadingReceipt === row.CombineReceiptNo ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              <Download />
+            )}
           </Button>
         </TooltipWrapper>
       ),

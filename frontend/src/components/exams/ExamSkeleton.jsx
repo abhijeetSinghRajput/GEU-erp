@@ -6,14 +6,15 @@ import { Skeleton } from "../ui/skeleton";
 
 const ExamSkeleton = ({heading = "Exam Summary"}) => {
   return (
-    <div className="max-w-screen-lg mx-auto p-6 flex justify-center">
+    <div className="max-w-screen-lg mx-auto px-2 sm:px-4 md:px-6 py-2">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ staggerChildren: 0.1 }}
         className="space-y-4 w-full"
       >
-        <h2 className="text-2xl sm:text-3xl font-bold mb-6">{heading}</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold mb-2">{heading}</h2>
+
         {[...Array(2)].map((_, index) => (
           <motion.div
             key={index}

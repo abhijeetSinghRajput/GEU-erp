@@ -5,17 +5,48 @@ import { create } from "zustand";
 export const useStudentStore = create((set, get) => ({
   student: null,
   isFetchingProfile: false,
+  avatarBlobUrl: null,
+  errors: {
+    fetchProfile: null,
+  },
+  loadingAvatar: false,
 
   fetchProfile: async () => {
-    set({ isFetchingProfile: true });
+    set({
+      isFetchingProfile: true,
+      errors: { ...get().errors, fetchProfile: null },
+    });
     try {
       const res = await axiosInstance.get("/");
-      set({student: res.data});
+      set({ student: res.data });
     } catch (error) {
-      console.log(error);
-      toast.error(error?.response?.data.message || "something went wrong");
+      const message =
+        error?.response?.data.message ||
+        "Something went wrong while fetching profile";
+      set({ errors: { ...get().errors, fetchProfile: message } });
+      // console.log(message, error);
+      toast.error(message);
     } finally {
       set({ isFetchingProfile: false });
+    }
+  },
+
+  loadAvatar: async () => {
+    set({loadingAvatar: true});
+    try {
+      const response = await axiosInstance.get("/avatar", {
+        responseType: "blob",
+      });
+      const blobUrl = URL.createObjectURL(response.data);
+
+      set({ avatarBlobUrl: blobUrl });
+      return blobUrl;
+    } catch (error) {
+      // console.log("failed to load avatar");
+      set({avatarBlobUrl: null});
+      return null;
+    } finally{
+      set({loadingAvatar: false});
     }
   },
 }));

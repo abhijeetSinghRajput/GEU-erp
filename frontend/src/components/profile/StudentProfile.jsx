@@ -16,13 +16,25 @@ import {
   Home,
   WalletCards,
   GraduationCap,
+  XIcon,
 } from "lucide-react";
+
 import { useStudentStore } from "@/stores/useStudentStore";
 import { Link } from "react-router-dom";
 import ProfileSkeleton from "./ProfileSkeleton";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import ProfileError from "./ProfileError";
+import {
+  MorphingDialog,
+  MorphingDialogTrigger,
+  MorphingDialogContainer,
+  MorphingDialogContent,
+  MorphingDialogClose,
+  MorphingDialogTitle,
+  MorphingDialogSubtitle,
+  MorphingDialogImage,
+} from "../../../components/motion-primitives/morphing-dialog";
 
 const textVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -57,13 +69,23 @@ const tabContentVariants = {
 };
 
 export function StudentProfile() {
-  const { student } = useStudentStore();
   const [activeTab, setActiveTab] = useState(0);
-  const { isFetchingProfile, fetchProfile } = useStudentStore();
+  const {
+    student,
+    isFetchingProfile,
+    fetchProfile,
+    errors,
+    loadAvatar,
+    loadingAvatar,
+    avatarBlobUrl,
+  } = useStudentStore();
   const { authenticated } = useAuthStore();
 
   useEffect(() => {
-    if (authenticated) fetchProfile();
+    if (authenticated) {
+      fetchProfile();
+      loadAvatar();
+    }
   }, [authenticated]);
 
   const TABS = [
@@ -76,9 +98,9 @@ export function StudentProfile() {
     return <ProfileSkeleton />;
   }
 
-  if (!student) {
+  if (errors.fetchProfile || !student) {
     return (
-      <ProfileError onReload={fetchProfile}/>
+      <ProfileError description={errors.fetchProfile} onReload={fetchProfile} />
     );
   }
 
@@ -105,21 +127,41 @@ export function StudentProfile() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                <Avatar className="h-24 w-24 border-4 border-primary-foreground/20">
-                  <AvatarImage
-                    loading="lazy"
-                    src={`http://localhost:5000/api/avatar?id=${student.StudentID}`}
-                  />
-                  <AvatarFallback className="text-3xl font-medium">
-                    <motion.span
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ delay: 0.3 }}
+                <MorphingDialog
+                  transition={{
+                    duration: 0.3,
+                    ease: "easeInOut",
+                  }}
+                >
+                  <MorphingDialogTrigger>
+                    <Avatar className="size-32">
+                      <AvatarImage className="w-full h-full object-cover" src={avatarBlobUrl}/>
+                      <AvatarFallback className="text-4xl text-muted-foreground">
+                        {student.StudentName[0].toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </MorphingDialogTrigger>
+                  <MorphingDialogContainer>
+                    <MorphingDialogContent className="relative rounded-3xl" style={{
+                      maxWidth: "min(100svw, 70svh)"
+                    }}>
+                      <img src={avatarBlobUrl}/>
+                    </MorphingDialogContent>
+                    <MorphingDialogClose
+                      className="fixed right-6 top-6 h-fit w-fit rounded-full bg-white p-1"
+                      variants={{
+                        initial: { opacity: 0 },
+                        animate: {
+                          opacity: 1,
+                          transition: { delay: 0.3, duration: 0.1 },
+                        },
+                        exit: { opacity: 0, transition: { duration: 0 } },
+                      }}
                     >
-                      {student.StudentName?.charAt(0) || "S"}
-                    </motion.span>
-                  </AvatarFallback>
-                </Avatar>
+                      <XIcon className="h-5 w-5 text-zinc-500" />
+                    </MorphingDialogClose>
+                  </MorphingDialogContainer>
+                </MorphingDialog>
 
                 <div className="text-center md:text-left space-y-2">
                   <CardTitle className="text-3xl font-bold tracking-tight">

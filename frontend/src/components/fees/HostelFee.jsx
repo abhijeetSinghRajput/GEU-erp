@@ -17,12 +17,7 @@ import { ChevronDown, HomeIcon } from "lucide-react";
 import React, { useState } from "react";
 import DataTable from "../table/DataTable";
 
-const HostelFee = ({
-  data,
-  totals,
-  columns,
-  hasHostelFees = false,
-}) => {
+const HostelFee = ({ data, totals, columns, hasHostelFees = false }) => {
   const [visibleColumns, setVisibleColumns] = useState({
     FeeHead: true,
     DueAmount: true,
@@ -37,6 +32,7 @@ const HostelFee = ({
       [columnId]: !prev[columnId],
     }));
   };
+
   return (
     <Card className="rounded-2xl overflow-hidden">
       <CardHeader className="bg-muted">
@@ -45,37 +41,39 @@ const HostelFee = ({
             <CardTitle>Hostel Fee Details</CardTitle>
             <CardDescription>Accommodation and meal charges</CardDescription>
           </div>
-          <div className="flex gap-2">
-            <Badge
-              variant={totals.BalanceAmount > 0 ? "destructive" : "success"}
-            >
-              {totals.BalanceAmount > 0 ? "Pending" : "Paid"}
-            </Badge>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="ml-auto gap-1 bg-input"
-                >
-                  <span>Columns</span>
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-[150px]">
-                {columns.map((column) => (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={visibleColumns[column.id]}
-                    onCheckedChange={() => toggleColumnVisibility(column.id)}
+          {hasHostelFees && (
+            <div className="flex gap-2">
+              <Badge
+                variant={totals.BalanceAmount > 0 ? "destructive" : "success"}
+              >
+                {totals.BalanceAmount > 0 ? "Pending" : "Paid"}
+              </Badge>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="ml-auto gap-1 bg-input"
                   >
-                    {column.header}
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+                    <span>Columns</span>
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-[150px]">
+                  {columns.map((column) => (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={visibleColumns[column.id]}
+                      onCheckedChange={() => toggleColumnVisibility(column.id)}
+                    >
+                      {column.header}
+                    </DropdownMenuCheckboxItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
         </div>
       </CardHeader>
       <CardContent className="p-0">

@@ -1,11 +1,18 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Skeleton } from "../ui/skeleton";
+import { cn } from "@/lib/utils";
 
-const CircularSkeleton = () => {
+const CircularSkeleton = ({ className }) => {
   return (
-    <div className="max-w-screen-lg mx-auto p-6">
-      <Skeleton className={"h-7 w-28 mb-2"} />
+    <div
+      className={cn(
+        "max-w-screen-lg mx-auto px-2 sm:px-4 md:px-6 py-2",
+        className
+      )}
+    >
+      <h2 className="text-2xl sm:text-3xl font-bold mb-2">Notices</h2>
+
       <div className="space-y-4">
         {[...Array(3)].map((_, idx) => (
           <Card key={idx} className="w-full rounded-3xl shadow-lg">

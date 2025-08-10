@@ -25,7 +25,6 @@ export const getAllAttendanceSubjects = async (req, res) => {
 
 
 export const getAttendanceBySubject = async (req, res) => {
-  console.log("getAttendanceBySubject");
   const { SubjectID } = req.params;
   
   if (!SubjectID) return res.status(400).json({ message: "SubjectID required" });
@@ -63,7 +62,7 @@ export const getAttendanceBySubject = async (req, res) => {
 
 
 export const attendanceDates = async (req, res) => {
-  console.log("attendanceDates");
+  // console.log("attendanceDates");
   try {
     const data = await fetchGEU("/Web_StudentAcademic/FillDates", req, {
       customHeaders: {
@@ -79,7 +78,7 @@ export const attendanceDates = async (req, res) => {
 };
 
 export const getAttendanceTable = async (req, res) => {
-  console.log("getAttendanceTable");
+  // console.log("getAttendanceTable");
   const { subjectCode, startDate, endDate } = req.params;
   try {
     const data = await fetchGEU("/Web_StudentAcademic/GetStudentAttendanceDetail", req, {
@@ -97,7 +96,7 @@ export const getAttendanceTable = async (req, res) => {
 
 // 🔥 NEW: Full Attendance Data — Dates, Subjects, and Tables
 export const getFullAttendance = async (req, res) => {
-  console.log("getFullAttendance");
+  // console.log("getFullAttendance");
   const { startDate, endDate } = req.params;
 
   try {
@@ -140,7 +139,7 @@ export const getFullAttendance = async (req, res) => {
 
 
 export const fetchCourseAttendance = async (req, res) => {
-  console.log("fetchCourseAttendance");
+  // console.log("fetchCourseAttendance");
   try {
     const {
       RegID,
@@ -172,7 +171,7 @@ export const fetchCourseAttendance = async (req, res) => {
       referer: "https://student.geu.ac.in/Web_StudentAcademic/Cyborg_StudentAttendanceDetail",
     });
 
-    console.log("📚 Course Attendance Result →", result);
+    // console.log("📚 Course Attendance Result →", result);
 
     const state = JSON.parse(result.state || "[]");
     const data = JSON.parse(result.data || "[]");

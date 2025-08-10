@@ -16,6 +16,7 @@ import {
 import { ChevronDown, InfoIcon } from "lucide-react";
 import React, { useState } from "react";
 import DataTable from "../table/DataTable";
+import FeeError from "./FeeError";
 
 const CourseFee = ({ data, totals, columns }) => {
   const [visibleColumns, setVisibleColumns] = useState({
@@ -25,6 +26,12 @@ const CourseFee = ({ data, totals, columns }) => {
     BalanceAmount: true,
     status: true,
   });
+
+  if(!Array.isArray(data)){
+    return <FeeError
+      description="Something went wrong"
+    />
+  }
 
   const toggleColumnVisibility = (columnId) => {
     setVisibleColumns((prev) => ({
@@ -103,7 +110,7 @@ const CourseFee = ({ data, totals, columns }) => {
             />
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-12">
+          <div className="flex h-[60vh] flex-col items-center justify-center py-12">
             <InfoIcon className="w-12 h-12 text-muted-foreground mb-4" />
             <h3 className="text-lg font-medium mb-1">No Course Fees Found</h3>
             <p className="text-muted-foreground text-center max-w-md">

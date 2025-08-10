@@ -74,7 +74,7 @@ export const getCaptcha = async (req, res) => {
       formToken, // Send this to frontend to include in login
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(500).json({ message: errorMap[error.code] || "Something went wrong" });
   }
 };

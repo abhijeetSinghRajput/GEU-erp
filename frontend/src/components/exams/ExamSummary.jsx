@@ -16,7 +16,8 @@ const ExamSummary = () => {
     examSummary,
     loadingExamSummary,
     loadingDetail,
-    getExamDetails,
+    downloadMarksheet,
+    errors,
   } = useExamStore();
 
   useEffect(() => {
@@ -27,8 +28,13 @@ const ExamSummary = () => {
     return <ExamSkeleton />;
   }
 
-  if(!Array.isArray(examSummary) || examSummary.length === 0 ) {
-    return <ExamError onReload={getExamSummary}/>
+  if (errors.getExamSummary || !Array.isArray(examSummary)) {
+    return (
+      <ExamError
+        description={errors.getExamSummary}
+        onReload={getExamSummary}
+      />
+    );
   }
 
   return (
@@ -38,7 +44,7 @@ const ExamSummary = () => {
         animate={{ opacity: 1, y: 0 }}
         className="flex justify-between items-center gap-2 py-2"
       >
-        <h2 className="text-2xl sm:text-3xl font-bold mb-6">Exam Summary</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold mb">Exam Summary</h2>
 
         {Array.isArray(examSummary) && examSummary[0]?.CGPA && (
           <div className="font-semibold">CGPA {examSummary[0].CGPA}</div>
@@ -73,7 +79,7 @@ const ExamSummary = () => {
                 <TooltipWrapper content="Download Marksheet">
                   <Button
                     className="size-8 p-0"
-                    onClick={() => getExamDetails(exam.YearSem)}
+                    onClick={() => downloadMarksheet(exam.YearSem)}
                   >
                     {loadingDetail === exam.YearSem ? (
                       <Loader2 className="animate-spin" />

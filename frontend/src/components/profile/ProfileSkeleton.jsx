@@ -25,7 +25,7 @@ const ProfileSkeleton = () => {
   ];
 
   return (
-    <div className="max-w-screen-lg mx-auto px-4 sm:px-6 md:px-4 py-2">
+    <div className="max-w-screen-lg mx-auto px-2 sm:px-4 md:px-6 py-2">
       <Card className="overflow-hidden">
         {/* Profile Header */}
         <CardHeader className="px-8 py-6">

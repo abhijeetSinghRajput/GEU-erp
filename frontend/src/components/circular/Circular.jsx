@@ -17,13 +17,18 @@ const icons = {
 };
 
 const Circular = () => {
-  const { circulars, isLoadingCirculars, getCirculars, getCircularsDetails } =
-    useNoticeStore();
+  const {
+    circulars,
+    isLoadingCirculars,
+    getCirculars,
+    getAllCirculars,
+    errors,
+  } = useNoticeStore();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     getCirculars();
-    getCircularsDetails();
+    getAllCirculars();
   }, []);
 
   // Automatically cycle through circulars
@@ -52,14 +57,20 @@ const Circular = () => {
     return <CircularSkeleton />;
   }
 
-  if (!circulars || circulars.length === 0) {
-    return <CircularError onReload={getCirculars} />;
+  if (errors.getCirculars || !circulars) {
+    return (
+      <CircularError
+        description={errors.getCirculars}
+        onReload={getCirculars}
+      />
+    );
   }
 
   return (
     <div className="max-w-screen-lg mx-auto px-2 sm:px-4 md:px-6 py-2">
       <div className="flex justify-between items-center gap-2 py-2">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-b">Notices </h2>
+      <h2 className="text-2xl sm:text-3xl font-bold mb-2">Notices</h2>
+
 
         <CircularDetailsDrawer />
       </div>

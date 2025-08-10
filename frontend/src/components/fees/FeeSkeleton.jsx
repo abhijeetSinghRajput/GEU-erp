@@ -9,10 +9,10 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 
-const FeeSkeleton = ({header}) => {
+const FeeSkeleton = ({ header = "Fee Submissions" }) => {
   return (
     <div className="max-w-screen-lg mx-auto p-6 space-y-6">
-      {header && <h2 className="text-3xl font-bold mb-6">{header}</h2>}
+      <h2 className="text-2xl sm:text-3xl font-bold mb-2">{header}</h2>
       <TableSkeleton className={"max-w-full md:p-0 sm:p-0 p-0"} />
       <FeeSummaryCards />
       <PaymentSummary />
