@@ -1,5 +1,5 @@
 import axios from "axios";
-import { fetchGEU } from "../utils/geuApi.js"
+import { fetchGEU } from "../utils/geuApi.js";
 import { errorMap } from "../constants/error.js";
 import qs from "qs";
 
@@ -18,32 +18,36 @@ export const getFeeSubmissions = async (req, res) => {
       body: payload,
     });
     const feeSubmissions = {
-        ...response ,
-        headdata : JSON.parse(response.headdata),
-        headdatahostel : JSON.parse(response.headdatahostel),
+      ...response,
+      headdata: JSON.parse(response.headdata),
+      headdatahostel: JSON.parse(response.headdatahostel),
     };
-    return res.status(200).json({feeSubmissions});
+    return res.status(200).json({ feeSubmissions });
   } catch (error) {
     console.error("Error fetching fee submission:", error);
-    return res.status(500).json({ message: errorMap[error.code] || "Failed to fetch fee data" });
+    return res
+      .status(500)
+      .json({ message: errorMap[error.code] || "Failed to fetch fee data" });
   }
 };
 
-
-
 export const getFeeReceipts = async (req, res) => {
   try {
-    const response = await fetchGEU("/Web_StudentFinance/GetStudentFeeReceipt_ostulgn", req, {
-      method: "POST",
-    });
+    const response = await fetchGEU(
+      "/Web_StudentFinance/GetStudentFeeReceipt_ostulgn",
+      req,
+      {
+        method: "POST",
+      }
+    );
 
     // Parse the response (assuming it's JSON)
     const feeReceipts = JSON.parse(response);
-    
+
     return res.status(200).json({ feeReceipts });
   } catch (error) {
     console.error("Error fetching fee receipts:", error);
-    return res.status(500).json({ 
+    return res.status(500).json({
       message: errorMap[error.code] || "Failed to fetch fee receipt data",
     });
   }
@@ -83,19 +87,22 @@ export const downloadReceipt = async (req, res) => {
 
     // console.log(pdfStream);
     // 3️⃣ Forward headers & pipe directly to client
+    const encodedFilename = encodeURIComponent(`${ReceiptNo}-fee-receipt.pdf`);
     res.setHeader(
       "Content-Disposition",
-      `attachment; filename="${ReceiptNo}-fee-receipt.pdf"`
+      `attachment; filename=${encodedFilename}`
     );
     res.setHeader("Content-Type", "application/pdf");
 
     pdfStream.data.pipe(res); // Streams directly, no memory bloat
-
   } catch (error) {
-    console.error("Error downloading receipt:", errorMap[error.code] , error.message);
+    console.error(
+      "Error downloading receipt:",
+      errorMap[error.code],
+      error.message
+    );
     res.status(500).json({
       message: errorMap[error.code] || "Failed to download receipt",
     });
   }
 };
-
