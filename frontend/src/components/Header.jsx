@@ -88,7 +88,7 @@ const Header = () => {
           </div>
         </Link>
       </TooltipWrapper>
-      <div className="flex gap-0 items-center">
+      <div className="flex gap-1 items-center">
         <TooltipWrapper content="Rate us on Github">
           <Button size="sm" variant="ghost" onClick={handleGithubClick}>
             {githubStarsCount}

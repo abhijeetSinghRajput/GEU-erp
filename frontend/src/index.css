@@ -100,14 +100,25 @@
   body {
     @apply bg-background text-foreground;
   }
-  .link, .prose a{
-    @apply dark:text-[#7ab7ff] dark:hover:text-[#5e83b3] text-[#2964aa] hover:text-[749ac8]
+  .link,
+  .prose a {
+    @apply dark:text-[#7ab7ff] dark:hover:text-[#5e83b3] text-[#2964aa] hover:text-[749ac8];
   }
-  .day-cell{
-    @apply p-2 rounded-md hover:bg-accent size-8 cursor-pointer flex items-center justify-center
+  .prose a {
+    word-break: break-all;
+    overflow-wrap: break-word;
+  }
+
+  .prose {
+    max-width: 100%;
+    overflow-wrap: break-word;
+  }
+  
+  .day-cell {
+    @apply p-2 rounded-md hover:bg-accent size-8 cursor-pointer flex items-center justify-center;
   }
 }
 
-.rdp-week{
-  @apply gap-2
+.rdp-week {
+  @apply gap-2;
 }

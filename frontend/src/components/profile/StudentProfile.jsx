@@ -135,17 +135,23 @@ export function StudentProfile() {
                 >
                   <MorphingDialogTrigger>
                     <Avatar className="size-32">
-                      <AvatarImage className="w-full h-full object-cover" src={avatarBlobUrl}/>
+                      <AvatarImage
+                        className="w-full h-full object-cover"
+                        src={avatarBlobUrl}
+                      />
                       <AvatarFallback className="text-4xl text-muted-foreground">
                         {student.StudentName[0].toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                   </MorphingDialogTrigger>
                   <MorphingDialogContainer>
-                    <MorphingDialogContent className="relative rounded-3xl" style={{
-                      maxWidth: "min(100svw, 70svh)"
-                    }}>
-                      <img src={avatarBlobUrl}/>
+                    <MorphingDialogContent
+                      className="relative rounded-3xl"
+                      style={{
+                        maxWidth: "min(100svw, 70svh)",
+                      }}
+                    >
+                      <img src={avatarBlobUrl} />
                     </MorphingDialogContent>
                     <MorphingDialogClose
                       className="fixed right-6 top-6 h-fit w-fit rounded-full bg-white p-1"
@@ -261,7 +267,7 @@ export function StudentProfile() {
                                 <dt className="w-40 flex-shrink-0 text-sm font-medium text-muted-foreground">
                                   Enrollment No
                                 </dt>
-                                <dd className="text-sm font-mono">
+                                <dd className="text-s font-mono">
                                   {student.EnrollmentNo}
                                 </dd>
                               </motion.div>
@@ -320,7 +326,7 @@ export function StudentProfile() {
                                     href={`mailto:${student.Email}`}
                                     className="text-primary hover:underline"
                                   >
-                                    {student.Email}
+                                    {student.Email?.toLowerCase()}
                                   </Link>
                                 </dd>
                               </motion.div>
