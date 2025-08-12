@@ -6,16 +6,15 @@ import { load } from "cheerio";
 import { fetchGEU } from "../utils/geuApi.js";
 import { errorMap } from "../constants/error.js";
 
-const jar = new CookieJar();
-const client = wrapper(
-  axios.create({
-    jar,
-    withCredentials: true,
-  })
-);
-
 export const getCaptcha = async (req, res) => {
   try {
+    const jar = new CookieJar();
+    const client = wrapper(
+      axios.create({
+        jar,
+        withCredentials: true,
+      })
+    );
     // Step 1: Get initial page to establish session and get tokens
     const initialResponse = await client.get("https://student.geu.ac.in/");
 
@@ -75,7 +74,9 @@ export const getCaptcha = async (req, res) => {
     });
   } catch (error) {
     // console.log(error);
-    res.status(500).json({ message: errorMap[error.code] || "Something went wrong" });
+    res
+      .status(500)
+      .json({ message: errorMap[error.code] || "Something went wrong" });
   }
 };
 
@@ -106,6 +107,14 @@ export const login = async (req, res) => {
     formData.append("Password", password);
     formData.append("clientIP", "");
     formData.append("captcha", captcha);
+
+    const jar = new CookieJar();
+    const client = wrapper(
+      axios.create({
+        jar,
+        withCredentials: true,
+      })
+    );
 
     // Use the same client instance that maintains cookies
     const response = await client.post("https://student.geu.ac.in/", formData, {
@@ -154,25 +163,28 @@ export const login = async (req, res) => {
     console.error("Login error:", error);
     return res
       .status(500)
-      .json({ message: errorMap[error.code] || "Something went wrong during login" });
+      .json({
+        message: errorMap[error.code] || "Something went wrong during login",
+      });
   }
 };
-
 
 export const logout = async (req, res) => {
   try {
     await fetchGEU("/Account/LogOff", req, {
       method: "post",
-      data: {}, 
+      data: {},
     });
 
     res.clearCookie("ASP.NET_SessionId");
     res.clearCookie("__RequestVerificationToken");
 
-    res.status(200).json({ message: 'Logged out successfully' });
+    res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
-    console.error('Logout error:', error);
-    res.status(500).json({message: errorMap[error.code] || 'Failed to logout',});
+    console.error("Logout error:", error);
+    res
+      .status(500)
+      .json({ message: errorMap[error.code] || "Failed to logout" });
   }
 };
 
@@ -207,7 +219,8 @@ export const checkAuth = async (req, res) => {
     return res.status(500).json({ message: "Unexpected status" });
   } catch (error) {
     console.error("❌ Error checking auth:", error.message);
-    return res.status(500).json({ message: errorMap[error.code] || "Internal error" });
+    return res
+      .status(500)
+      .json({ message: errorMap[error.code] || "Internal error" });
   }
 };
-
