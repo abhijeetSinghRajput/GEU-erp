@@ -7,8 +7,9 @@ import {
   parse,
   startOfWeek,
   endOfWeek,
+  addWeeks,
 } from "date-fns";
-import { CheckCircle, X, Clock } from "lucide-react";
+import { CheckCircle, X, Clock, RefreshCw } from "lucide-react";
 import CalendarSkeleton from "./CalendarSkeleton";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
@@ -30,7 +31,11 @@ const AttendanceCalendar = ({ selectedSubject, data }) => {
     attendanceData.state.forEach((item) => {
       if (item.AttendanceType === "N/A") return;
 
-      const dateKey = parse(item.AttendanceDate, "dd/MM/yyyy", new Date()).getTime();
+      const dateKey = parse(
+        item.AttendanceDate,
+        "dd/MM/yyyy",
+        new Date()
+      ).getTime();
       map.set(dateKey, item);
     });
     return map;
@@ -40,46 +45,52 @@ const AttendanceCalendar = ({ selectedSubject, data }) => {
     return attendanceMap.get(date.getTime());
   };
 
-  // 🗓️ Fetch attendance for full visible calendar range
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!selectedSubject) return;
+  const fetchAttendance = async () => {
+    if (!selectedSubject) return;
 
-      const visibleStart = startOfWeek(startOfMonth(currentMonth), { weekStartsOn: 0 });
-      const visibleEnd = endOfWeek(endOfMonth(currentMonth), { weekStartsOn: 0 });
+    const visibleStart = startOfWeek(startOfMonth(currentMonth), {weekStartsOn: 0,});
+    const visibleEnd = addWeeks(visibleStart, 6);
 
-      const data = {
-        RegID,
-        SubjectID,
-        PeriodAssignID,
-        TTID,
-        LectureTypeID,
-        DateFrom: visibleStart.toISOString(),
-        DateTo: visibleEnd.toISOString(),
-      };
-
-      try {
-        const result = await getAttendanceBySubject(SubjectID, data);
-        setAttendanceData(result);
-      } catch (error) {
-        console.error("Error fetching attendance data:", error);
-      }
+    console.log({visibleStart, visibleEnd, currentMonth})
+    const payload = {
+      RegID,
+      SubjectID,
+      PeriodAssignID,
+      TTID,
+      LectureTypeID,
+      DateFrom: visibleStart.toISOString(),
+      DateTo: visibleEnd.toISOString(),
     };
 
-    fetchData();
+    try {
+      const result = await getAttendanceBySubject(SubjectID, payload);
+      setAttendanceData(result);
+    } catch (error) {
+      console.error("Error fetching attendance data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAttendance();
   }, [selectedSubject, SubjectID, getAttendanceBySubject, currentMonth]);
 
   if (isLoadingSubjectDetails) return <CalendarSkeleton />;
 
   if (!attendanceData) {
     return (
-      <div className="flex justify-center items-center h-64">
-        No attendance data available
+      <div className="flex flex-col gap-2 justify-center items-center h-64">
+        <p>No attendance data available</p>
+        <Button size="sm" onClick={fetchAttendance}>
+          <RefreshCw />
+          Reload
+        </Button>
       </div>
     );
   }
 
-  const startMonth = data?.DateFrom ? startOfMonth(new Date(data.DateFrom)) : undefined;
+  const startMonth = data?.DateFrom
+    ? startOfMonth(new Date(data.DateFrom))
+    : undefined;
   const endMonth = data?.DateTo ? endOfMonth(new Date(data.DateTo)) : undefined;
 
   const CustomDay = (props) => {
@@ -99,7 +110,8 @@ const AttendanceCalendar = ({ selectedSubject, data }) => {
     const attendance = getAttendanceForDate(day.date);
     const dateNum = day.date.getDate();
 
-    const baseClasses = "p-0 aspect-square flex items-center justify-center h-9 w-full rounded-md overflow-hidden";
+    const baseClasses =
+      "p-0 aspect-square flex items-center justify-center h-9 w-full rounded-md overflow-hidden";
     const buttonProps = {
       onClick,
       onFocus,
