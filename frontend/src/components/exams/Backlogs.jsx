@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DataTable from "../table/Table";
-import { ChevronDown, InfoIcon } from "lucide-react";
+import { ChevronDown, ClipboardCheck, InfoIcon, Smile } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -23,7 +23,7 @@ const Backlogs = ({ backlogs }) => {
     PaperType: log.SubjectCode.startsWith("TMC") ? "Theory" : "Lab",
   }));
 
-  const termType = backlogs[0].YS || "Semester";
+  const termType = backlogs[0]?.YS || "Semester";
 
   const [visibleColumns, setVisibleColumns] = useState({
     SubjectCode: true,
@@ -98,7 +98,8 @@ const Backlogs = ({ backlogs }) => {
           </div>
         ) : (
           <div className="flex h-[60vh] flex-col items-center justify-center py-12">
-            <InfoIcon className="w-12 h-12 text-muted-foreground mb-4" />
+
+            <ClipboardCheck className="w-12 h-12 text-muted-foreground mb-4" />
             <h3 className="text-lg font-medium mb-1">No Backlogs Found</h3>
             <p className="text-muted-foreground text-center max-w-md">
               You have cleared all your subjects. Great job!

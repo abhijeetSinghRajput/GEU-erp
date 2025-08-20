@@ -59,7 +59,10 @@ export const useExamStore = create((set, get) => ({
         error?.response?.data.message || "Failed to fetch exam summary";
       // console.log(message, error);
       toast.error(message);
-      set({ errors: { ...get().errors, downloadMarksheet: message } });
+      set({
+        errors: { ...get().errors, downloadMarksheet: message },
+        backlogs: [],
+      });
     } finally {
       set({ loadingMarksheet: 0 });
     }
