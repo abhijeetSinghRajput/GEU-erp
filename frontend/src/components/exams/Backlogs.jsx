@@ -18,12 +18,18 @@ import {
 import { Button } from "../ui/button";
 
 const Backlogs = ({ backlogs }) => {
+  backlogs = backlogs.map((log) => ({
+    ...log,
+    PaperType: log.SubjectCode.startsWith("TMC") ? "Theory" : "Lab",
+  }));
+
   const termType = backlogs[0].YS || "Semester";
 
   const [visibleColumns, setVisibleColumns] = useState({
     SubjectCode: true,
     Subject: true,
     [termType]: true,
+    PaperType: true,
   });
 
   const toggleColumnVisibility = (columnId) => {
@@ -36,6 +42,7 @@ const Backlogs = ({ backlogs }) => {
   const columns = [
     { id: "SubjectCode", header: "Subject Code", sortable: true },
     { id: "Subject", header: "Subject Name", sortable: true },
+    { id: "PaperType", header: "Paper Type", sortable: false },
     { id: "YearSem", header: [termType], sortable: true },
   ];
 
@@ -43,11 +50,14 @@ const Backlogs = ({ backlogs }) => {
     <Card className="rounded-2xl overflow-hidden">
       <CardHeader className="border bg-muted">
         <div className="flex justify-between items-start">
-          <div>
+          <div className="space-y-2">
             <CardTitle>Backlog Details</CardTitle>
-            <CardDescription>Subjects that need to be cleared</CardDescription>
+            <CardDescription className="flex gap-2">
+              <Badge variant="destructive">{`${backlogs.length} Backlogs`}</Badge>
+              that need to be cleared
+            </CardDescription>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -83,10 +93,6 @@ const Backlogs = ({ backlogs }) => {
               data={backlogs}
               columns={columns}
               visibleColumns={visibleColumns}
-              footerData={{
-                SubjectCode: "Total Backlogs",
-                YearSem: backlogs.length || 0,
-              }}
               numericColumns={["YearSem"]}
             />
           </div>

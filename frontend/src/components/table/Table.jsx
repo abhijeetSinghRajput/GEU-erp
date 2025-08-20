@@ -21,7 +21,7 @@ const DataTable = ({
   data = [],
   columns = [],
   visibleColumns = {},
-  footerData = {},
+  footerData = null,
   onRowClick,
   statusConfig = {
     accessor: "status",
