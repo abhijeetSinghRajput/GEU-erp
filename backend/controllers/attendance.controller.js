@@ -19,7 +19,7 @@ export const getAllAttendanceSubjects = async (req, res) => {
 
     res.json({ state, data });
   } catch (error) {
-    res.status(500).json({ message: errorMap[error.code] || "Failed to fetch attendance subjects" });
+    res.status(error.status || 500).json({ message: errorMap[error.code] || "Failed to fetch attendance subjects" });
   }
 };
 
@@ -53,7 +53,7 @@ export const getAttendanceBySubject = async (req, res) => {
 
     res.status(200).json({ state, data, dtLecture });
   } catch (error) {
-    res.status(500).json({
+    res.status(error.status || 500).json({
       message: errorMap[error.code] || "Failed to fetch attendance details by subject",
     });
   }
@@ -73,7 +73,7 @@ export const attendanceDates = async (req, res) => {
     });
     res.json(data);
   } catch (error) {
-    res.status(500).json({ message: errorMap[error.code] || "Failed to fetch attendance dates" });
+    res.status(error.status || 500).json({ message: errorMap[error.code] || "Failed to fetch attendance dates" });
   }
 };
 
@@ -90,7 +90,7 @@ export const getAttendanceTable = async (req, res) => {
     });
     res.json(data);
   } catch (error) {
-    res.status(500).json({ message: errorMap[error] || "Failed to fetch attendance data" });
+    res.status(error.status || 500).json({ message: errorMap[error] || "Failed to fetch attendance data" });
   }
 };
 
@@ -133,7 +133,7 @@ export const getFullAttendance = async (req, res) => {
       subjects: tableData,
     });
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch full attendance" });
+    res.status(error.status || 500).json({ message: "Failed to fetch full attendance" });
   }
 };
 
@@ -180,6 +180,6 @@ export const fetchCourseAttendance = async (req, res) => {
     res.json({ state, data, dtLecture });
   } catch (error) {
     console.error("❌ Error fetching course attendance:", err.message);
-    res.status(500).json({ message: errorMap[error.code] || "Failed to fetch course attendance" });
+    res.status(error.status || 500).json({ message: errorMap[error.code] || "Failed to fetch course attendance" });
   }
 };

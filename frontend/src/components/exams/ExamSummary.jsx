@@ -9,19 +9,23 @@ import { Button } from "../ui/button";
 import TooltipWrapper from "../TooltipWrapper";
 import ExamSkeleton from "./ExamSkeleton";
 import ExamError from "./ExamError";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import Result from "./Result";
+import Backlogs from "./Backlogs";
 
 const ExamSummary = () => {
   const {
     getExamSummary,
+    getBacklogs,
     examSummary,
+    backlogs,
     loadingExamSummary,
-    loadingDetail,
-    downloadMarksheet,
     errors,
   } = useExamStore();
 
   useEffect(() => {
     getExamSummary();
+    getBacklogs();
   }, []);
 
   if (loadingExamSummary) {
@@ -36,7 +40,7 @@ const ExamSummary = () => {
       />
     );
   }
-
+  
   return (
     <div className="max-w-screen-lg mx-auto px-2 sm:px-4 md:px-6 py-2">
       <motion.div
@@ -50,73 +54,19 @@ const ExamSummary = () => {
           <div className="font-semibold">CGPA {examSummary[0].CGPA}</div>
         )}
       </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ staggerChildren: 0.1 }}
-        className="space-y-4"
-      >
-        {examSummary.map((exam, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Card className="rounded-3xl">
-              <CardHeader className="pb-0 justify-between items-center flex-row">
-                <div className="flex gap-2 items-center">
-                  <CardTitle className="text-lg">
-                    Year/Sem {exam.YearSem}
-                  </CardTitle>
-                  <Badge
-                    variant={exam.Result === "Pass" ? "default" : "destructive"}
-                  >
-                    {exam.Result}
-                  </Badge>
-                </div>
-                <TooltipWrapper content="Download Marksheet">
-                  <Button
-                    className="size-8 p-0"
-                    onClick={() => downloadMarksheet(exam.YearSem)}
-                  >
-                    {loadingDetail === exam.YearSem ? (
-                      <Loader2 className="animate-spin" />
-                    ) : (
-                      <Download />
-                    )}
-                  </Button>
-                </TooltipWrapper>
-              </CardHeader>
-              <CardContent className="flex p-6 justify-between items-start">
-                <div>
-                  {/* Exam Details */}
-                  <div className="">
-                    <div className="flex gap-2 items-center">
-                      <p className="text-muted-foreground">Subjects</p>
-                      <p className="font-medium text-xl ">
-                        {exam.TotalSubject}
-                      </p>
-                    </div>
-                    <div className="flex gap-2 items-center">
-                      <p className="text-muted-foreground">Backlogs</p>
-                      <p className="font-medium text-xl ">{exam.TotalBack}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <CircularProgress
-                  value={exam.percnt}
-                  maxValue={10}
-                  label={exam.percnt}
-                  subLabel={exam.Marks}
-                />
-              </CardContent>
-            </Card>
-          </motion.div>
-        ))}
-      </motion.div>
+        <Tabs defaultValue="results">
+          <TabsList>
+            <TabsTrigger value="results">Result</TabsTrigger>
+            <TabsTrigger value="backlogs">Backlogs</TabsTrigger>
+          </TabsList>
+          <TabsContent value="results">
+            <Result examSummary={examSummary}/>
+          </TabsContent>
+          <TabsContent value="backlogs">
+            <Backlogs backlogs={backlogs}/>
+          </TabsContent>
+        </Tabs>
+      
     </div>
   );
 };

@@ -8,8 +8,8 @@ export const profile = async (req, res) => {
     const data = await fetchGEU("/Account/GetStudentDetail", req);
     const student = JSON.parse(data.state)[0];
     res.json(student);
-  } catch (err) {
-    res.status(500).json({ message:  errorMap[err.code] || "Failed to fetch profile" });
+  } catch (error) {
+    res.status(error.status || 500).json({ message:  errorMap[err.code] || "Failed to fetch profile" });
   }
 };
 
@@ -17,8 +17,8 @@ export const results = async (req, res) => {
   try {
     const data = await fetchGEU("/Account/GetResultIntension", req);
     res.json(data);
-  } catch (err) {
-    res.status(500).json({ message: errorMap[err.code] || "Failed to fetch results" });
+  } catch (error) {
+    res.status(error.status || 500).json({ message: errorMap[err.code] || "Failed to fetch results" });
   }
 };
 
@@ -26,8 +26,8 @@ export const messages = async (req, res) => {
   try {
     const data = await fetchGEU("/Account/GetStudentMsgHistory", req);
     res.json(data);
-  } catch (err) {
-    res.status(500).json({ message: errorMap[err.code] || "Failed to fetch messages" });
+  } catch (error) {
+    res.status(error.status || 500).json({ message: errorMap[err.code] || "Failed to fetch messages" });
   }
 };
 
@@ -35,8 +35,8 @@ export const dashboardCard = async (req, res) => {
   try {
     const data = await fetchGEU("/Account/GetModalPopUpSetting", req);
     res.json(data);
-  } catch (err) {
-    res.status(500).json({ message: errorMap[err.code] || "Failed to fetch dashboard card" });
+  } catch (error) {
+    res.status(error.status || 500).json({ message: errorMap[err.code] || "Failed to fetch dashboard card" });
   }
 };
 
@@ -47,8 +47,8 @@ export const circulars = async (req, res) => {
       ...data, 
       circular: JSON.parse(data.circular)
     });
-  } catch (err) {
-    res.status(500).json({ message: errorMap[err.code] || "Failed to fetch circulars" });
+  } catch (error) {
+    res.status(error.status || 500).json({ message: errorMap[err.code] || "Failed to fetch circulars" });
   }
 };
 
@@ -66,8 +66,8 @@ export const getCircularDetails = async (req, res) => {
       count: circulars.length,
       circulars,
     });
-  } catch (err) {
-    res.status(500).json({
+  } catch (error) {
+    res.status(error.status || 500).json({
       message: errorMap[err.code] || "Failed to fetch circular details",
     });
   }
@@ -79,8 +79,8 @@ export const workshops = async (req, res) => {
   try {
     const data = await fetchGEU("/Account/FillWorkShop", req);
     res.json(data);
-  } catch (err) {
-    res.status(500).json({ message: errorMap[err.code] || "Failed to fetch workshops" });
+  } catch (error) {
+    res.status(error.status || 500).json({ message: errorMap[err.code] || "Failed to fetch workshops" });
   }
 };
 
@@ -88,8 +88,8 @@ export const exams = async (req, res) => {
   try {
     const data = await fetchGEU("/Account/GetOnlineExamHome", req);
     res.json(data);
-  } catch (err) {
-    res.status(500).json({ message: errorMap[err.code] || "Failed to fetch exam data" });
+  } catch (error) {
+    res.status(error.status || 500).json({ message: errorMap[err.code] || "Failed to fetch exam data" });
   }
 };
 
@@ -97,8 +97,8 @@ export const companies = async (req, res) => {
   try {
     const data = await fetchGEU("/Web_StudentAcademic/GetUpcomingCompany", req);
     res.json(data);
-  } catch (err) {
-    res.status(500).json({ message: errorMap[err.code] || "Failed to fetch company info" });
+  } catch (error) {
+    res.status(error.status || 500).json({ message: errorMap[err.code] || "Failed to fetch company info" });
   }
 };
 
@@ -140,9 +140,9 @@ export const avatar = async (req, res) => {
 
     // Send the image data
     res.send(imageResponse.data);
-  } catch (err) {
+  } catch (error) {
     console.error("Error fetching profile image:", err);
-    res.status(500).send("Failed to fetch profile image");
+    res.status(error.status || 500).send("Failed to fetch profile image");
   }
 };
 

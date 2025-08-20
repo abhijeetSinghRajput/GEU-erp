@@ -32,7 +32,7 @@ export const useAuthStore = create((set, get) => ({
       const res = await axiosInstance.get("/auth");
       const { image, formToken } = res.data;
       set({ captchaImage: image, formToken });
-    } catch (err) {
+    } catch (error) {
       console.error("Error fetching auth data:", err);
       toast.error(err?.response?.data.message || "failed to load captcha");
       set({ captchaImage: null, formToken: "" });
@@ -53,7 +53,7 @@ export const useAuthStore = create((set, get) => ({
       await fetchProfile();
 
       return true;
-    } catch (err) {
+    } catch (error) {
       console.error("Error fetching auth data:", err);
       set({ authUser: null, authenticated: false });
       toast.error(err?.response?.data.message || "something went wrong");

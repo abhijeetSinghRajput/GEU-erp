@@ -4,8 +4,10 @@ import { create } from "zustand";
 
 export const useExamStore = create((set, get) => ({
   examSummary: [],
+  backlogs: [],
   loadingExamSummary: false,
-  loadingDetail: 0,
+  loadingBacklogs: false,
+  loadingMarksheet: 0,
   errors: {
     getExamSummary: null,
     downloadMarksheet: null,
@@ -21,7 +23,8 @@ export const useExamStore = create((set, get) => ({
       const { examSummary } = res.data;
       set({ examSummary });
     } catch (error) {
-      const message = error?.response?.data.message || "Failed to fetch exam summary";
+      const message =
+        error?.response?.data.message || "Failed to fetch exam summary";
       // console.log(message, error);
       toast.error(message);
       set({
@@ -35,7 +38,7 @@ export const useExamStore = create((set, get) => ({
 
   downloadMarksheet: async (yearSem) => {
     set({
-      loadingDetail: yearSem,
+      loadingMarksheet: yearSem,
       errors: { ...get().errors, downloadMarksheet: null },
     });
     try {
@@ -52,12 +55,33 @@ export const useExamStore = create((set, get) => ({
         // console.log(res);
       }
     } catch (error) {
-      const message = error?.response?.data.message || "Failed to fetch exam summary";
+      const message =
+        error?.response?.data.message || "Failed to fetch exam summary";
       // console.log(message, error);
       toast.error(message);
-      set({errors: { ...get().errors, downloadMarksheet: message }});
+      set({ errors: { ...get().errors, downloadMarksheet: message } });
     } finally {
-      set({ loadingDetail: 0 });
+      set({ loadingMarksheet: 0 });
+    }
+  },
+
+  getBacklogs: async () => {
+    set({
+      loadingBacklogs: true,
+      errors: { ...get().errors, getBacklogs: null },
+    });
+    try {
+      const res = await axiosInstance.get("/exam/get-back-papers");
+      const { backlogs } = res.data;
+      set({ backlogs });
+    } catch (error) {
+      const message =
+        error?.response?.data.message || "Failed to fetch backlogs";
+      console.log(message, error);
+      toast.error(message);
+      set({ errors: { ...get().errors, getBacklogs: message } });
+    } finally {
+      set({ loadingBacklogs: false });
     }
   },
 }));

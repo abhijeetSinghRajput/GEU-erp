@@ -47,7 +47,7 @@ export const getFeeReceipts = async (req, res) => {
     return res.status(200).json({ feeReceipts });
   } catch (error) {
     console.error("Error fetching fee receipts:", error);
-    return res.status(500).json({
+    return res.status(error.status || 500).json({
       message: errorMap[error.code] || "Failed to fetch fee receipt data",
     });
   }
@@ -101,7 +101,7 @@ export const downloadReceipt = async (req, res) => {
       errorMap[error.code],
       error.message
     );
-    res.status(500).json({
+    res.status(error.status || 500).json({
       message: errorMap[error.code] || "Failed to download receipt",
     });
   }

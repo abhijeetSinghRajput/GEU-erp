@@ -50,7 +50,7 @@ export const getCaptcha = async (req, res) => {
 
     if (!isValidPng) {
       console.error("⚠️ Invalid PNG image received.");
-      return res.status(500).json({ message: "Invalid PNG image." });
+      return res.status(error.status || 500).json({ message: "Invalid PNG image." });
     }
 
     // Step 5: Convert to base64 for frontend
@@ -216,7 +216,7 @@ export const checkAuth = async (req, res) => {
       return res.status(401).json({ authenticated: false });
     }
 
-    return res.status(500).json({ message: "Unexpected status" });
+    return res.status(error.status || 500).json({ message: "Unexpected status" });
   } catch (error) {
     console.error("❌ Error checking auth:", error.message);
     return res
