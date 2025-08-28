@@ -31,7 +31,6 @@ export const useAuthStore = create((set, get) => ({
     try {
       const res = await axiosInstance.get("/auth");
       const { image, formToken } = res.data;
-      console.log(res.data);
       set({ captchaImage: image, formToken });
     } catch (error) {
       console.error("Error fetching auth data:", error);

@@ -80,7 +80,7 @@ export const useExamStore = create((set, get) => ({
     } catch (error) {
       const message =
         error?.response?.data.message || "Failed to fetch backlogs";
-      console.log(message, error);
+      // console.log(message, error);
       toast.error(message);
       set({ errors: { ...get().errors, getBacklogs: message } });
     } finally {

@@ -51,7 +51,6 @@ const AttendanceCalendar = ({ selectedSubject, data }) => {
     const visibleStart = startOfWeek(startOfMonth(currentMonth), {weekStartsOn: 0,});
     const visibleEnd = addWeeks(visibleStart, 6);
 
-    console.log({visibleStart, visibleEnd, currentMonth})
     const payload = {
       RegID,
       SubjectID,
