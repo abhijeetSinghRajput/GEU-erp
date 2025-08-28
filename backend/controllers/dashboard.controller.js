@@ -141,7 +141,7 @@ export const avatar = async (req, res) => {
     // Send the image data
     res.send(imageResponse.data);
   } catch (error) {
-    console.error("Error fetching profile image:", err);
+    console.error("Error fetching profile image:", error);
     res.status(error.status || 500).send("Failed to fetch profile image");
   }
 };

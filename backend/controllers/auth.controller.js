@@ -17,45 +17,16 @@ export const getCaptcha = async (req, res) => {
     );
     // Step 1: Get initial page to establish session and get tokens
     const initialResponse = await client.get("https://student.geu.ac.in/");
-
+    
     // Parse the HTML to get the form's verification token
     const $ = load(initialResponse.data);
     const formToken = $('input[name="__RequestVerificationToken"]').val();
+
     // Step 2: Get captcha as JSON array
-    const { data: byteArray } = await client.post(
-      "https://student.geu.ac.in/Account/showcaptchaImage",
-      {}, // Empty body
-      {
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-          Referer: "https://student.geu.ac.in/",
-          Origin: "https://student.geu.ac.in",
-          Accept: "application/json",
-        },
-      }
-    );
-    // Step 3: Convert JSON byte array to Buffer
-    const buffer = Buffer.from(byteArray);
-
-    // Step 4: Validate PNG header
-    const isValidPng =
-      buffer[0] === 137 &&
-      buffer[1] === 80 &&
-      buffer[2] === 78 &&
-      buffer[3] === 71 &&
-      buffer[4] === 13 &&
-      buffer[5] === 10 &&
-      buffer[6] === 26 &&
-      buffer[7] === 10;
-
-    if (!isValidPng) {
-      console.error("⚠️ Invalid PNG image received.");
-      return res.status(error.status || 500).json({ message: "Invalid PNG image." });
+    const captchaUrl = $("#imgPhoto").attr("src");
+    if (!captchaUrl) {
+      return res.status(500).json({ message: "Captcha image not found" });
     }
-
-    // Step 5: Convert to base64 for frontend
-    const base64Captcha = buffer.toString("base64");
-    const dataUrl = `data:image/png;base64,${base64Captcha}`;
 
     // Step 6: Set cookies for frontend
     const cookies = await jar.getCookies("https://student.geu.ac.in/");
@@ -69,7 +40,7 @@ export const getCaptcha = async (req, res) => {
 
     // Also send the form token to the frontend
     res.status(200).json({
-      image: dataUrl,
+      image: captchaUrl,
       formToken, // Send this to frontend to include in login
     });
   } catch (error) {

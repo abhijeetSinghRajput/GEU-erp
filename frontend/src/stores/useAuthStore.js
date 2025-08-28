@@ -31,10 +31,11 @@ export const useAuthStore = create((set, get) => ({
     try {
       const res = await axiosInstance.get("/auth");
       const { image, formToken } = res.data;
+      console.log(res.data);
       set({ captchaImage: image, formToken });
     } catch (error) {
-      console.error("Error fetching auth data:", err);
-      toast.error(err?.response?.data.message || "failed to load captcha");
+      console.error("Error fetching auth data:", error);
+      toast.error(error?.response?.data.message || "failed to load captcha");
       set({ captchaImage: null, formToken: "" });
     } finally {
       set({ loadingCaptcha: false });
@@ -54,9 +55,9 @@ export const useAuthStore = create((set, get) => ({
 
       return true;
     } catch (error) {
-      console.error("Error fetching auth data:", err);
+      console.error("Error fetching auth data:", error);
       set({ authUser: null, authenticated: false });
-      toast.error(err?.response?.data.message || "something went wrong");
+      toast.error(error?.response?.data.message || "something went wrong");
       return false;
     } finally {
       set({ logningIn: false });

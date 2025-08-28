@@ -55,7 +55,7 @@ export const fetchGEU = async (endpoint, req, options = {}) => {
 
     return res.data;
   } catch (error) {
-    console.error(`❌ Error fetching from ${endpoint}:`, err);
+    console.error(`❌ Error fetching from ${endpoint}:`, error);
     throw err;
   }
 };
