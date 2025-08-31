@@ -61,7 +61,7 @@ A modern, enhanced clone of Graphic Era University's student portal built with c
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/abhijeetSinghRajput/GEU-erp.git
    cd GEU-erp
    ```
 
@@ -193,9 +193,16 @@ We welcome contributions to make this portal even better!
 
 This project is licensed under the ISC License.
 
+---
+
 ## 📞 Support
 
-For support and questions, please contact the development team or create an issue in the repository.
+For support and questions, please contact the development team or create an issue in the [repository](https://github.com/abhijeetSinghRajput/GEU-erp/issues).
+
+- 📧 Email: [abhijeet62008@gmail.com](mailto:abhijeet62008@gmail.com)
+- 🔗 LinkedIn: [Abhijeet Singh Rajput](https://linkedin.com/in/abhijeet-singh-rajput1)
+
+---
 
 ## 🙏 Acknowledgments
 
@@ -204,10 +211,6 @@ For support and questions, please contact the development team or create an issu
 - **Development Team** - For their dedication to creating a better student experience
 
 ---
-
-## 🚀 **Ready to Experience the Future of Student Portals?**
-
-**🔗 [CLICK HERE TO TRY THE LIVE DEMO](https://student-geu.netlify.app/login)**
 
 *Experience the difference - where every piece of information is just a finger-tap away!*
 
