@@ -22,7 +22,7 @@ export const getExamSummary = async (req, res) => {
   }
 };
 
-export const getExamDetails = async (req, res) => {
+export const downloadMarksheet = async (req, res) => {
   const { yearSem } = req.query;
   try {
     const response = await fetchGEU("/Web_StudentAcademic/FillMarksheet", req, {
@@ -33,7 +33,28 @@ export const getExamDetails = async (req, res) => {
       data: { yearSem },
     });
 
-    res.status(200).json({ ...response });
+    const { docNo } = response;
+
+    // Step 2: fetch PDF binary using docNo
+    const pdfResponse = await fetchGEU(
+      `/Web_StudentAcademic/DownloadFile?docNo=${docNo}`,
+      req,
+      {
+        method: "get",
+        responseType: "arraybuffer", // raw bytes
+        customHeaders: {
+          Accept: "application/pdf",
+        },
+      }
+    );
+
+    // Step 3: stream it to client
+    res.set({
+      "Content-Type": "application/pdf",
+      "Content-Disposition": `attachment; filename="marksheet_${yearSem}.pdf"`,
+    });
+
+    res.send(Buffer.from(pdfResponse));
   } catch (error) {
     // console.error("Error fetching exam details:", error);
     return res

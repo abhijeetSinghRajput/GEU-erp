@@ -1,9 +1,9 @@
 import express from "express";
-import { getExamDetails, getExamSummary, getBacklogs } from "../controllers/exam.controller.js";
+import { downloadMarksheet, getExamSummary, getBacklogs } from "../controllers/exam.controller.js";
 
 const router = express.Router();
 
 router.get("/", getExamSummary);
-router.get("/get-details", getExamDetails);
+router.get("/get-marksheet", downloadMarksheet);
 router.get("/get-back-papers", getBacklogs);
 export default router;
