@@ -8,6 +8,7 @@ import examRouter from "./routes/exam.route.js";
 import dashboardRouter from "./routes/dashboard.route.js";
 import attendanceRouter from "./routes/attendance.route.js";
 import authRouter from "./routes/auth.route.js";
+import circularRouter from "./routes/circular.route.js";
 import path from "path";
 
 dotenv.config();
@@ -39,6 +40,7 @@ app.use("/api/exam", examRouter);
 app.use("/api/attendance", attendanceRouter);
 app.use("/api/auth", authRouter);
 app.use("/api", dashboardRouter);
+app.use("/api/circular", circularRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));

@@ -18,7 +18,7 @@ export const useNoticeStore = create((set, get) => ({
       errors: { ...get().errors, getCirculars: null },
     });
     try {
-      const res = await axiosInstance.get("/circulars");
+      const res = await axiosInstance.get("/circular");
       const { circular } = res.data;
       set({ circulars: circular || [] });
     } catch (error) {
@@ -40,7 +40,7 @@ export const useNoticeStore = create((set, get) => ({
       errors: { ...get().errors, getAllCirculars: null },
     });
     try {
-      const res = await axiosInstance.get("/circulars-detail");
+      const res = await axiosInstance.get("/circular/circulars-detail");
       const { circulars } = res.data;
       set({ allCirculars: circulars || [] });
     } catch (error) {

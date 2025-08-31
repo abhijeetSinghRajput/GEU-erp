@@ -1,17 +1,14 @@
 import React, { useEffect } from "react";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import { Loader } from "lucide-react";
-import AttendancePage from "./pages/AttendancePage";
 import { TooltipProvider } from "./components/ui/tooltip";
 import { Toaster } from "sonner";
 import { useAuthStore } from "./stores/useAuthStore";
 import useOnlineStatus from "./hooks/useOnlineStatus";
 import NoInternet from "./components/emptyState.jsx/NoInternet";
 import { LoginPage } from "./pages/LoginPage";
-import { useExamStore } from "./stores/useExamStore";
-import { useFeeStore } from "./stores/useFeeStore";
 
 const App = () => {
   const { checkingAuth, authenticated, checkAuth } = useAuthStore();
