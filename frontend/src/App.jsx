@@ -45,10 +45,6 @@ const App = () => {
             path="/" 
             element={authenticated ? <HomePage /> : <Navigate to="/login" replace />} 
           />
-          <Route 
-            path="/attendance/:SubjectID" 
-            element={authenticated ? <AttendancePage /> : <Navigate to="/login" replace />} 
-          />
         </Routes>
       </TooltipProvider>
       <Toaster expand={true} richColors/>
