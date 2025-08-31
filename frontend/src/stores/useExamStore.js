@@ -41,23 +41,30 @@ export const useExamStore = create((set, get) => ({
       loadingMarksheet: yearSem,
       errors: { ...get().errors, downloadMarksheet: null },
     });
+
     try {
-      const res = await axiosInstance.get(`/exam/get-details`, {
+      const res = await axiosInstance.get(`/exam/get-marksheet`, {
         params: { yearSem },
+        responseType: "blob", // 👈 important: tells axios to treat it as binary
       });
-      const { msg, data, docNo } = res.data;
-      if (msg === "OK") {
-        window.open(
-          `https://student.geu.ac.in/Web_StudentAcademic/DownloadFile?docNo=${docNo}`
-        );
-      } else {
-        toast.error(msg || "Failed to download exam details");
-        // console.log(res);
-      }
+
+      // Create a URL for the Blob
+      const blob = new Blob([res.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+
+      // Create a temporary link element
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `marksheet_${yearSem}.pdf`; // suggested filename
+      document.body.appendChild(a);
+      a.click();
+
+      // Clean up
+      a.remove();
+      window.URL.revokeObjectURL(url);
     } catch (error) {
       const message =
-        error?.response?.data.message || "Failed to fetch exam summary";
-      // console.log(message, error);
+        error?.response?.data?.message || "Failed to download marksheet";
       toast.error(message);
       set({
         errors: { ...get().errors, downloadMarksheet: message },
