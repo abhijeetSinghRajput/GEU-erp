@@ -101,7 +101,7 @@ export function LoginPage({ className, ...props }) {
                       value={formData.studentId}
                       onChange={handleInput}
                       placeholder="Enter your Student Id"
-                      className={`focus-visible:ring-2 pl-9 bg-input/30 ${
+                      className={`h-11 focus-visible:ring-2 pl-9 bg-input/30 ${
                         errors.studentId ? "ring-2 ring-destructive" : ""
                       }`}
                     />
@@ -129,7 +129,7 @@ export function LoginPage({ className, ...props }) {
                       type={showPassword ? "text" : "password"}
                       onChange={handleInput}
                       placeholder="Enter your password"
-                      className={`focus-visible:ring-2 px-9 bg-input/30 ${
+                      className={`h-11 focus-visible:ring-2 px-9 bg-input/30 ${
                         errors.password ? "ring-2 ring-destructive" : ""
                       }`}
                     />
@@ -172,7 +172,7 @@ export function LoginPage({ className, ...props }) {
                       placeholder="Fill the Captcha"
                       disabled={loadingCaptcha || !captchaImage}
                       autoComplete="off"
-                      className={`focus-visible:ring-2 pl-9 bg-input/30 ${
+                      className={`h-11 focus-visible:ring-2 pl-9 bg-input/30 ${
                         errors.captcha ? "ring-2 ring-destructive" : ""
                       }`}
                     />
