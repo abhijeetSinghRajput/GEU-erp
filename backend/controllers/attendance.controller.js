@@ -5,7 +5,8 @@ import qs from "qs";
 
 export const getAllAttendanceSubjects = async (req, res) => {
   const {RegID} = req.query;
-  if(!RegID) res.status(400).json({message: "RegId required"});
+  if(!RegID) return res.status(400).json({message: "RegId required"});
+  
   try {
     const result = await fetchGEU("/Web_StudentAcademic/GetSubjectDetailStudentAcademicFromLive", req, {
       customHeaders: {
