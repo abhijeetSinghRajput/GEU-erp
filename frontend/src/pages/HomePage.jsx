@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import { StudentProfile } from "@/components/profile/StudentProfile";
 import AttendanceTable from "@/components/table/AttendanceTable";
 import React from "react";
+import IdCard from "../components/profile/IdCard";
 
 const HomePage = () => {
   return (

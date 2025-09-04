@@ -10,6 +10,8 @@ export const useStudentStore = create((set, get) => ({
     fetchProfile: null,
   },
   loadingAvatar: false,
+  idCard: null,
+  loadingIdCard: false,
 
   fetchProfile: async () => {
     set({
@@ -32,7 +34,7 @@ export const useStudentStore = create((set, get) => ({
   },
 
   loadAvatar: async () => {
-    set({loadingAvatar: true});
+    set({ loadingAvatar: true });
     try {
       const response = await axiosInstance.get("/avatar", {
         responseType: "blob",
@@ -43,10 +45,22 @@ export const useStudentStore = create((set, get) => ({
       return blobUrl;
     } catch (error) {
       // console.log("failed to load avatar");
-      set({avatarBlobUrl: null});
+      set({ avatarBlobUrl: null });
       return null;
-    } finally{
-      set({loadingAvatar: false});
+    } finally {
+      set({ loadingAvatar: false });
+    }
+  },
+
+  getIdCard: async () => {
+    set({ loadingIdCard: true });
+    try {
+      const response = await axiosInstance.get("/idcard");
+      set({idCard: response.data});
+    } catch (error) {
+      console.log(error);
+    } finally {
+      set({ loadingIdCard: false });
     }
   },
 }));

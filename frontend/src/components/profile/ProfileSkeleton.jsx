@@ -30,7 +30,7 @@ const ProfileSkeleton = () => {
         {/* Profile Header */}
         <CardHeader className="px-8 py-6">
           <div className="flex flex-col md:flex-row items-center gap-6">
-            <Skeleton className="size-24 rounded-full" />
+            <Skeleton className="size-32 rounded-full" />
 
             <div className="text-center md:text-left space-y-2">
               <CardTitle className="text-3xl font-bold tracking-tight">

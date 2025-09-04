@@ -1,6 +1,5 @@
 import axios from "axios";
 import { fetchGEU } from "../utils/geuApi.js";
-import qs from "qs";
 import { errorMap } from "../constants/error.js";
 
 export const profile = async (req, res) => {
@@ -9,26 +8,7 @@ export const profile = async (req, res) => {
     const student = JSON.parse(data.state)[0];
     res.json(student);
   } catch (error) {
-    res.status(error.status || 500).json({ message:  errorMap[err.code] || "Failed to fetch profile" });
-  }
-};
-
-export const messages = async (req, res) => {
-  try {
-    const data = await fetchGEU("/Account/GetStudentMsgHistory", req);
-    res.json(data);
-  } catch (error) {
-    res.status(error.status || 500).json({ message: errorMap[err.code] || "Failed to fetch messages" });
-  }
-};
-
-
-export const exams = async (req, res) => {
-  try {
-    const data = await fetchGEU("/Account/GetOnlineExamHome", req);
-    res.json(data);
-  } catch (error) {
-    res.status(error.status || 500).json({ message: errorMap[err.code] || "Failed to fetch exam data" });
+    res.status(error.status || 500).json({ message:  errorMap[error.code] || "Failed to fetch profile" });
   }
 };
 
@@ -75,4 +55,13 @@ export const avatar = async (req, res) => {
   }
 };
 
-
+export const getIdCard = async (req, res) => {
+  try {
+    const response = await fetchGEU("/Account/StudentIDCardPrint", req);
+    const jsonData = JSON.parse(response);
+    res.status(200).json(jsonData[0]);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message: "Internal server error."});
+  }
+}
