@@ -14,9 +14,9 @@ const IdCard = () => {
     );
   }
   return (
-    <div className="mx-auto grid grid-cols-1 md:grid-cols-2 p-2 gap-0.5 w-max bg-white text-black">
-      <IdCardFront idCard={idCard} />
-      <IdCardBack idCard={idCard} />
+    <div className="mx-auto grid grid-cols-1 md:grid-cols-2 p-1 sm:p-2 gap-0.5 w-max bg-white text-black">
+      <IdCardFront idCard={idCard} className={"w-[350px] sm:w-[400px]"} />
+      <IdCardBack idCard={idCard}  className={"w-[350px] sm:w-[400px]"}/>
     </div>
   );
 };
@@ -63,8 +63,8 @@ const IdCardFront = ({ idCard, className }) => {
             {/* Student Details */}
             <td className="p-2 align-top">
               <div className="space-y-1">
-                <div className="font-bold">{idCard?.StudentName}</div>
-                <div className="font-bold ">{idCard?.CourseBranch}</div>
+                <div className="font-bold text-xs">{idCard?.StudentName}</div>
+                <div className="font-bold text-xs">{idCard?.CourseBranch}</div>
                 <div className="space-y-0.5 text-[10px]">
                   <div className="flex gap-2">
                     <span className="font-bold w-20">ADMISSION NO.</span>
