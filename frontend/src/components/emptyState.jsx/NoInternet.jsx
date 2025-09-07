@@ -1,8 +1,6 @@
-import React from "react";
 import { motion } from "framer-motion";
-import { Button } from "../ui/button"; // Assuming you're using shadcn/ui
 import { RefreshCw } from "lucide-react";
-import Header from "../Header";
+import { Button } from "../ui/button";
 
 const NoInternet = () => {
   const handleRetry = () => {

@@ -15,9 +15,11 @@ import { useStudentStore } from "../../stores/useStudentStore";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import IdCard from "./IdCard";
 import { XIcon } from "lucide-react";
+import ProfilePhotoUploader from "./ProfilePhotoUploader";
 
 const ProfileDialog = () => {
-  const { student, loadingAvatar, avatarBlobUrl } = useStudentStore();
+  const { student } = useStudentStore();
+  const { idCard, loadingIdCard } = useStudentStore();
 
   return (
     <MorphingDialog
@@ -27,18 +29,24 @@ const ProfileDialog = () => {
       }}
     >
       <MorphingDialogTrigger>
-        {loadingAvatar ? (
+        {loadingIdCard ? (
           <Skeleton className={"size-32 rounded-full"} />
         ) : (
-          <Avatar className="size-32">
-            <AvatarImage
-              className="w-full h-full object-cover"
-              src={avatarBlobUrl}
-            />
-            <AvatarFallback className="text-4xl text-muted-foreground">
-              {student.StudentName[0].toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
+          <div className="relative">
+            <Avatar className="size-32">
+              <AvatarImage src={idCard?.Photo} />
+              <AvatarFallback className="text-4xl text-muted-foreground">
+                {student.StudentName[0].toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+
+            <div
+              className="absolute bottom-0 right-0"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <ProfilePhotoUploader />
+            </div>
+          </div>
         )}
       </MorphingDialogTrigger>
       <MorphingDialogContainer>

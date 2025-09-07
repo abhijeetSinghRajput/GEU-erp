@@ -12,6 +12,7 @@ export const useStudentStore = create((set, get) => ({
   loadingAvatar: false,
   idCard: null,
   loadingIdCard: false,
+  uploadingAvatar: false,
 
   fetchProfile: async () => {
     set({
@@ -52,11 +53,40 @@ export const useStudentStore = create((set, get) => ({
     }
   },
 
+  updateAvatar: async (file) => {
+    set({ uploadingAvatar: true });
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await axiosInstance.post("/upload-avatar", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log(res.data);
+      toast.success("Avatar uploaded successfully ✅");
+      get().getIdCard();
+    } catch (error) {
+      console.error(error);
+      toast.error("❌ Failed to upload avatar");
+    } finally {
+      set({ uploadingAvatar: false });
+    }
+  },
+
   getIdCard: async () => {
     set({ loadingIdCard: true });
     try {
       const response = await axiosInstance.get("/idcard");
-      set({idCard: response.data});
+      const idCard = {
+        ...response.data,
+        AuthoritySignature: `data:image/bmp;base64,${response.data?.AuthoritySignature}`,
+        Photo: `data:image/bmp;base64,${response.data?.Photo}`,
+      };
+      
+      set({ idCard });
     } catch (error) {
       console.log(error);
     } finally {

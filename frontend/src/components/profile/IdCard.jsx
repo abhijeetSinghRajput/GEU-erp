@@ -2,6 +2,7 @@ import React from "react";
 import { useStudentStore } from "../../stores/useStudentStore";
 import { cn } from "../../lib/utils";
 import { Skeleton } from "../ui/skeleton";
+import { id } from "date-fns/locale";
 
 const IdCard = () => {
   const { idCard, loadingIdCard } = useStudentStore();
@@ -16,14 +17,14 @@ const IdCard = () => {
   return (
     <div className="mx-auto grid grid-cols-1 md:grid-cols-2 p-1 sm:p-2 gap-0.5 w-max bg-white text-black">
       <IdCardFront idCard={idCard} className={"w-[350px] sm:w-[400px]"} />
-      <IdCardBack idCard={idCard}  className={"w-[350px] sm:w-[400px]"}/>
+      <IdCardBack idCard={idCard} className={"w-[350px] sm:w-[400px]"} />
     </div>
   );
 };
 
 const IdCardFront = ({ idCard, className }) => {
   return (
-    <div className={cn("id-card border-2 border-black w-[400px]", className)}>
+    <div className={cn("id-card border-2 border-black w-[400px] text-[10px]", className)}>
       <table className="w-full h-full  border-collapse">
         <tbody>
           {/* Header with University Logo */}
@@ -40,17 +41,17 @@ const IdCardFront = ({ idCard, className }) => {
               className="w-4 text-center"
               style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
             >
-              <div className="text-[10px] tracking-wider  font-bold p-1 h-full flex items-center justify-center">
+              <div className=" tracking-wider  font-bold p-1 h-full flex items-center justify-center text-[8px]">
                 PROVISIONAL ID CARD
               </div>
             </td>
 
             {/* Student Photo */}
             <td className="w-24 p-2">
-              <div className="w-20 h-24 border border-gray-300 bg-gray-50 flex items-center justify-center">
+              <div className="w-20 h-24 bg-gray-50 flex items-center justify-center">
                 {idCard?.Photo ? (
                   <img
-                    src={`data:image/bmp;base64,${idCard?.Photo}`}
+                    src={idCard?.Photo}
                     alt="Student"
                     className="w-full h-full object-cover"
                   />
@@ -63,9 +64,9 @@ const IdCardFront = ({ idCard, className }) => {
             {/* Student Details */}
             <td className="p-2 align-top">
               <div className="space-y-1">
-                <div className="font-bold text-xs">{idCard?.StudentName}</div>
-                <div className="font-bold text-xs">{idCard?.CourseBranch}</div>
-                <div className="space-y-0.5 text-[10px]">
+                <div className="font-bold ">{idCard?.StudentName}</div>
+                <div className="font-bold ">{idCard?.CourseBranch}</div>
+                <div className="space-y-0.5 ">
                   <div className="flex gap-2">
                     <span className="font-bold w-20">ADMISSION NO.</span>
                     <span className="ml-1">{idCard?.StudentID}</span>
@@ -88,7 +89,7 @@ const IdCardFront = ({ idCard, className }) => {
           </tr>
           <tr>
             <td colSpan={3}>
-              <div className="text-center text-xs pb-2 font-semibold">
+              <div className="text-center  pb-2 font-semibold">
                 {idCard?.StudentID}
               </div>
             </td>
@@ -101,8 +102,8 @@ const IdCardFront = ({ idCard, className }) => {
 
 const IdCardBack = ({ idCard, className }) => {
   return (
-    <div className={cn("id-card border-2 border-black w-[400px]", className)}>
-      <table className="w-full h-full text-[12px] border-collapse">
+    <div className={cn("id-card border-2 border-black w-[400px] text-[10px]", className)}>
+      <table className="w-full h-full border-collapse">
         <tbody>
           {/* Contact Information */}
           <tr>
@@ -122,7 +123,7 @@ const IdCardBack = ({ idCard, className }) => {
                   <span className="font-bold w-20">E-mail</span>
                   <span>:</span>
                   <span className="ml-1 break-all">
-                    {idCard?.EmailID.toLowerCase()}
+                    {idCard?.EmailID?.toLowerCase()}
                   </span>
                 </div>
                 <div className="flex">
@@ -149,11 +150,11 @@ const IdCardBack = ({ idCard, className }) => {
                   </div>
 
                   {/* Authority Signature */}
-                  <div className="text-right">
+                  <div className="text-right -mt-4">
                     <div className="mb-1">
                       {idCard?.AuthoritySignature ? (
                         <img
-                          src={`data:image/bmp;base64,${idCard?.AuthoritySignature}`}
+                          src={idCard?.AuthoritySignature}
                           alt="Authority Signature"
                           className="h-8 inline-block"
                         />
@@ -163,16 +164,23 @@ const IdCardBack = ({ idCard, className }) => {
                         </div>
                       )}
                     </div>
-                    <div className="font-bold ">ISSUED BY</div>
+                    <div className="font-bold">ISSUED BY</div>
                   </div>
                 </div>
               </div>
 
               {/* Return Information */}
               <div className="text-center space-y-1 whitespace-nowrap">
-                <div className="font-bold ">If found please return to :</div>
-                <div className=" leading-tight">
-                  <div>Graphic Era (Deemed to be University)</div>
+                <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
+                  <div className="h-[1px] bg-blue-500 w-full" />
+                  <div className="font-bold text-center">
+                    If found please return to :
+                  </div>
+                  <div className="h-[1px] bg-blue-500 w-full" />
+                </div>
+
+                <div className="leading-tight">
+                  <div className="font-bold text-[#0a0aff] my-1">Graphic Era (Deemed to be University)</div>
                   <div>
                     Bell Road, Clement Town Dehradun, Uttarakhand India -248002
                   </div>

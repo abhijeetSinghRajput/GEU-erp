@@ -62,7 +62,6 @@ export function StudentProfile() {
   useEffect(() => {
     if (authenticated) {
       fetchProfile();
-      loadAvatar();
       getIdCard();
     }
   }, [authenticated]);
