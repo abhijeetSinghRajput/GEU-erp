@@ -91,7 +91,7 @@ const ProfilePhotoUploader = () => {
   };
 
   return (
-    <Dialog className>
+    <Dialog>
       <DialogTrigger asChild>
         <Button size="icon" variant="secondary">
           <Camera />
