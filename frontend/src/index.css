@@ -122,3 +122,12 @@
 .rdp-week {
   @apply gap-2;
 }
+
+.docs {
+  h3 {
+    @apply flex items-center gap-2 text-xl lg:text-2xl font-semibold; 
+  }
+  blockquote{
+    @apply bg-input/30 border-l-2 p-2 rounded-md overflow-hidden border-accent pl-4 italic;
+  }
+}

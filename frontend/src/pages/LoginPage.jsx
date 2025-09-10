@@ -50,10 +50,10 @@ export function LoginPage({ className, ...props }) {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    
+
     if (!validateLoginForm(formData, setErrors)) return;
     const result = await login(formData);
-    if(result) navigate("/");
+    if (result) navigate("/");
   };
 
   return (
@@ -72,14 +72,23 @@ export function LoginPage({ className, ...props }) {
             <div className="flex flex-col gap-6">
               {/* University logo and title... */}
               <div className="flex flex-col items-center gap-2">
-                <a href="#" className="flex flex-col items-center gap-2 font-medium">
+                <a
+                  href="#"
+                  className="flex flex-col items-center gap-2 font-medium"
+                >
                   <div className="flex size-24 items-center justify-center rounded-md">
-                    <img src="./graphic-era-university-dehradun-logo.png" alt="University Logo" />
+                    <img
+                      src="./graphic-era-university-dehradun-logo.png"
+                      alt="University Logo"
+                    />
                   </div>
-                  <span className="sr-only">Graphic Era Deemed to be university</span>
+                  <span className="sr-only">
+                    Graphic Era Deemed to be university
+                  </span>
                 </a>
                 <h1 className="text-xl font-bold">
-                  Welcome to <span className="text-red-500 font-serif">Graphic Era</span>
+                  Welcome to{" "}
+                  <span className="text-red-500 font-serif">Graphic Era</span>
                 </h1>
               </div>
 
@@ -88,7 +97,10 @@ export function LoginPage({ className, ...props }) {
                 <div className="grid gap-2">
                   <div className="flex items-center justify-between">
                     <Label htmlFor="studentId">Student Id</Label>
-                    <Link to={"/forgot-id"} className="text-sm text-muted-foreground font-medium underline-offset-4 hover:underline">
+                    <Link
+                      to={"/forgot-id"}
+                      className="text-sm text-muted-foreground font-medium underline-offset-4 hover:underline"
+                    >
                       Forgot your id?
                     </Link>
                   </div>
@@ -115,7 +127,10 @@ export function LoginPage({ className, ...props }) {
                 <div className="grid gap-2">
                   <div className="flex items-center justify-between">
                     <Label htmlFor="password">Password</Label>
-                    <Link to={"/forgot-password"} className="text-sm text-muted-foreground font-medium underline-offset-4 hover:underline">
+                    <Link
+                      to={"/forgot-password"}
+                      className="text-sm text-muted-foreground font-medium underline-offset-4 hover:underline"
+                    >
                       Forgot your password?
                     </Link>
                   </div>
@@ -206,6 +221,16 @@ export function LoginPage({ className, ...props }) {
               </div>
             </div>
           </form>
+
+          <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+            By clicking continue, you agree to our{" "}
+            <Link
+              to={"/privacy-policy"}
+              className="text-muted-foreground font-medium underline-offset-4 underline"
+            >
+              Privacy Policy
+            </Link>
+          </div>
         </div>
       </div>
     </div>

@@ -11,6 +11,8 @@ import NoInternet from "./components/emptyState.jsx/NoInternet";
 import { LoginPage } from "./pages/LoginPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ForgotIdPage from "./pages/ForgotIdPage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import DocsPage from "./pages/DocsPage";
 
 const App = () => {
   const { checkingAuth, authenticated, checkAuth } = useAuthStore();
@@ -39,14 +41,13 @@ const App = () => {
       <TooltipProvider>
         <Routes>
           <Route path="/login" element={!authenticated ? <LoginPage /> : <Navigate to="/" replace />} />
-          {/* <Route path="/" element={<HomePage/>}/> */}
-          <Route 
-            path="/" 
-            element={authenticated ? <HomePage /> : <Navigate to="/login" replace />} 
-          />
+          <Route path="/" element={authenticated ? <HomePage /> : <Navigate to="/login" replace />} />
+          
           {/* public route  */}
           <Route path="/forgot-password" element={<ForgotPasswordPage/>} />
           <Route path="/forgot-id" element={<ForgotIdPage/>} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage/>} />
+          <Route path="/docs" element={<DocsPage/>} />
         </Routes>
       </TooltipProvider>
       <Toaster expand={true} richColors/>
