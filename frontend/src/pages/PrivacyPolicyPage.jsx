@@ -245,32 +245,6 @@ const PrivacyPolicyPage = () => {
                     </li>
                   </ul>
 
-                  <p>📂 Example endpoints we call:</p>
-                  <ul className="list-disc space-y-2 pl-5">
-                    <li>
-                      <code>
-                        /Web_StudentAcademic/GetSubjectDetailStudentAcademicFromLive
-                      </code>{" "}
-                      → Fetches your subject list
-                    </li>
-                    <li>
-                      <code>
-                        /Web_StudentAcademic/FillAttendanceDetail_ostulgn
-                      </code>{" "}
-                      → Detailed attendance records
-                    </li>
-                    <li>
-                      <code>/Account/GetStudentDetail</code> → Student profile
-                      information
-                    </li>
-                    <li>
-                      <code>
-                        /Web_StudentFinance/GetStudentFeeReceipt_ostulgn
-                      </code>{" "}
-                      → Fee receipts
-                    </li>
-                  </ul>
-
                   <blockquote className="bg-input/30 border-l-2 p-2 rounded-md overflow-hidden border-accent pl-4 italic">
                     "Minimal access, maximum security – we only fetch what you
                     request."
