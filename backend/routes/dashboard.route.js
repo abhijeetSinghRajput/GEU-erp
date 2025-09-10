@@ -1,20 +1,27 @@
 import express from "express";
-import { 
-    avatar, 
-    profile, 
-    getIdCard,
-    updateAvatar,
+import {
+  avatar,
+  profile,
+  getIdCard,
+  updateAvatar,
+  forgotPassword,
+  getLoginId,
 } from "../controllers/dashboard.controller.js";
 import { checkSession } from "../middlewares/checkSession.middleware.js";
 import { upload } from "../middlewares/upload.middleware.js";
 const router = express.Router();
 
+router.post("/forgot-password", forgotPassword);
+router.post("/get-loginid", getLoginId);
 
-router.use(checkSession);
-
-router.get("/", profile);
-router.get("/avatar", avatar);
-router.get("/idcard", getIdCard);
-router.post("/upload-avatar", upload.single("file"), updateAvatar);
+router.get("/", checkSession, profile);
+router.get("/avatar", checkSession, avatar);
+router.get("/idcard", checkSession, getIdCard);
+router.post(
+  "/upload-avatar",
+  checkSession,
+  upload.single("file"),
+  updateAvatar
+);
 
 export default router;

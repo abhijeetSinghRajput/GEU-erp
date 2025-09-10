@@ -2,10 +2,13 @@ import axios from "axios";
 import { fetchGEU } from "../utils/geuApi.js";
 import { errorMap } from "../constants/error.js";
 import FormData from "form-data";
+import qs from "qs";
 
 export const profile = async (req, res) => {
   try {
-    const data = await fetchGEU("/Account/GetStudentDetail", req);
+    const data = await fetchGEU("/Account/GetStudentDetail", req, {
+      method: "post"
+    });
     const student = JSON.parse(data.state)[0];
     res.json(student);
   } catch (error) {
@@ -59,7 +62,9 @@ export const avatar = async (req, res) => {
 
 export const getIdCard = async (req, res) => {
   try {
-    const response = await fetchGEU("/Account/StudentIDCardPrint", req);
+    const response = await fetchGEU("/Account/StudentIDCardPrint", req, {
+      method: "post",
+    });
     const jsonData = JSON.parse(response);
     res.status(200).json(jsonData[0]);
   } catch (error) {
@@ -107,5 +112,73 @@ export const updateAvatar = async (req, res) => {
   } catch (error) {
     console.error("Error uploading avatar:", error?.response?.data || error);
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const forgotPassword = async (req, res) => {
+  try {
+    const { studentId, email, DOB } = req.body;
+    const url = `https://student.geu.ac.in/Account/ResetPassword?ID=${studentId}&Mob=${encodeURIComponent(
+      email
+    )}&db=${encodeURIComponent(DOB)}`;
+    const response = await axios.get(url, {
+      headers: {
+        accept: "*/*",
+        "user-agent": "Mozilla/5.0", // mimic browser
+        "x-requested-with": "XMLHttpRequest",
+        referer: "https://student.geu.ac.in/Account/ForgotPassword",
+      },
+      withCredentials: true,
+    });
+
+    return res.status(200).json({
+      message: "success",
+      result: response.data, 
+    });
+  } catch (error) {
+    console.error("Error uploading avatar:", error?.response?.data || error);
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error?.response?.status || error.message,
+    });
+  }
+};
+
+
+export const getLoginId = async (req, res) => {
+  try {
+    const { DOB, email } = req.body; 
+    const data = qs.stringify({
+      db: DOB,
+      Email: email
+    });
+    
+    // Make request to ERP
+    const response = await axios.post(
+      "https://student.geu.ac.in/Account/GetLoginID",
+      data,
+      {
+        headers: {
+          "accept": "*/*",
+          "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+          "user-agent": "Mozilla/5.0",
+          "x-requested-with": "XMLHttpRequest",
+          "referer": "https://student.geu.ac.in/Account/ForgotID",
+        },
+        withCredentials: true,
+      }
+    );
+    console.log(req.body, response.data);
+
+    return res.status(200).json({
+      message: "success",
+      result: response.data, 
+    });
+  } catch (error) {
+    console.error("GetLoginID error:", error?.response?.data || error.message);
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error?.response?.status || error.message,
+    });
   }
 };

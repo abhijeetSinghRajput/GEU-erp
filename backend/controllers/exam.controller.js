@@ -40,7 +40,6 @@ export const downloadMarksheet = async (req, res) => {
       `/Web_StudentAcademic/DownloadFile?docNo=${docNo}`,
       req,
       {
-        method: "get",
         responseType: "arraybuffer", // raw bytes
         customHeaders: {
           Accept: "application/pdf",

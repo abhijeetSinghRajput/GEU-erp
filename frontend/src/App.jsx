@@ -9,6 +9,8 @@ import { useAuthStore } from "./stores/useAuthStore";
 import useOnlineStatus from "./hooks/useOnlineStatus";
 import NoInternet from "./components/emptyState.jsx/NoInternet";
 import { LoginPage } from "./pages/LoginPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ForgotIdPage from "./pages/ForgotIdPage";
 
 const App = () => {
   const { checkingAuth, authenticated, checkAuth } = useAuthStore();
@@ -42,6 +44,9 @@ const App = () => {
             path="/" 
             element={authenticated ? <HomePage /> : <Navigate to="/login" replace />} 
           />
+          {/* public route  */}
+          <Route path="/forgot-password" element={<ForgotPasswordPage/>} />
+          <Route path="/forgot-id" element={<ForgotIdPage/>} />
         </Routes>
       </TooltipProvider>
       <Toaster expand={true} richColors/>

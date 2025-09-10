@@ -2,7 +2,7 @@ import { fetchGEU } from "../utils/geuApi.js";
 
 export const circulars = async (req, res) => {
   try {
-    const data = await fetchGEU("/Account/GetCircularIntention", req);
+    const data = await fetchGEU("/Account/GetCircularIntention", req, {method: "post"});
     res.json({
       ...data, 
       circular: JSON.parse(data.circular)

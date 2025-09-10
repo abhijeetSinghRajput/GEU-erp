@@ -27,7 +27,7 @@ export const useNoticeStore = create((set, get) => ({
       toast.error(message);
       set({
         circular: [],
-        errors: { ...get().errors, getAllCirculars: message },
+        errors: { ...get().errors, getCirculars: message },
       });
     } finally {
       set({ isLoadingCirculars: false });

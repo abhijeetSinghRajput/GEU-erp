@@ -57,7 +57,7 @@ const Circular = () => {
     return <CircularSkeleton />;
   }
 
-  if (errors.getCirculars || !circulars) {
+  if (errors.getCirculars || !circulars || circulars.length === 0) {
     return (
       <CircularError
         description={errors.getCirculars}

@@ -88,7 +88,7 @@ export function LoginPage({ className, ...props }) {
                 <div className="grid gap-2">
                   <div className="flex items-center justify-between">
                     <Label htmlFor="studentId">Student Id</Label>
-                    <Link className="text-sm text-muted-foreground font-medium underline-offset-4 hover:underline">
+                    <Link to={"/forgot-id"} className="text-sm text-muted-foreground font-medium underline-offset-4 hover:underline">
                       Forgot your id?
                     </Link>
                   </div>
@@ -115,7 +115,7 @@ export function LoginPage({ className, ...props }) {
                 <div className="grid gap-2">
                   <div className="flex items-center justify-between">
                     <Label htmlFor="password">Password</Label>
-                    <Link className="text-sm text-muted-foreground font-medium underline-offset-4 hover:underline">
+                    <Link to={"/forgot-password"} className="text-sm text-muted-foreground font-medium underline-offset-4 hover:underline">
                       Forgot your password?
                     </Link>
                   </div>

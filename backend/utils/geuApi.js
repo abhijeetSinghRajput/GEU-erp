@@ -8,7 +8,7 @@ export const fetchGEU = async (endpoint, req, options = {}) => {
     throw new Error("Credentials are missing");
   }
   const {
-    method = "post",
+    method = "get",
     data = {},
     customHeaders = {},
     referer = "https://student.geu.ac.in",

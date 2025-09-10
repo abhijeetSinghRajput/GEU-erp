@@ -9,10 +9,12 @@ export const useStudentStore = create((set, get) => ({
   errors: {
     fetchProfile: null,
   },
-  loadingAvatar: false,
   idCard: null,
+  sendingMail: false,
+  loadingAvatar: false,
   loadingIdCard: false,
   uploadingAvatar: false,
+  requestingID: false,
 
   fetchProfile: async () => {
     set({
@@ -27,7 +29,7 @@ export const useStudentStore = create((set, get) => ({
         error?.response?.data.message ||
         "Something went wrong while fetching profile";
       set({ errors: { ...get().errors, fetchProfile: message } });
-      // console.log(message, error);
+      console.log(message, error);
       toast.error(message);
     } finally {
       set({ isFetchingProfile: false });
@@ -85,12 +87,39 @@ export const useStudentStore = create((set, get) => ({
         AuthoritySignature: `data:image/bmp;base64,${response.data?.AuthoritySignature}`,
         Photo: `data:image/bmp;base64,${response.data?.Photo}`,
       };
-      
+
       set({ idCard });
     } catch (error) {
       console.log(error);
     } finally {
       set({ loadingIdCard: false });
+    }
+  },
+
+  requestPasswordResetLink: async (data) => {
+    set({ sendingMail: true });
+    try {
+      const response = await axiosInstance.post("/forgot-password", data);
+      return response?.data?.result;
+    } catch (error) {
+      console.log(error);
+      return null;
+    } finally {
+      set({ sendingMail: false });
+    }
+  },
+
+  getStudentId: async (data) => {
+    set({ requestingID: true });
+    try {
+      const response = await axiosInstance.post("/get-loginid", data);
+      console.log(response.data);
+      return response?.data?.result;
+    } catch (error) {
+      console.log(error);
+      return null;
+    } finally {
+      set({ requestingID: false });
     }
   },
 }));
