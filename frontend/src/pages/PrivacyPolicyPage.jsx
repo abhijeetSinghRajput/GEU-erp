@@ -64,7 +64,7 @@ const PrivacyPolicyPage = () => {
   return (
     <>
       <Header />
-      <div className="relative min-h-screen w-full p-4 lg:p-8 docs">
+      <div className="relative min-h-screen w-full p-2 sm:p-4 lg:p-8 docs">
         <div className="mx-auto max-w-6xl">
           <h1 className="font-cal-sans pt-8 text-3xl md:text-4xl lg:pt-12">
             Terms of Service & Privacy Policy
@@ -122,7 +122,7 @@ const PrivacyPolicyPage = () => {
                     <li>
                       Complete source code available on{" "}
                       <a
-                        href="https://github.com/your-username/geu-student-portal"
+                        href="https://github.com/abhijeetsinghrajput/geu-erp"
                         className="text-primary hover:underline"
                       >
                         GitHub
@@ -136,7 +136,7 @@ const PrivacyPolicyPage = () => {
                   </ul>
 
                   <a
-                    href="https://github.com/your-username/geu-student-portal"
+                    href="https://github.com/abhijeetsinghrajput/geu-erp"
                     className="inline-flex items-center gap-2 text-primary hover:underline font-medium"
                   >
                     <Button>

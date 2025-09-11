@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { CodeBlock } from "../components/ui/code-block";
 
 export function LoginPage({ className, ...props }) {
   const navigate = useNavigate();

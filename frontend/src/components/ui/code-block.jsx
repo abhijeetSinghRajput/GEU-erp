@@ -4,6 +4,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { IconCheck, IconCopy } from "@tabler/icons-react";
 import { Button } from "./button";
+import { ScrollArea, ScrollBar } from "./scroll-area";
 
 export const CodeBlock = ({
   language,
@@ -35,7 +36,7 @@ export const CodeBlock = ({
     : highlightLines;
 
   return (
-    <div className="relative w-full my-2 rounded-lg bg-zinc-900 p-4 font-mono text-sm">
+    <div className="codeblock relative w-full my-2 rounded-lg bg-zinc-900 p-4 pb-1 font-mono text-sm">
       <div className="flex justify-between items-center pb-2">
         {/* Tabs OR filename */}
         <div className="flex items-center gap-3 overflow-x-auto">
@@ -69,30 +70,39 @@ export const CodeBlock = ({
         {copied ? <IconCheck /> : <IconCopy />}
       </Button>
 
-      <SyntaxHighlighter
-        language={activeLanguage}
-        style={atomDark}
-        customStyle={{
-          margin: 0,
-          padding: 0,
-          background: "transparent",
-          fontSize: "0.875rem", // text-sm
-        }}
-        wrapLines={true}
-        showLineNumbers={true}
-        lineProps={(lineNumber) => ({
-          style: {
-            backgroundColor: activeHighlightLines.includes(lineNumber)
-              ? "rgba(255,255,255,0.1)"
-              : "transparent",
-            display: "block",
-            width: "100%",
-          },
-        })}
-        PreTag="div"
-      >
-        {String(activeCode)}
-      </SyntaxHighlighter>
+      <div className="relative overflow-hidden">
+        <ScrollArea className="w-full">
+          <div className="min-w-max pb-3">
+            <SyntaxHighlighter
+              language={activeLanguage}
+              style={atomDark}
+              customStyle={{
+                margin: 0,
+                padding: 0,
+                background: "transparent",
+                fontSize: "0.875rem",
+                minWidth: "100%",
+                display: "table",
+              }}
+              wrapLines={false}
+              showLineNumbers={true}
+              lineProps={(lineNumber) => ({
+                style: {
+                  backgroundColor: activeHighlightLines.includes(lineNumber)
+                    ? "rgba(255,255,255,0.1)"
+                    : "transparent",
+                  display: "block",
+                  width: "100%",
+                },
+              })}
+              PreTag="div"
+            >
+              {String(activeCode)}
+            </SyntaxHighlighter>
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      </div>
     </div>
   );
 };

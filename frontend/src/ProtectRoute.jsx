@@ -15,7 +15,7 @@ import { LoginPage } from "./pages/LoginPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ForgotIdPage from "./pages/ForgotIdPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
-import DocsPage from "./pages/DocsPage";
+import DocsPage from "./pages/docs/DocsPage";
 
 
 const App = () => {
