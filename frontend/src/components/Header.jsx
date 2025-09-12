@@ -79,9 +79,9 @@ const Header = ({ children }) => {
         <Link to="/" className="flex items-center gap-2 h-full">
           <div className="h-full p-1">
             <img
-              src="/geu-logo.png"
-              className="h-full w-full object-contain"
-              alt="GEU Logo"
+              className="w-full h-full object-contain"
+              src="./graphic-era-university-dehradun-logo.png"
+              alt="Graphic Era University Logo"
             />
           </div>
           <div className="w-32">
@@ -119,8 +119,8 @@ const Header = ({ children }) => {
           <DropdownMenuContent className="min-w-40" align="end">
             {/* Theme toggle */}
             <DropdownMenuItem onClick={toggleMode}>
-              {theme === "light" ?  <Moon /> : <Sun />}
-              <span>{theme === "light"? "Dark" : "Light"}</span>
+              {theme === "light" ? <Moon /> : <Sun />}
+              <span>{theme === "light" ? "Dark" : "Light"}</span>
             </DropdownMenuItem>
 
             {/* Docs */}

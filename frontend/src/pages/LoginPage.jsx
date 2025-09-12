@@ -7,6 +7,7 @@ import { cn, validateLoginForm } from "@/lib/utils";
 import { useAuthStore } from "@/stores/useAuthStore";
 import {
   BookOpen,
+  ExternalLink,
   Eye,
   EyeOff,
   Loader2,
@@ -74,20 +75,6 @@ export function LoginPage({ className, ...props }) {
             <div className="flex flex-col gap-6">
               {/* University logo and title... */}
               <div className="flex flex-col items-center gap-2">
-                <a
-                  href="#"
-                  className="flex flex-col items-center gap-2 font-medium"
-                >
-                  <div className="flex size-24 items-center justify-center rounded-md">
-                    <img
-                      src="./graphic-era-university-dehradun-logo.png"
-                      alt="University Logo"
-                    />
-                  </div>
-                  <span className="sr-only">
-                    Graphic Era Deemed to be university
-                  </span>
-                </a>
                 <h1 className="text-xl font-bold">
                   Welcome to{" "}
                   <span className="text-red-500 font-serif">Graphic Era</span>
@@ -224,26 +211,27 @@ export function LoginPage({ className, ...props }) {
             </div>
           </form>
 
-          <div className="flex flex-col items-center gap-4 text-center">
-            <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-              By clicking continue, you agree to our{" "}
-              <Link
-                to={"/privacy-policy"}
-                className="text-muted-foreground font-medium underline-offset-4 underline"
-              >
-                Privacy Policy
-              </Link>
-            </div>
-            <div>
-              <Link
-                to="/docs"
-                className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-primary bg-primary/5 rounded-md hover:bg-primary/10 transition-colors"
-              >
-                <BookOpen className="w-4 h-4" />
-                Read Docs
-              </Link>
-            </div>
+          <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+            By clicking continue, you agree to our{" "}
+            <Link
+              to={"/privacy-policy"}
+              className="text-muted-foreground font-medium underline-offset-4 underline"
+            >
+              Privacy Policy
+            </Link>
           </div>
+          <blockquote className="text-sm text-muted-foreground bg-input/30 border-l-2 p-2 rounded-md overflow-hidden border-accent pl-4 italic">
+            “The portal does not store any credentials and is fully open-source.
+            You can verify our security practices by reviewing the source code.”
+            <a
+              href="https://github.com/abhijeetSinghRajput/geu-erp"
+              target="_blank"
+              className="inline-flex items-center gap-1 underline underline-offset-4 text-primary font-medium ml-1"
+            >
+              github
+              <ExternalLink size={14} />
+            </a>
+          </blockquote>
         </div>
       </div>
     </div>

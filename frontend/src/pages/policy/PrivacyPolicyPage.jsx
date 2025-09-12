@@ -22,6 +22,7 @@ import DataFetchingSection from "./DataFetchingSection";
 import CredentialsSection from "./CredentialsSection";
 import TermsSection from "./TermsSection";
 import { Separator } from "../../components/ui/separator";
+import TransparencySection from "./TransparencySection";
 
 const PrivacyPolicyPage = () => {
   const [activeSection, setActiveSection] = useState("transparency");
@@ -106,6 +107,7 @@ const PrivacyPolicyPage = () => {
             </ul>
 
             <main className="flex flex-1 flex-col gap-16 sm:gap-20 md:gap-12">
+              <TransparencySection/> <Separator/>
               <CredentialsSection/> <Separator/>
               <DataFetchingSection/> <Separator/>
               <ContributionSection/> <Separator/>
