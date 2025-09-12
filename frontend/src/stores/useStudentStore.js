@@ -67,7 +67,6 @@ export const useStudentStore = create((set, get) => ({
         },
       });
 
-      console.log(res.data);
       toast.success("Avatar uploaded successfully ✅");
       get().getIdCard();
     } catch (error) {

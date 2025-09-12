@@ -23,6 +23,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import AdmitCard from "./AdmitCard";
 
 const Header = ({ children }) => {
   const { theme, setTheme } = useTheme();
@@ -108,6 +109,8 @@ const Header = ({ children }) => {
             </div>
           </Button>
         </TooltipWrapper>
+
+        <AdmitCard/>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

@@ -8,6 +8,9 @@ import { Loader2, LogOut } from "lucide-react";
 import { Button } from "../components/ui/button";
 import TooltipWrapper from "../components/TooltipWrapper";
 import { useAuthStore } from "../stores/useAuthStore";
+import { useExamStore } from "../stores/useExamStore";
+import { useEffect } from "react";
+import AdmitCard from "../components/AdmitCard";
 
 const HomePage = () => {
   return (

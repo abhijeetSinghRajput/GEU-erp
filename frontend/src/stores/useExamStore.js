@@ -8,9 +8,15 @@ export const useExamStore = create((set, get) => ({
   loadingExamSummary: false,
   loadingBacklogs: false,
   loadingMarksheet: 0,
+  loadingAdmitCard: false,
   errors: {
     getExamSummary: null,
     downloadMarksheet: null,
+  },
+  admitCards: {
+    sessional: null,
+    endTerm: null,
+    midTerm: null,
   },
 
   getExamSummary: async () => {
@@ -92,6 +98,23 @@ export const useExamStore = create((set, get) => ({
       set({ errors: { ...get().errors, getBacklogs: message } });
     } finally {
       set({ loadingBacklogs: false });
+    }
+  },
+  getAdmitCard: async (examType) => {
+    set({ loadingAdmitCard: examType });
+    try {
+      const res = await axiosInstance.get(`/exam/get-admit-card/${examType}`);
+      set({
+        admitCards: { ...get().admitCards, [examType]: res.data.admitCard },
+      });
+    } catch (error) {
+      const message =
+        error?.response?.data.message || "Failed to fetch backlogs";
+      // console.log(message, error);
+      toast.error(message);
+      set({ errors: { ...get().errors, getAdmitCard: message } });
+    } finally {
+      set({ loadingAdmitCard: false });
     }
   },
 }));

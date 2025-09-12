@@ -83,3 +83,45 @@ export const getBacklogs = async (req, res) => {
       .json({ message: errorMap[error.code] || "Internal Server Error" });
   }
 };
+
+export const getAdmitCard = async (req, res) => {
+  const examTypes = {
+    sessional: "1",
+    endTerm: "2",
+    midTerm: "3",
+  };
+
+  try {
+    const { examType } = req.params;
+    if (!examType || !(examType in examTypes)) {
+      return res.status(400).json({ message: "Invalid examType parameter" });
+    }
+
+    // prepare payload (as a plain object)
+    const payload = {
+      ExamType: 1, // 1:main 2:back
+      MarksType: examTypes[examType],
+      BackSetting: -1,
+    };
+
+    const response = await fetchGEU(
+      "/Web_Exam/GetAdmitCardSlctStudentRecord",
+      req,
+      {
+        method: "post",
+        data: payload,
+        customHeaders: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    const parsed = JSON.parse(response?.state || "[]");
+    const admitCard = Array.isArray(parsed) && parsed.length ? parsed[0] : {};
+
+    res.status(200).json({ admitCard });
+  } catch (error) {
+    console.error("getAdmitCard error:", error);
+    res.status(500).json({ message: "Failed to fetch admit card" });
+  }
+};
