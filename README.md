@@ -1,6 +1,8 @@
 # 🎓 GEU ERP - Enhanced Student Portal Clone
 
-**🚀 [LIVE DEMO - CLICK HERE](https://student-geu.netlify.app/login) 🚀**
+**🚀 [LIVE DEMO - CLICK HERE](https://geu-erp.onrender.com) 🚀**
+
+**📒 [DOCS](https://geu-erp.onrender.com/docs)**
 
 A modern, enhanced clone of Graphic Era University's student portal built with cutting-edge technology. This project reimagines the traditional student portal experience with an intuitive, finger-tip accessible interface that puts all student data and academic information in one place - no more navigating through multiple pages!
 
