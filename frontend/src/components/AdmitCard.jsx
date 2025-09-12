@@ -19,9 +19,9 @@ const AdmitCard = () => {
     getAdmitCard("midTerm");
   }, []);
 
-  const filteredAdmitCard = Object.entries(admitCards)
-    .filter(([key, value]) => Object.keys(value).length !== 0)
-    .map(([key, value]) => value);
+  const filteredAdmitCard = Object.entries(admitCards || {})
+    ?.filter(([key, value]) => Object.keys(value || {}).length !== 0)
+    ?.map(([key, value]) => value);
 
   const notifications = {
     admitCard: filteredAdmitCard,
@@ -44,12 +44,14 @@ const AdmitCard = () => {
           <div>
             <h3 className="font-medium capitalize mb-1">{key}</h3>
             {value.map((item, index) => (
-              <Card key={index}>
+              <Card key={index} className="bg-input/50 shadow-md">
                 <CardHeader className="p-3 pb-0">
                   <CardTitle>Semester {item?.YearSem}</CardTitle>
                 </CardHeader>
                 <CardContent className="p-3 pt-1">
-                  <p className="text-muted-foreground text-xs font-semibold">{item?.Caption}</p>
+                  <p className="text-muted-foreground text-xs font-semibold">
+                    {item?.Caption}
+                  </p>
                 </CardContent>
               </Card>
             ))}

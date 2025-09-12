@@ -69,12 +69,16 @@ const Circular = () => {
   return (
     <div className="max-w-screen-lg mx-auto px-2 sm:px-4 md:px-6 py-2">
       <div className="flex justify-between items-center gap-2 py-2">
-      <h2 className="text-2xl sm:text-3xl font-bold mb-2">Notices</h2>
-
+        <h2 className="text-2xl sm:text-3xl font-bold mb-2">Notices</h2>
 
         <CircularDetailsDrawer />
       </div>
-      <div className="relative min-h-[500px] h-full w-full overflow-hidden">
+      <div className="relative min-h-[580px] sm:min-h-[500px] h-full w-full overflow-hidden">
+        {/* Top Gradient */}
+        <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-background/90 to-transparent pointer-events-none z-40" />
+        {/* Bottom Gradient */}
+        <div className="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-background/90 to-transparent pointer-events-none z-40" />
+
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
           <AnimatePresence mode="popLayout">
             {visibleCirculars.map((circular, index) => (
