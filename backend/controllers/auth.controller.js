@@ -6,8 +6,12 @@ import { load } from "cheerio";
 import { fetchGEU } from "../utils/geuApi.js";
 import { errorMap } from "../constants/error.js";
 
+const DEEMED_BASE_URL = "https://student.geu.ac.in/";
+const HILL_BASE_URL = "https://student.gehu.ac.in/";
 export const getCaptcha = async (req, res) => {
   try {
+    const campus = req.cookies["campus"] || "deemed";
+    const BASE_URL = campus === "hill" ? HILL_BASE_URL : DEEMED_BASE_URL;
     const jar = new CookieJar();
     const client = wrapper(
       axios.create({
@@ -16,8 +20,8 @@ export const getCaptcha = async (req, res) => {
       })
     );
     // Step 1: Get initial page to establish session and get tokens
-    const initialResponse = await client.get("https://student.geu.ac.in/");
-    
+    const initialResponse = await client.get(BASE_URL);
+
     // Parse the HTML to get the form's verification token
     const $ = load(initialResponse.data);
     const formToken = $('input[name="__RequestVerificationToken"]').val();
@@ -29,7 +33,7 @@ export const getCaptcha = async (req, res) => {
     }
 
     // Step 6: Set cookies for frontend
-    const cookies = await jar.getCookies("https://student.geu.ac.in/");
+    const cookies = await jar.getCookies(BASE_URL);
     cookies.forEach(({ key, value }) => {
       res.cookie(key, value, {
         httpOnly: true,
@@ -87,17 +91,23 @@ export const login = async (req, res) => {
       })
     );
 
+    const campus = req.cookies["campus"] || "deemed";
+    const BASE_URL = campus === "hill" ? HILL_BASE_URL : DEEMED_BASE_URL;
     // Use the same client instance that maintains cookies
-    const response = await client.post("https://student.geu.ac.in/", formData, {
-      maxRedirects: 0,
-      validateStatus: (status) => status >= 200 && status < 400,
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Referer: "https://student.geu.ac.in/",
-        Origin: "https://student.geu.ac.in",
-        Cookie: `ASP.NET_SessionId=${sessionId}; __RequestVerificationToken=${cookieToken}`,
-      },
-    });
+    const response = await client.post(
+      BASE_URL,
+      formData,
+      {
+        maxRedirects: 0,
+        validateStatus: (status) => status >= 200 && status < 400,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Referer: BASE_URL,
+          Origin: BASE_URL,
+          Cookie: `ASP.NET_SessionId=${sessionId}; __RequestVerificationToken=${cookieToken}`,
+        },
+      }
+    );
 
     // Login is successful if server redirects to student dashboard
     const isSuccess =
@@ -132,11 +142,9 @@ export const login = async (req, res) => {
     }
   } catch (error) {
     console.error("Login error:", error);
-    return res
-      .status(500)
-      .json({
-        message: errorMap[error.code] || "Something went wrong during login",
-      });
+    return res.status(500).json({
+      message: errorMap[error.code] || "Something went wrong during login",
+    });
   }
 };
 
@@ -163,13 +171,15 @@ export const checkAuth = async (req, res) => {
   try {
     const sessionId = req.cookies["ASP.NET_SessionId"];
     const token = req.cookies["__RequestVerificationToken"];
+    const campus = req.cookies["campus"] || "deemed";
+    const BASE_URL = campus === "hill" ? HILL_BASE_URL : DEEMED_BASE_URL;
 
     if (!sessionId || !token) {
       return res.status(401).json({ message: "Session or token missing" });
     }
 
     const response = await axios.get(
-      "https://student.geu.ac.in/account/Cyborg_StudentMenu",
+      `${BASE_URL}account/Cyborg_StudentMenu`,
       {
         headers: {
           Cookie: `ASP.NET_SessionId=${sessionId}; __RequestVerificationToken=${token}`,
@@ -187,7 +197,9 @@ export const checkAuth = async (req, res) => {
       return res.status(401).json({ authenticated: false });
     }
 
-    return res.status(error.status || 500).json({ message: "Unexpected status" });
+    return res
+      .status(error.status || 500)
+      .json({ message: "Unexpected status" });
   } catch (error) {
     console.error("❌ Error checking auth:", error.message);
     return res

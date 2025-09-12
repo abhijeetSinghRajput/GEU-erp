@@ -6,7 +6,7 @@ import { cn } from "../../lib/utils";
 const APIEndpointsSection = () => (
   <section id="api" className="space-y-6">
     <div className="flex items-center gap-3">
-      <Server className="w-6 h-6 text-primary" />
+      <Server className="w-6 h-6 text-primary flex-shrink-0" />
       <h3>API Endpoints & GEU Integration</h3>
     </div>
 

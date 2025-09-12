@@ -5,7 +5,7 @@ import { Layers } from "lucide-react";
 const ArchitectureSection = () => (
   <section id="architecture" className="space-y-6">
     <div className="flex items-center gap-3">
-      <Layers className="w-6 h-6 text-primary" />
+      <Layers className="w-6 h-6 text-primary flex-shrink-0" />
       <h3>System Architecture</h3>
     </div>
 

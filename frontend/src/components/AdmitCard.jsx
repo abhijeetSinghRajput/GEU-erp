@@ -18,6 +18,7 @@ const AdmitCard = () => {
     getAdmitCard("endTerm");
     getAdmitCard("midTerm");
   }, []);
+  console.log("Admit Cards:", admitCards);
 
   const filteredAdmitCard = Object.entries(admitCards || {})
     ?.filter(([key, value]) => Object.keys(value || {}).length !== 0)
@@ -26,6 +27,7 @@ const AdmitCard = () => {
   const notifications = {
     admitCard: filteredAdmitCard,
   };
+  console.log("Notifications:", notifications);
 
   return (
     <Popover>
@@ -33,7 +35,7 @@ const AdmitCard = () => {
         <Button variant="ghost" size="icon" className="relative group">
           <div className="relative">
             <Bell />
-            {Object.keys(notifications).length > 0 && (
+            {notifications?.admitCard?.length > 0 && (
               <span className="rounded-full border group-hover:border-accent transition-colors absolute top-0 right-0  border-background size-2 bg-red-500" />
             )}
           </div>

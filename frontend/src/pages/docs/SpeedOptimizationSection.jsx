@@ -5,14 +5,14 @@ import { CodeBlock } from "@/components/ui/code-block";
 const SpeedOptimizationSection = () => (
   <section id="speed" className="space-y-6">
     <div className="flex items-center gap-3">
-      <Zap className="w-6 h-6 text-primary" />
+      <Zap className="w-6 h-6 text-primary flex-shrink-0" />
       <h3>Why We're Faster Than Official GEU Website</h3>
     </div>
 
     <div className="space-y-6">
       <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-950/20 dark:to-blue-950/20 p-4 sm:p-6 rounded-lg border">
         <h4 className="font-semibold mb-4 flex items-center gap-2">
-          <Clock className="w-5 h-5" />
+          <Clock className="w-5 h-5 flex-shrink-0" />
           Performance Optimizations
         </h4>
 

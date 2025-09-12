@@ -19,6 +19,7 @@ import {
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CodeBlock } from "@/components/ui/code-block";
+import ExpandableSwitch from "../components/ExpandableSwitch";
 
 export function LoginPage({ className, ...props }) {
   const navigate = useNavigate();
@@ -79,6 +80,9 @@ export function LoginPage({ className, ...props }) {
                   Welcome to{" "}
                   <span className="text-red-500 font-serif">Graphic Era</span>
                 </h1>
+                <div>
+                  <ExpandableSwitch/>
+                </div>
               </div>
 
               <div className="flex flex-col gap-4">

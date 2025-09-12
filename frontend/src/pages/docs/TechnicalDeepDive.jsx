@@ -1,12 +1,16 @@
 import { Code } from "lucide-react";
 import React from "react";
 import { CodeBlock } from "@/components/ui/code-block";
+import { useCookieStore } from "../../stores/useCookieStore";
 
 const TechnicalDeepDive = () => {
+  const {getBaseUrl} = useCookieStore();
+  const baseUrl = getBaseUrl();
+
   return (
     <section id="technical" className="space-y-6">
       <div className="flex items-center gap-3">
-        <Code className="w-6 h-6 text-primary" />
+        <Code className="w-6 h-6 text-primary flex-shrink-0" />
         <h3>Technical Deep Dive</h3>
       </div>
 
@@ -34,7 +38,7 @@ const TechnicalDeepDive = () => {
     method = "get",
     data = {},
     customHeaders = {},
-    referer = "https://student.geu.ac.in",
+    referer = "${baseUrl}",
     responseType = "json",
   } = options;
 
@@ -47,7 +51,7 @@ const TechnicalDeepDive = () => {
       ? "application/x-www-form-urlencoded" 
       : "application/json",
     "X-Requested-With": "XMLHttpRequest",
-    "Origin": "https://student.geu.ac.in",
+    "Origin": "${baseUrl}",
     "Referer": referer,
     "Cookie": req.headers.cookie || 
       \`ASP.NET_SessionId=\${sessionId}; __RequestVerificationToken=\${token}\`,
@@ -57,7 +61,7 @@ const TechnicalDeepDive = () => {
   try {
     const res = await axios({
       method,
-      url: \`https://student.geu.ac.in\${endpoint}\`,
+      url: \`${baseUrl}\${endpoint}\`,
       headers: defaultHeaders,
       data: method === "post" && data
         ? isFormEncoded ? qs.stringify(data) : data
@@ -115,14 +119,14 @@ export const login = async (req, res) => {
   const jar = new CookieJar();
   const client = wrapper(axios.create({ jar, withCredentials: true }));
 
-  const response = await client.post("https://student.geu.ac.in/", 
+  const response = await client.post("${baseUrl}/", 
     formData, {
     maxRedirects: 0,
     validateStatus: (status) => status >= 200 && status < 400,
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-      "Referer": "https://student.geu.ac.in/",
-      "Origin": "https://student.geu.ac.in",
+      "Referer": "${baseUrl}/",
+      "Origin": "${baseUrl}",
       "Cookie": \`ASP.NET_SessionId=\${sessionId}; __RequestVerificationToken=\${cookieToken}\`,
     },
   });

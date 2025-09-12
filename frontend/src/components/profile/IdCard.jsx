@@ -3,14 +3,15 @@ import { useStudentStore } from "../../stores/useStudentStore";
 import { cn } from "../../lib/utils";
 import { Skeleton } from "../ui/skeleton";
 import { id } from "date-fns/locale";
+import { useCookieStore } from "../../stores/useCookieStore";
 
 const IdCard = () => {
   const { idCard, loadingIdCard } = useStudentStore();
-  if (loadingIdCard) {
+  if (loadingIdCard || 0) {
     return (
-      <div className="mx-auto h-[312px] grid grid-cols-1 md:grid-cols-2 p-2 gap-0.5 w-max bg-accent">
-        <Skeleton className={"w-[400px] h-full"} />
-        <Skeleton className={"w-[400px] h-full"} />
+      <div className="mx-auto h-[457px] grid grid-cols-1 md:grid-cols-2 p-2 gap-0.5 w-max bg-accent">
+        <Skeleton className={"w-[350px] sm:w-[400px] h-full"} />
+        <Skeleton className={"w-[350px] sm:w-[400px] h-full"} />
       </div>
     );
   }
@@ -23,6 +24,8 @@ const IdCard = () => {
 };
 
 const IdCardFront = ({ idCard, className }) => {
+  const {campus} = useCookieStore();
+  const banner = campus === 'hill' ? '/gehu-banner.png' : '/geu-banner.jpeg';
   return (
     <div className={cn("id-card border-2 border-black w-[400px] text-[10px]", className)}>
       <table className="w-full h-full  border-collapse">
@@ -30,7 +33,7 @@ const IdCardFront = ({ idCard, className }) => {
           {/* Header with University Logo */}
           <tr>
             <td colSpan="3">
-              <img src="./geu-banner.jpeg" />
+              <img src={banner} alt="Graphic Era Banner" />
             </td>
           </tr>
 
@@ -101,6 +104,9 @@ const IdCardFront = ({ idCard, className }) => {
 };
 
 const IdCardBack = ({ idCard, className }) => {
+  const {campus} = useCookieStore();
+  const website = campus === 'hill' ? 'www.gehu.ac.in' : 'www.geu.ac.in';
+  
   return (
     <div className={cn("id-card border-2 border-black w-[400px] text-[10px]", className)}>
       <table className="w-full h-full border-collapse">
@@ -185,7 +191,7 @@ const IdCardBack = ({ idCard, className }) => {
                     Bell Road, Clement Town Dehradun, Uttarakhand India -248002
                   </div>
                   <div>Phone No : +91-135-2643421, 2642727</div>
-                  <div className="mt-1">www.geu.ac.in</div>
+                  <div className="mt-1">{website}</div>
                 </div>
               </div>
             </td>

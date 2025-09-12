@@ -5,7 +5,7 @@ import React from "react";
 const OverviewSection = () => (
   <section id="overview" className="space-y-6">
     <div className="flex items-center gap-3">
-      <Globe className="w-6 h-6 text-primary" />
+      <Globe className="w-6 h-6 text-primary flex-shrink-0" />
       <h3>Project Overview</h3>
     </div>
     <div className="bg-muted/30 p-4 sm:p-6 rounded-lg border">

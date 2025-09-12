@@ -5,7 +5,7 @@ import { CodeBlock } from "@/components/ui/code-block";
 const SecuritySection = () => (
   <section id="security" className="space-y-6">
     <div className="flex items-center gap-3">
-      <Shield className="w-6 h-6 text-primary" />
+      <Shield className="w-6 h-6 text-primary flex-shrink-0" />
       <h3>Security & Privacy</h3>
     </div>
 

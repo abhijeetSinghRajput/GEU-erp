@@ -1,9 +1,15 @@
 import axios from "axios";
 import qs from "qs"; // make sure this is installed: npm i qs
 
+const DEEMED_BASE_URL = "https://student.geu.ac.in/";
+const HILL_BASE_URL = "https://student.gehu.ac.in/";
+
 export const fetchGEU = async (endpoint, req, options = {}) => {
   const sessionId = req.cookies["ASP.NET_SessionId"];
   const token = req.cookies["__RequestVerificationToken"];
+  const campus = req.cookies["campus"] || "deemed"; 
+  const BASE_URL = campus === "hill" ? HILL_BASE_URL : DEEMED_BASE_URL;
+
   if (!sessionId || !token) {
     throw new Error("Credentials are missing");
   }
@@ -11,11 +17,11 @@ export const fetchGEU = async (endpoint, req, options = {}) => {
     method = "get",
     data = {},
     customHeaders = {},
-    referer = "https://student.geu.ac.in",
+    referer = BASE_URL,
     responseType = "json",
   } = options;
 
-  const url = `https://student.geu.ac.in${endpoint}`;
+  const url = `${BASE_URL}${endpoint}`;
 
   const isFormEncoded =
     customHeaders["Content-Type"] === "application/x-www-form-urlencoded";
@@ -25,7 +31,7 @@ export const fetchGEU = async (endpoint, req, options = {}) => {
       ? "application/x-www-form-urlencoded"
       : "application/json",
     "X-Requested-With": "XMLHttpRequest",
-    Origin: "https://student.geu.ac.in",
+    Origin: BASE_URL,
     Referer: referer,
     Cookie: req.headers.cookie || `ASP.NET_SessionId=${sessionId}; __RequestVerificationToken=${token}`,
     ...customHeaders,

@@ -76,7 +76,7 @@ const PerformanceCard = ({ title, color, metrics }) => (
 const PerformanceMetrics = () => (
   <section id="metrics" className="space-y-6">
     <div className="flex items-center gap-3">
-      <Zap className="w-6 h-6 text-primary" />
+      <Zap className="w-6 h-6 text-primary flex-shrink-0" />
       <h3>Performance Metrics</h3>
     </div>
 

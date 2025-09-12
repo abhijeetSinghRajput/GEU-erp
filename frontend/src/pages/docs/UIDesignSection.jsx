@@ -82,7 +82,7 @@ return (
 const UIDesignSection = () => (
   <section id="ui" className="space-y-6">
     <div className="flex items-center gap-3">
-      <Monitor className="w-6 h-6 text-primary" />
+      <Monitor className="w-6 h-6 text-primary flex-shrink-0" />
       <h3>Modern UI/UX Design</h3>
     </div>
 

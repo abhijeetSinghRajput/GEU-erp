@@ -38,7 +38,7 @@ const FaqSection = () => {
   return (
     <section id="faq" className="space-y-6">
       <div className="flex items-center gap-3">
-        <Users className="w-6 h-6 text-primary" />
+        <Users className="w-6 h-6 text-primary flex-shrink-0" />
         <h3>Frequently Asked Questions</h3>
       </div>
 

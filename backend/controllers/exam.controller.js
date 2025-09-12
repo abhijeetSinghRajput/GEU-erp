@@ -117,7 +117,7 @@ export const getAdmitCard = async (req, res) => {
     );
 
     const parsed = JSON.parse(response?.state || "[]");
-    const admitCard = Array.isArray(parsed) && parsed.length ? parsed[0] : {};
+    const admitCard = Array.isArray(parsed) && parsed.length ? parsed[0] : null;
 
     res.status(200).json({ admitCard });
   } catch (error) {

@@ -1,8 +1,10 @@
 import { ExternalLink, GitBranch } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
+import { useCookieStore } from "../../stores/useCookieStore";
 
 const DataFetchingSection = () => {
+  const {getBaseUrl} = useCookieStore();
   return (
     <section id="data-fetching" className="space-y-4 md:space-y-6">
       <div className="flex justify-between items-center">
@@ -25,7 +27,7 @@ const DataFetchingSection = () => {
           </strong>
           . Instead, it communicates securely with the official{" "}
           <a
-            href="https://student.geu.ac.in"
+            href={getBaseUrl()}
             className="text-primary hover:underline"
           >
             GEU ERP servers

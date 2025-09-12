@@ -4,6 +4,9 @@ import { errorMap } from "../constants/error.js";
 import FormData from "form-data";
 import qs from "qs";
 
+const DEEMED_BASE_URL = "https://student.geu.ac.in/";
+const HILL_BASE_URL = "https://student.gehu.ac.in/";
+
 export const profile = async (req, res) => {
   try {
     const data = await fetchGEU("/Account/GetStudentDetail", req, {
@@ -23,6 +26,8 @@ export const avatar = async (req, res) => {
     // Extract cookies from the incoming request
     const sessionId = req.cookies["ASP.NET_SessionId"];
     const token = req.cookies["__RequestVerificationToken"];
+    const campus = req.cookies["campus"] || "deemed";
+    const BASE_URL = campus === "hill" ? HILL_BASE_URL : DEEMED_BASE_URL;
 
     if (!sessionId || !token) {
       return res.status(401).send("Authentication cookies missing");
@@ -30,11 +35,11 @@ export const avatar = async (req, res) => {
 
     // Make the request to GEU's image endpoint
     const imageResponse = await axios.get(
-      "https://student.geu.ac.in/Account/show",
+      `${BASE_URL}Account/show`,
       {
         headers: {
           Cookie: `ASP.NET_SessionId=${sessionId}; __RequestVerificationToken=${token}`,
-          Referer: "https://student.geu.ac.in/",
+          Referer: BASE_URL,
         },
         responseType: "arraybuffer",
         withCredentials: true, // Important for session handling
@@ -78,6 +83,8 @@ export const updateAvatar = async (req, res) => {
     const { file } = req;
     const sessionId = req.cookies["ASP.NET_SessionId"];
     const token = req.cookies["__RequestVerificationToken"];
+    const campus = req.cookies["campus"] || "deemed";
+    const BASE_URL = campus === "hill" ? HILL_BASE_URL : DEEMED_BASE_URL;
     if (!sessionId || !token) {
       throw new Error("Credentials are missing");
     }
@@ -94,15 +101,14 @@ export const updateAvatar = async (req, res) => {
     });
 
     const response = await axios.post(
-      "https://student.geu.ac.in/Web_StudentAcademic/UploadStudentImg_ostulgn",
+      `${BASE_URL}Web_StudentAcademic/UploadStudentImg_ostulgn`,
       formData,
       {
         headers: {
           ...formData.getHeaders(),
           Cookie: `ASP.NET_SessionId=${sessionId}; __RequestVerificationToken=${token}`,
-          Origin: "https://student.geu.ac.in",
-          Referer:
-            "https://student.geu.ac.in/Web_StudentAcademic/Cyborg_StudentLogin_DocumentUpload?id=Enrollment%20Form",
+          Origin: BASE_URL,
+          Referer: `${BASE_URL}Web_StudentAcademic/Cyborg_StudentLogin_DocumentUpload?id=Enrollment%20Form`,
           "X-Requested-With": "XMLHttpRequest",
         },
       }
@@ -118,7 +124,10 @@ export const updateAvatar = async (req, res) => {
 export const forgotPassword = async (req, res) => {
   try {
     const { studentId, email, DOB } = req.body;
-    const url = `https://student.geu.ac.in/Account/ResetPassword?ID=${studentId}&Mob=${encodeURIComponent(
+    const campus = req.cookies["campus"] || "deemed";
+    const BASE_URL = campus === "hill" ? HILL_BASE_URL : DEEMED_BASE_URL;
+
+    const url = `${BASE_URL}Account/ResetPassword?ID=${studentId}&Mob=${encodeURIComponent(
       email
     )}&db=${encodeURIComponent(DOB)}`;
     const response = await axios.get(url, {
@@ -126,7 +135,7 @@ export const forgotPassword = async (req, res) => {
         accept: "*/*",
         "user-agent": "Mozilla/5.0", // mimic browser
         "x-requested-with": "XMLHttpRequest",
-        referer: "https://student.geu.ac.in/Account/ForgotPassword",
+        referer: `${BASE_URL}Account/ForgotPassword`,
       },
       withCredentials: true,
     });
@@ -152,10 +161,12 @@ export const getLoginId = async (req, res) => {
       db: DOB,
       Email: email
     });
+    const campus = req.cookies["campus"] || "deemed";
+    const BASE_URL = campus === "hill" ? HILL_BASE_URL : DEEMED_BASE_URL;
     
     // Make request to ERP
     const response = await axios.post(
-      "https://student.geu.ac.in/Account/GetLoginID",
+      `${BASE_URL}Account/GetLoginID`,
       data,
       {
         headers: {
@@ -163,7 +174,7 @@ export const getLoginId = async (req, res) => {
           "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
           "user-agent": "Mozilla/5.0",
           "x-requested-with": "XMLHttpRequest",
-          "referer": "https://student.geu.ac.in/Account/ForgotID",
+          "referer": `${BASE_URL}Account/ForgotID`,
         },
         withCredentials: true,
       }

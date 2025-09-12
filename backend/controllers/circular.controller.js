@@ -1,4 +1,6 @@
 import { fetchGEU } from "../utils/geuApi.js";
+const DEEMED_BASE_URL = "https://student.geu.ac.in/";
+const HILL_BASE_URL = "https://student.gehu.ac.in/";
 
 export const circulars = async (req, res) => {
   try {
@@ -14,9 +16,11 @@ export const circulars = async (req, res) => {
 
 export const getCircularDetails = async (req, res) => {
   try {
+    const campus = req.cookies["campus"] || "deemed";
+    const BASE_URL = campus === "hill" ? HILL_BASE_URL : DEEMED_BASE_URL;
     const data = await fetchGEU("/Web_Teaching/GetCircularDetails", req, {
       method: "post",
-      referer: "https://student.geu.ac.in/Web_StudentAcademic/Cyborg_studentCircular?id=Circular/Notice"
+      referer: `${BASE_URL}/Web_StudentAcademic/Cyborg_studentCircular?id=Circular/Notice`
     });
 
     const circulars = JSON.parse(data.state); 

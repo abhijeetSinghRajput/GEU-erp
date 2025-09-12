@@ -1,7 +1,11 @@
 import { ShieldCheck } from "lucide-react";
 import React from "react";
+import { useCookieStore } from "../../stores/useCookieStore";
 
 const CredentialsSection = () => {
+  const {getBaseUrl} = useCookieStore();
+  const baseUrl = getBaseUrl();
+
   return (
     <section id="credentials" className="space-y-4 md:space-y-6">
       <h3>
@@ -29,10 +33,10 @@ const CredentialsSection = () => {
         <p>
           All authentication happens directly with the official GEU ERP at{" "}
           <a
-            href="https://student.geu.ac.in"
+            href={baseUrl}
             className="text-primary hover:underline"
           >
-            https://student.geu.ac.in
+            {baseUrl}
           </a>
           .
         </p>

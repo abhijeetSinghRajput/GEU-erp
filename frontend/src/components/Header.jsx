@@ -110,7 +110,7 @@ const Header = ({ children }) => {
           </Button>
         </TooltipWrapper>
 
-        <AdmitCard/>
+        {authenticated && <AdmitCard />}
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
