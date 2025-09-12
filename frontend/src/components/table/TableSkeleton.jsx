@@ -12,7 +12,7 @@ import {
 import { Skeleton } from "../ui/skeleton";
 import { cn } from "@/lib/utils";
 
-const TableSkeleton = ({ className }) => {
+const TableSkeleton = ({ className, heading }) => {
   return (
     <div
       className={cn(
@@ -20,7 +20,7 @@ const TableSkeleton = ({ className }) => {
         className
       )}
     >
-      <h2 className="text-2xl sm:text-3xl font-bold mb-2">Attendance</h2>
+      <h2 className="text-2xl sm:text-3xl font-bold mb-2">{heading}</h2>
 
       <Card className="overflow-hidden">
         <div className="sticky top-0 z-10 bg-muted">

@@ -11,7 +11,7 @@ import NoInternet from "./components/emptyState.jsx/NoInternet";
 import { LoginPage } from "./pages/LoginPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ForgotIdPage from "./pages/ForgotIdPage";
-import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import PrivacyPolicyPage from "./pages/policy/PrivacyPolicyPage";
 import DocsPage from "./pages/docs/DocsPage";
 
 const App = () => {
@@ -39,16 +39,16 @@ const App = () => {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <TooltipProvider>
-        <Routes>
-          <Route path="/login" element={!authenticated ? <LoginPage /> : <Navigate to="/" replace />} />
-          <Route path="/" element={authenticated ? <HomePage /> : <Navigate to="/login" replace />} />
-          
-          {/* public route  */}
-          <Route path="/forgot-password" element={<ForgotPasswordPage/>} />
-          <Route path="/forgot-id" element={<ForgotIdPage/>} />
-          <Route path="/privacy-policy" element={<PrivacyPolicyPage/>} />
-          <Route path="/docs" element={<DocsPage/>} />
-        </Routes>
+          <Routes>
+            <Route path="/login" element={!authenticated ? <LoginPage /> : <Navigate to="/" replace />} />
+            <Route path="/" element={authenticated ? <HomePage /> : <Navigate to="/login" replace />} />
+            
+            {/* public route  */}
+            <Route path="/forgot-password" element={<ForgotPasswordPage/>} />
+            <Route path="/forgot-id" element={<ForgotIdPage/>} />
+            <Route path="/privacy-policy" element={<PrivacyPolicyPage/>} />
+            <Route path="/docs" element={<DocsPage/>} />
+          </Routes>
       </TooltipProvider>
       <Toaster expand={true} richColors/>
     </ThemeProvider>

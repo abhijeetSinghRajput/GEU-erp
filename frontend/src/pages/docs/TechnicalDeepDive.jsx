@@ -1,6 +1,6 @@
 import { Code } from "lucide-react";
 import React from "react";
-import { CodeBlock } from "../../components/ui/code-block";
+import { CodeBlock } from "@/components/ui/code-block";
 
 const TechnicalDeepDive = () => {
   return (
@@ -19,6 +19,7 @@ const TechnicalDeepDive = () => {
           </p>
             <div className="w-full max-w-full overflow-x-auto rounded-md">
             <CodeBlock
+              filename="backend/utils/geuApi.js"
               language="js"
               code={`export const fetchGEU = async (endpoint, req, options = {}) => {
   // Extract session cookies from request
@@ -86,6 +87,7 @@ const TechnicalDeepDive = () => {
           <div className="w-full max-w-full overflow-x-auto rounded-md">
             <CodeBlock
             language="js"
+            filename="backend/contollers/auth.controller.js"
             code={`// Authentication flow
 export const login = async (req, res) => {
   const { studentId, password, captcha, formToken } = req.body;

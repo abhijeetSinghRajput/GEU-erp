@@ -1,5 +1,5 @@
 import React from "react";
-import { CodeBlock } from "../../components/ui/code-block";
+import { CodeBlock } from "@/components/ui/code-block";
 import { Layers } from "lucide-react";
 
 const ArchitectureSection = () => (

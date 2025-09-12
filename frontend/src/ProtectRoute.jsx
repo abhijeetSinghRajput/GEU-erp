@@ -14,7 +14,7 @@ import HomePage from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ForgotIdPage from "./pages/ForgotIdPage";
-import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import PrivacyPolicyPage from "./pages/policy/PrivacyPolicyPage";
 import DocsPage from "./pages/docs/DocsPage";
 
 

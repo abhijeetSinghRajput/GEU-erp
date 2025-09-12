@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Header from "../components/Header";
-import { Button } from "../components/ui/button";
+import Header from "@/components/Header";
+import { Button } from "@/components/ui/button";
 import {
   ChevronDownIcon,
   Loader2,
@@ -9,19 +9,19 @@ import {
   AlertCircle,
   CheckCircle2,
 } from "lucide-react";
-import { Label } from "../components/ui/label";
+import { Label } from "@/components/ui/label";
 import { cn } from "../lib/utils";
-import { Input } from "../components/ui/input";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "../components/ui/popover";
-import { Calendar } from "../components/ui/calendar";
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
 import validator from "validator";
 import { format } from "date-fns";
 import { useStudentStore } from "../stores/useStudentStore";
-import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const ForgotPasswordPage = ({ className, ...props }) => {
   const { requestPasswordResetLink, sendingMail } = useStudentStore();

@@ -39,7 +39,7 @@ export const CodeBlock = ({
     <div className="codeblock relative w-full my-2 rounded-lg bg-zinc-900 p-4 pb-1 font-mono text-sm">
       <div className="flex justify-between items-center pb-2">
         {/* Tabs OR filename */}
-        <div className="flex items-center gap-3 overflow-x-auto">
+        <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide">
           {tabsExist
             ? tabs.map((tab, index) => (
                 <button
@@ -63,7 +63,7 @@ export const CodeBlock = ({
       <Button
         size="icon"
         variant="ghost"
-        className="absolute text-white hover:text-white top-2 right-2 size-5 rounded-sm hover:bg-transparent"
+        className="absolute text-muted-foreground hover:text-muted-foreground top-2 right-2 size-5 rounded-sm hover:bg-transparent"
         onClick={copyToClipboard}
         disabled={copied}
       >

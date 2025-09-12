@@ -9,9 +9,8 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import axios from "axios";
 import TooltipWrapper from "./TooltipWrapper";
 
-const Header = () => {
+const Header = ({children}) => {
   const { theme } = useTheme();
-  const { logout, loginingOut, authenticated } = useAuthStore();
   const [githubStarsCount, setGithubStarsCount] = useState(0);
 
   useEffect(() => {
@@ -29,11 +28,8 @@ const Header = () => {
     getGithubStarCount();
   }, []);
 
-  const logo =
-    theme === "dark" ? "/graphic-era-light.svg" : "/graphic-era-dark.svg";
-
-  const githubLogo =
-    theme === "dark" ? "/github-mark-white.svg" : "/github-mark.svg";
+  const logo = theme === "dark" ? "/graphic-era-light.svg" : "/graphic-era-dark.svg";
+  const githubLogo = theme === "dark" ? "/github-mark-white.svg" : "/github-mark.svg";
 
   const lastScrollY = useRef(0);
   const [hidden, setHidden] = useState(false);
@@ -103,19 +99,7 @@ const Header = () => {
         </TooltipWrapper>
 
         <ModeToggle />
-
-        {authenticated && (
-          <TooltipWrapper content="Logout account">
-            <Button
-              variant="ghost"
-              disabled={loginingOut}
-              onClick={logout}
-              className="size-8"
-            >
-              {loginingOut ? <Loader2 className="animate-spin" /> : <LogOut />}
-            </Button>
-          </TooltipWrapper>
-        )}
+        {children}
       </div>
     </motion.nav>
   );

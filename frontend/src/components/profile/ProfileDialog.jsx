@@ -5,9 +5,6 @@ import {
   MorphingDialogContainer,
   MorphingDialogContent,
   MorphingDialogClose,
-  MorphingDialogTitle,
-  MorphingDialogSubtitle,
-  MorphingDialogImage,
 } from "../../../components/motion-primitives/morphing-dialog";
 import { Skeleton } from "../ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";

@@ -1,11 +1,11 @@
 import { Cookie } from "lucide-react";
 import React from "react";
-import { CodeBlock } from "../../components/ui/code-block";
+import { CodeBlock } from "@/components/ui/code-block";
 
 const SessionManagementSection = () => (
   <section id="session" className="space-y-6">
     <div className="flex items-center gap-3">
-      <Cookie className="w-6 h-6 text-primary" />
+      <Cookie className="w-6 h-6 text-primary flex-shrink-0" />
       <h3>HTTP-Only Cookie Management & Header Manipulation</h3>
     </div>
 
@@ -23,6 +23,7 @@ const SessionManagementSection = () => (
             <h5 className="font-medium mb-2">1. Cookie Jar Strategy</h5>
             <div className="w-full max-w-full overflow-x-auto rounded-md">
               <CodeBlock
+                filename="backend/controllers/auth.controller.js"
                 language="js"
                 code={`// Server-side cookie management
 import { CookieJar } from "tough-cookie";
@@ -43,6 +44,7 @@ const client = wrapper(axios.create({
             <h5 className="font-medium mb-2">2. Session Persistence</h5>
             <div className="w-full max-w-full overflow-x-auto rounded-md">
               <CodeBlock
+                filename="backend/controllers/auth.controller.js"
                 language="js"
                 code={`// Extract and store GEU session cookies
 const cookies = await jar.getCookies("https://student.geu.ac.in/");
@@ -61,6 +63,7 @@ cookies.forEach(({ key, value }) => {
             <h5 className="font-medium mb-2">3. Automatic Cookie Forwarding</h5>
             <div className="w-full max-w-full overflow-x-auto rounded-md">
               <CodeBlock
+                filename="backend/utils/geuApi.js"
                 language="js"
                 code={`// fetchGEU utility automatically includes session cookies
 export const fetchGEU = async (endpoint, req, options = {}) => {

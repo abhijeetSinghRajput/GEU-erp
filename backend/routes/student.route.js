@@ -6,7 +6,7 @@ import {
   updateAvatar,
   forgotPassword,
   getLoginId,
-} from "../controllers/dashboard.controller.js";
+} from "../controllers/student.controller.js";
 import { checkSession } from "../middlewares/checkSession.middleware.js";
 import { upload } from "../middlewares/upload.middleware.js";
 const router = express.Router();

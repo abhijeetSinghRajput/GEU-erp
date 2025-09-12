@@ -1,6 +1,6 @@
 import { Server } from "lucide-react";
 import React from "react";
-import { Badge } from "../../components/ui/badge";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "../../lib/utils";
 
 const APIEndpointsSection = () => (

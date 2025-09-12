@@ -1,6 +1,6 @@
 import { ArrowRight, Clock, Zap } from "lucide-react";
 import React from "react";
-import { CodeBlock } from "../../components/ui/code-block";
+import { CodeBlock } from "@/components/ui/code-block";
 
 const SpeedOptimizationSection = () => (
   <section id="speed" className="space-y-6">

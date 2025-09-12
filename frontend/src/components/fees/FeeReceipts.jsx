@@ -19,6 +19,7 @@ import TooltipWrapper from "../TooltipWrapper";
 import { useFeeStore } from "@/stores/useFeeStore";
 import TableError from "../table/TableError";
 import FeeSkeleton from "./FeeSkeleton";
+import { motion } from "framer-motion";
 
 const FeeReceipts = ({ data }) => {
   const {
@@ -120,77 +121,83 @@ const FeeReceipts = ({ data }) => {
     }
     return dateString;
   }
-
+  
   return (
-    <Card className="rounded-2xl overflow-hidden">
-      <CardHeader className="border bg-muted">
-        <div className="flex justify-between items-start">
-          <div>
-            <CardTitle className="flex items-center gap-2">
-              Fee Receipts
-            </CardTitle>
-            <CardDescription>
-              Payment history and transaction records
-            </CardDescription>
-          </div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.1 }}
+    >
+      <Card className="rounded-2xl overflow-hidden">
+        <CardHeader className="border bg-muted">
+          <div className="flex justify-between items-start">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                Fee Receipts
+              </CardTitle>
+              <CardDescription>
+                Payment history and transaction records
+              </CardDescription>
+            </div>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                size="sm"
-                className="ml-auto gap-1 bg-input"
-              >
-                <span>Columns</span>
-                <ChevronDown className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-[150px]">
-              {columns
-                .filter((col) => col.id !== "actions")
-                .map((column) => (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={visibleColumns[column.id]}
-                    onCheckedChange={() => toggleColumnVisibility(column.id)}
-                  >
-                    {column.header}
-                  </DropdownMenuCheckboxItem>
-                ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </CardHeader>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="ml-auto gap-1 bg-input"
+                >
+                  <span>Columns</span>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-[150px]">
+                {columns
+                  .filter((col) => col.id !== "actions")
+                  .map((column) => (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={visibleColumns[column.id]}
+                      onCheckedChange={() => toggleColumnVisibility(column.id)}
+                    >
+                      {column.header}
+                    </DropdownMenuCheckboxItem>
+                  ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </CardHeader>
 
-      <CardContent className="border p-0">
-        {processedData.length > 0 ? (
-          <div className="space-y-6">
-            <DataTable
-              data={processedData}
-              columns={columns}
-              visibleColumns={visibleColumns}
-              footerData={{
-                CombineReceiptNo: "Total",
-                TotalAmount: processedData.reduce(
-                  (sum, receipt) => sum + receipt.TotalAmount,
-                  0
-                ),
-              }}
-              numericColumns={["TotalAmount"]}
-            />
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center py-12">
-            <InfoIcon className="w-12 h-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium mb-1">No Receipts Found</h3>
-            <p className="text-muted-foreground text-center max-w-md">
-              There are no payment receipts associated with your account.
-            </p>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+        <CardContent className="border p-0">
+          {processedData.length > 0 ? (
+            <div className="space-y-6">
+              <DataTable
+                data={processedData}
+                columns={columns}
+                visibleColumns={visibleColumns}
+                footerData={{
+                  CombineReceiptNo: "Total",
+                  TotalAmount: processedData.reduce(
+                    (sum, receipt) => sum + receipt.TotalAmount,
+                    0
+                  ),
+                }}
+                numericColumns={["TotalAmount"]}
+              />
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-12">
+              <InfoIcon className="w-12 h-12 text-muted-foreground mb-4" />
+              <h3 className="text-lg font-medium mb-1">No Receipts Found</h3>
+              <p className="text-muted-foreground text-center max-w-md">
+                There are no payment receipts associated with your account.
+              </p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 };
 

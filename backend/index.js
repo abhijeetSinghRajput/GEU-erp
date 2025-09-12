@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 
 import freeRouter from "./routes/free.route.js";
 import examRouter from "./routes/exam.route.js";
-import dashboardRouter from "./routes/dashboard.route.js";
+import studentRouter from "./routes/student.route.js";
 import attendanceRouter from "./routes/attendance.route.js";
 import authRouter from "./routes/auth.route.js";
 import circularRouter from "./routes/circular.route.js";
@@ -39,7 +39,7 @@ app.use("/api/fee", freeRouter);
 app.use("/api/exam", examRouter);
 app.use("/api/attendance", attendanceRouter);
 app.use("/api/auth", authRouter);
-app.use("/api", dashboardRouter);
+app.use("/api", studentRouter);
 app.use("/api/circular", circularRouter);
 
 const __dirname = path.resolve();

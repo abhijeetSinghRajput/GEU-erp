@@ -1,6 +1,6 @@
 import { Shield } from "lucide-react";
 import React from "react";
-import { CodeBlock } from "../../components/ui/code-block";
+import { CodeBlock } from "@/components/ui/code-block";
 
 const SecuritySection = () => (
   <section id="security" className="space-y-6">
@@ -40,6 +40,7 @@ const SecuritySection = () => (
         <h4 className="font-semibold mb-4">Security Implementation</h4>
         <div className="w-full max-w-full overflow-x-auto rounded-md">
           <CodeBlock
+            filename="backend/controllers/auth.controller.js"
             language="js"
             code={`// Session validation before each request
 const checkAuth = async (req, res) => {

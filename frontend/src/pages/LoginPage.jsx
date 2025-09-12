@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn, validateLoginForm } from "@/lib/utils";
 import { useAuthStore } from "@/stores/useAuthStore";
 import {
+  BookOpen,
   Eye,
   EyeOff,
   Loader2,
@@ -16,7 +17,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CodeBlock } from "../components/ui/code-block";
+import { CodeBlock } from "@/components/ui/code-block";
 
 export function LoginPage({ className, ...props }) {
   const navigate = useNavigate();
@@ -223,14 +224,25 @@ export function LoginPage({ className, ...props }) {
             </div>
           </form>
 
-          <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-            By clicking continue, you agree to our{" "}
-            <Link
-              to={"/privacy-policy"}
-              className="text-muted-foreground font-medium underline-offset-4 underline"
-            >
-              Privacy Policy
-            </Link>
+          <div className="flex flex-col items-center gap-4 text-center">
+            <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+              By clicking continue, you agree to our{" "}
+              <Link
+                to={"/privacy-policy"}
+                className="text-muted-foreground font-medium underline-offset-4 underline"
+              >
+                Privacy Policy
+              </Link>
+            </div>
+            <div>
+              <Link
+                to="/docs"
+                className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-primary bg-primary/5 rounded-md hover:bg-primary/10 transition-colors"
+              >
+                <BookOpen className="w-4 h-4" />
+                Read Docs
+              </Link>
+            </div>
           </div>
         </div>
       </div>

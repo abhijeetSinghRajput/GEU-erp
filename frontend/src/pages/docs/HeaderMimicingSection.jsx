@@ -1,5 +1,5 @@
 import React from 'react'
-import { CodeBlock } from '../../components/ui/code-block';
+import { CodeBlock } from '@/components/ui/code-block';
 import { CheckCircle, Settings } from 'lucide-react';
 
 const HeaderMimicingSection = () => (
@@ -22,7 +22,9 @@ const HeaderMimicingSection = () => (
           <div>
             <h5 className="font-medium mb-2">1. CSRF Protection</h5>
             <div className="w-full max-w-full overflow-x-auto rounded-md">
-            <CodeBlock language="js" code={`// GEU requires proper CSRF tokens
+            <CodeBlock 
+            filename="backend/utils/geuApi.js"
+            language="js" code={`// GEU requires proper CSRF tokens
 const defaultHeaders = {
   "__RequestVerificationToken": token,
   "X-Requested-With": "XMLHttpRequest",
@@ -38,7 +40,10 @@ const defaultHeaders = {
           <div>
             <h5 className="font-medium mb-2">2. Content-Type Validation</h5>
             <div className="w-full max-w-full overflow-x-auto rounded-md">
-            <CodeBlock language="js" code={`// Different endpoints expect specific content types
+            <CodeBlock 
+            filename="backend/utils/geuApi.js"
+            language="js" 
+            code={`// Different endpoints expect specific content types
 const isFormEncoded = customHeaders["Content-Type"] === 
   "application/x-www-form-urlencoded";
 
@@ -54,7 +59,10 @@ data: isFormEncoded ? qs.stringify(data) : data`} />
           <div>
             <h5 className="font-medium mb-2">3. Session Validation</h5>
             <div className="w-full max-w-full overflow-x-auto rounded-md">
-            <CodeBlock language="js" code={`// Check for unexpected login redirects
+            <CodeBlock 
+            filename="backend/utils/geuApi.js"
+            language="js" 
+            code={`// Check for unexpected login redirects
 if (typeof res.data === "string" && 
     res.data.includes("<title>Graphic Era")) {
   throw new Error("❌ Invalid session or redirected to login page.");
