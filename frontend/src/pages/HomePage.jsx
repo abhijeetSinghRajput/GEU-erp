@@ -10,23 +10,9 @@ import TooltipWrapper from "../components/TooltipWrapper";
 import { useAuthStore } from "../stores/useAuthStore";
 
 const HomePage = () => {
-  const { logout, loginingOut, authenticated } = useAuthStore();
   return (
     <div>
-      <Header>
-        {authenticated && (
-          <TooltipWrapper content="Logout account">
-            <Button
-              variant="ghost"
-              disabled={loginingOut}
-              onClick={logout}
-              className="size-8"
-            >
-              {loginingOut ? <Loader2 className="animate-spin" /> : <LogOut />}
-            </Button>
-          </TooltipWrapper>
-        )}
-      </Header>
+      <Header/>
       <div className="space-y-6">
         <StudentProfile />
         <AttendanceTable />

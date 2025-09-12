@@ -4,14 +4,31 @@ import { useTheme } from "./theme-provider";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { Link, NavLink } from "react-router-dom";
 import { Button } from "./ui/button";
-import { ExternalLink, Loader2, LogOut } from "lucide-react";
+import {
+  BookOpen,
+  FileText,
+  Loader2,
+  LogOut,
+  Moon,
+  Settings,
+  Sun,
+} from "lucide-react";
 import { useAuthStore } from "@/stores/useAuthStore";
 import axios from "axios";
 import TooltipWrapper from "./TooltipWrapper";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
-const Header = ({children}) => {
-  const { theme } = useTheme();
+const Header = ({ children }) => {
+  const { theme, setTheme } = useTheme();
+  const toggleMode = () => setTheme(theme === "light" ? "dark" : "light");
   const [githubStarsCount, setGithubStarsCount] = useState(0);
+  const { logout, loginingOut, authenticated } = useAuthStore();
 
   useEffect(() => {
     const getGithubStarCount = async () => {
@@ -24,15 +41,15 @@ const Header = ({children}) => {
         console.error("Error fetching GitHub stars:", error);
       }
     };
-
     getGithubStarCount();
   }, []);
 
-  const logo = theme === "dark" ? "/graphic-era-light.svg" : "/graphic-era-dark.svg";
-  const githubLogo = theme === "dark" ? "/github-mark-white.svg" : "/github-mark.svg";
+  const logo =
+    theme === "dark" ? "/graphic-era-light.svg" : "/graphic-era-dark.svg";
+  const githubLogo =
+    theme === "dark" ? "/github-mark-white.svg" : "/github-mark.svg";
 
   const lastScrollY = useRef(0);
-  const [hidden, setHidden] = useState(false);
   const y = useMotionValue(0);
   const opacity = useTransform(y, [0, -60], [1, 0]);
 
@@ -42,31 +59,23 @@ const Header = ({children}) => {
       const scrollDirection =
         currentScrollY > lastScrollY.current ? "down" : "up";
 
-      if (scrollDirection === "down") {
-        setHidden(true);
-        animate(y, -60, { duration: 0.3 });
-      } else if (scrollDirection === "up") {
-        setHidden(false);
-        animate(y, 0, { duration: 0.3 });
-      }
-
+      animate(y, scrollDirection === "down" ? -60 : 0, { duration: 0.3 });
       lastScrollY.current = currentScrollY;
     };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [y]);
 
-  const handleGithubClick = () => {
+  const handleGithubClick = () =>
     window.open("https://github.com/abhijeetsinghrajput/geu-erp", "_blank");
-  };
 
   return (
     <motion.nav
       style={{ y, opacity }}
       className="flex sticky shadow-sm top-0 left-0 w-full border-b px-4 sm:px-6 bg-background z-50 justify-between items-center h-14 p-2"
     >
-      <TooltipWrapper content={"go to homepage"}>
+      {/* Logo */}
+      <TooltipWrapper content="Go to homepage">
         <Link to="/" className="flex items-center gap-2 h-full">
           <div className="h-full p-1">
             <img
@@ -84,8 +93,10 @@ const Header = ({children}) => {
           </div>
         </Link>
       </TooltipWrapper>
+
+      {/* Right section */}
       <div className="flex gap-1 items-center">
-        <TooltipWrapper content="Rate us on Github">
+        <TooltipWrapper content="Rate us on GitHub">
           <Button size="sm" variant="ghost" onClick={handleGithubClick}>
             {githubStarsCount}
             <div className="size-5 text-base">
@@ -98,7 +109,60 @@ const Header = ({children}) => {
           </Button>
         </TooltipWrapper>
 
-        <ModeToggle />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button size="icon" variant="ghost" className="size-8">
+              <Settings />
+            </Button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent className="min-w-40" align="end">
+            {/* Theme toggle */}
+            <DropdownMenuItem onClick={toggleMode}>
+              {theme === "light" ?  <Moon /> : <Sun />}
+              <span>{theme === "light"? "Dark" : "Light"}</span>
+            </DropdownMenuItem>
+
+            {/* Docs */}
+            <DropdownMenuItem asChild>
+              <NavLink to="/docs" className="flex items-center gap-2 w-full">
+                <BookOpen className="h-4 w-4" />
+                <span>Docs</span>
+              </NavLink>
+            </DropdownMenuItem>
+
+            {/* Privacy Policy */}
+            <DropdownMenuItem asChild>
+              <NavLink
+                to="/privacy-policy"
+                className="flex items-center gap-2 w-full"
+              >
+                <FileText className="h-4 w-4" />
+                <span>Privacy Policy</span>
+              </NavLink>
+            </DropdownMenuItem>
+
+            {/* Logout */}
+            {authenticated && (
+              <>
+                <DropdownMenuSeparator className="bg-input" />
+                <DropdownMenuItem
+                  onClick={logout}
+                  disabled={loginingOut}
+                  className="text-red-600 flex items-center gap-2"
+                >
+                  {loginingOut ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <LogOut className="h-4 w-4" />
+                  )}
+                  <span>Logout</span>
+                </DropdownMenuItem>
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
         {children}
       </div>
     </motion.nav>
