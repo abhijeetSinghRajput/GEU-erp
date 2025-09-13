@@ -22,8 +22,11 @@ import validator from "validator";
 import { format } from "date-fns";
 import { useStudentStore } from "../stores/useStudentStore";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Link } from "react-router-dom";
+import { useCookieStore } from "../stores/useCookieStore";
 
 const ForgotPasswordPage = ({ className, ...props }) => {
+  const { campus } = useCookieStore();
   const { requestPasswordResetLink, sendingMail } = useStudentStore();
   const [formData, setFormData] = useState({
     studentId: "",
@@ -145,7 +148,11 @@ const ForgotPasswordPage = ({ className, ...props }) => {
                   >
                     <div className="flex size-24 items-center justify-center rounded-md">
                       <img
-                        src="./graphic-era-university-dehradun-logo.png"
+                        src={
+                          campus === "hill"
+                            ? "./gehu-logo.png"
+                            : "./geu-logo.png"
+                        }
                         alt="University Logo"
                       />
                     </div>
@@ -157,7 +164,15 @@ const ForgotPasswordPage = ({ className, ...props }) => {
               <div className="flex flex-col gap-4">
                 {/* Student ID */}
                 <div className="grid gap-2">
-                  <Label htmlFor="studentId">Student Id</Label>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="studentId">Student Id</Label>
+                    <Link
+                      to={"/forgot-id"}
+                      className="text-sm text-muted-foreground font-medium underline-offset-4 hover:underline"
+                    >
+                      Forgot your id?
+                    </Link>
+                  </div>
                   <div className="relative rounded-md">
                     <span className="absolute top-0 text-muted-foreground h-full border-r left-0 flex items-center justify-center w-8">
                       <User2 className="size-5" />
@@ -251,7 +266,7 @@ const ForgotPasswordPage = ({ className, ...props }) => {
                       Please wait...
                     </>
                   ) : (
-                    "Reset"
+                    "Reset Password"
                   )}
                 </Button>
               </div>

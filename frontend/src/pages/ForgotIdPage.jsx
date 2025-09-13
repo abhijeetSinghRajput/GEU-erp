@@ -22,8 +22,10 @@ import validator from "validator";
 import { format } from "date-fns";
 import { useStudentStore } from "../stores/useStudentStore";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useCookieStore } from "../stores/useCookieStore";
 
 const ForgotIdPage = ({ className, ...props }) => {
+  const { campus } = useCookieStore();
   const { getStudentId, requestingID } = useStudentStore();
   const [formData, setFormData] = useState({
     email: "",
@@ -78,16 +80,16 @@ const ForgotIdPage = ({ className, ...props }) => {
 
     if (result === 1) {
       setAlert({
-          type: "success",
-          message:
-          "We have sent your ERP User ID to the your registered email address.",
-        });
-    } else if (result === 2) {
-        type: "error",
-      setAlert({
+        type: "success",
         message:
-          "Given information is not valid please update it on erp and  try again.",
+          "We have sent your ERP User ID to the your registered email address.",
       });
+    } else if (result === 2) {
+      type: "error",
+        setAlert({
+          message:
+            "Given information is not valid please update it on erp and  try again.",
+        });
     } else {
       setAlert({
         type: "success",
@@ -131,7 +133,11 @@ const ForgotIdPage = ({ className, ...props }) => {
                   >
                     <div className="flex size-24 items-center justify-center rounded-md">
                       <img
-                        src="./graphic-era-university-dehradun-logo.png"
+                        src={
+                          campus === "hill"
+                            ? "./gehu-logo.png"
+                            : "./geu-logo.png"
+                        }
                         alt="University Logo"
                       />
                     </div>
