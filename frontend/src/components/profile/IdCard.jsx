@@ -7,6 +7,8 @@ import { useCookieStore } from "../../stores/useCookieStore";
 
 const IdCard = () => {
   const { idCard, loadingIdCard } = useStudentStore();
+  const { campus } = useCookieStore();
+
   if (loadingIdCard || 0) {
     return (
       <div className="mx-auto h-[457px] grid grid-cols-1 md:grid-cols-2 p-2 gap-0.5 w-max bg-accent">
@@ -17,17 +19,29 @@ const IdCard = () => {
   }
   return (
     <div className="mx-auto grid grid-cols-1 md:grid-cols-2 p-1 sm:p-2 gap-0.5 w-max bg-white text-black">
-      <IdCardFront idCard={idCard} className={"w-[350px] sm:w-[400px]"} />
-      <IdCardBack idCard={idCard} className={"w-[350px] sm:w-[400px]"} />
+      <IdCardFront
+        campus={campus}
+        idCard={idCard}
+        className={"w-[350px] sm:w-[400px]"}
+      />
+      <IdCardBack
+        campus={campus}
+        idCard={idCard}
+        className={"w-[350px] sm:w-[400px]"}
+      />
     </div>
   );
 };
 
-const IdCardFront = ({ idCard, className }) => {
-  const {campus} = useCookieStore();
-  const banner = campus === 'hill' ? '/gehu-banner.png' : '/geu-banner.jpeg';
+const IdCardFront = ({ idCard, className, campus }) => {
+  const banner = campus === "hill" ? "/gehu-banner.jpeg" : "/geu-banner.jpeg";
   return (
-    <div className={cn("id-card border-2 border-black w-[400px] text-[10px]", className)}>
+    <div
+      className={cn(
+        "id-card border-2 border-black w-[400px] text-[10px]",
+        className
+      )}
+    >
       <table className="w-full h-full  border-collapse">
         <tbody>
           {/* Header with University Logo */}
@@ -103,12 +117,16 @@ const IdCardFront = ({ idCard, className }) => {
   );
 };
 
-const IdCardBack = ({ idCard, className }) => {
-  const {campus} = useCookieStore();
-  const website = campus === 'hill' ? 'www.gehu.ac.in' : 'www.geu.ac.in';
-  
+const IdCardBack = ({ idCard, className, campus }) => {
+  const website = campus === "hill" ? "www.gehu.ac.in" : "www.geu.ac.in";
+  const phoneNo = campus === "hill" ? "0135-2645843" : "+91-135-2643421, 2642727";
   return (
-    <div className={cn("id-card border-2 border-black w-[400px] text-[10px]", className)}>
+    <div
+      className={cn(
+        "id-card border-2 border-black w-[400px] text-[10px]",
+        className
+      )}
+    >
       <table className="w-full h-full border-collapse">
         <tbody>
           {/* Contact Information */}
@@ -162,7 +180,7 @@ const IdCardBack = ({ idCard, className }) => {
                         <img
                           src={idCard?.AuthoritySignature}
                           alt="Authority Signature"
-                          className="h-8 inline-block"
+                          className="h-8 w-[75px] inline-block object-fill"
                         />
                       ) : (
                         <div className="h-6 w-16 border border-gray-300 flex items-center justify-center">
@@ -186,11 +204,17 @@ const IdCardBack = ({ idCard, className }) => {
                 </div>
 
                 <div className="leading-tight">
-                  <div className="font-bold text-[#0a0aff] my-1">Graphic Era (Deemed to be University)</div>
+                  <div className="font-bold text-[#0a0aff] my-1">
+                    {campus === "hill"
+                      ? "GEHU-Dehradun Campus"
+                      : "Graphic Era (Deemed to be University)"}
+                  </div>
                   <div>
                     Bell Road, Clement Town Dehradun, Uttarakhand India -248002
                   </div>
-                  <div>Phone No : +91-135-2643421, 2642727</div>
+                  <div>
+                    Phone No : {phoneNo}
+                    </div>
                   <div className="mt-1">{website}</div>
                 </div>
               </div>

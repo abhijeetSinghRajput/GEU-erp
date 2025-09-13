@@ -24,12 +24,14 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import AdmitCard from "./AdmitCard";
+import { useCookieStore } from "../stores/useCookieStore";
 
 const Header = ({ children }) => {
   const { theme, setTheme } = useTheme();
   const toggleMode = () => setTheme(theme === "light" ? "dark" : "light");
   const [githubStarsCount, setGithubStarsCount] = useState(0);
   const { logout, loginingOut, authenticated } = useAuthStore();
+  const { campus } = useCookieStore();
 
   useEffect(() => {
     const getGithubStarCount = async () => {
@@ -81,7 +83,7 @@ const Header = ({ children }) => {
           <div className="h-full p-1">
             <img
               className="w-full h-full object-contain"
-              src="./graphic-era-university-dehradun-logo.png"
+              src={campus === "hill" ? "gehu-logo.png" : "./geu-logo.png"}
               alt="Graphic Era University Logo"
             />
           </div>
