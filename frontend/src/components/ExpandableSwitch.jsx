@@ -1,30 +1,35 @@
 "use client";
 
-import { useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { GraduationCap, TreePine } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "../stores/useAuthStore";
 import { useCookieStore } from "../stores/useCookieStore";
 
-const campuss = [
+const campus = [
   { name: "Deemed", value: "deemed", icon: GraduationCap },
   { name: "Hill", value: "hill", icon: TreePine },
 ];
 
 const ExpandableSwitch = () => {
   const { getCaptcha } = useAuthStore();
- const { campus: activeCampus, setcampus } = useCookieStore();
+  const { campus: activeCampus, setCampus } = useCookieStore();
+  const firstRender = useRef(true);
 
   // Call captcha only when user switches (not on first render)
   useEffect(() => {
+    if(firstRender.current){
+      firstRender.current = false;
+      return;
+    }
     getCaptcha();
-  }, [activeCampus]);
+  }, [activeCampus, getCaptcha]);
 
   return (
     <div className="w-full max-w-md">
       <div className="flex gap-2 rounded-xl p-1 border bg-muted/50">
-        {campuss.map(({ icon: Icon, name, value }) => {
+        {campus.map(({ icon: Icon, name, value }) => {
           const isActive = activeCampus === value;
           return (
             <motion.div
@@ -34,7 +39,7 @@ const ExpandableSwitch = () => {
                 "flex h-8 items-center bg-muted justify-center overflow-hidden rounded-md cursor-pointer transition-colors",
                 isActive ? "flex-1" : "flex-none"
               )}
-              onClick={() => setcampus(value)}
+              onClick={() => setCampus(value)}
               initial={false}
               animate={{ width: isActive ? 120 : 36 }}
               transition={{ type: "tween", duration: 0.25 }}
@@ -49,6 +54,7 @@ const ExpandableSwitch = () => {
                 <AnimatePresence initial={false}>
                   {isActive && (
                     <motion.span
+                      key={value}
                       className="font-medium whitespace-nowrap"
                       initial={{ opacity: 0, scaleX: 0.8 }}
                       animate={{ opacity: 1, scaleX: 1 }}
