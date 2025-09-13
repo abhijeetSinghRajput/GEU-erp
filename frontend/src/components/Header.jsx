@@ -83,7 +83,7 @@ const Header = ({ children }) => {
           <div className="h-full p-1">
             <img
               className="w-full h-full object-contain"
-              src={campus === "hill" ? "gehu-logo.png" : "./geu-logo.png"}
+              src={campus === "hill" ? "gehu-circular-logo.png" : "./geu-circular-logo.png"}
               alt="Graphic Era University Logo"
             />
           </div>

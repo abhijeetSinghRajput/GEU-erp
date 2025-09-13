@@ -135,8 +135,8 @@ const ForgotIdPage = ({ className, ...props }) => {
                       <img
                         src={
                           campus === "hill"
-                            ? "./gehu-logo.png"
-                            : "./geu-logo.png"
+                            ? "./gehu-circular-logo.png"
+                            : "./geu-circular-logo.png"
                         }
                         alt="University Logo"
                       />

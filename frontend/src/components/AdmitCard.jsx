@@ -41,19 +41,20 @@ const AdmitCard = () => {
           </div>
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end">
+      <PopoverContent align="end" className="p-2 rounded-xl">
         {Object.entries(notifications).map(([key, value]) => (
           <div>
-            <h3 className="font-medium capitalize mb-1">{key}</h3>
+            <h3 className="font-medium capitalize mb-1 text-primary/90">{key}</h3>
             {value.map((item, index) => (
               <Card key={index} className="bg-input/50 shadow-md">
                 <CardHeader className="p-3 pb-0">
-                  <CardTitle>Semester {item?.YearSem}</CardTitle>
+                  <CardTitle className="text-sm">Semester {item?.YearSem}</CardTitle>
                 </CardHeader>
-                <CardContent className="p-3 pt-1">
+                <CardContent className="p-3 pt-1 space-y-2">
                   <p className="text-muted-foreground text-xs font-semibold">
                     {item?.Caption}
                   </p>
+                  <p className="text-muted-foreground/60 text-xs">{item?.Course}</p>
                 </CardContent>
               </Card>
             ))}
