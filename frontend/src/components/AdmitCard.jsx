@@ -42,7 +42,7 @@ const AdmitCard = ({variant="outline", className}) => {
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent align="end" className="p-3 rounded-xl w-64">
+      <PopoverContent align="end" className="p-2 rounded-xl w-64">
         <h3 className="font-medium capitalize mb-2 text-primary/90">
           Admit Card
         </h3>
@@ -70,7 +70,7 @@ const AdmitCard = ({variant="outline", className}) => {
         {!loadingAdmitCard && hasCards && (
           <div className="space-y-2">
             {Object.entries(filteredAdmitCard).map(([examType, admitCard]) => (
-              <Card key={examType} className="bg-input/50 shadow-md">
+              <Card key={examType} className="bg-input/30 shadow-SM">
                 <CardHeader className="flex-row gap-2 justify-between items-center mb-2 p-3 pb-0">
                   <CardTitle className="text-sm">
                     Semester {admitCard?.YearSem}
