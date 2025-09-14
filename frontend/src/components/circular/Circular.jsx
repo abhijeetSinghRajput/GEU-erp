@@ -127,7 +127,7 @@ const Circular = () => {
                 <Card className="w-full rounded-3xl shadow-lg">
                   <CardHeader className="flex pb-4 gap-2 flex-row items-start">
                     <div
-                      className="aspect-square size-14 rounded-2xl text-3xl flex items-center justify-center"
+                      className="aspect-square size-14 rounded-2xl text-3xl flex-shrink-0 flex items-center justify-center"
                       style={{
                         background:
                           icons[circular.ByDepartment]?.color || "#ffb800",
@@ -136,7 +136,7 @@ const Circular = () => {
                       {icons[circular.ByDepartment]?.icon || "📢"}
                     </div>
                     <div className="space-y-1">
-                      <CardTitle className="line-clamp-2 text-lg">
+                      <CardTitle className="line-clamp-2 text-base sm:text-lg">
                         {circular.Subject}
                       </CardTitle>
                       <div className="text-sm flex gap-2 text-muted-foreground">

@@ -21,7 +21,7 @@ export const fetchGEU = async (endpoint, req, options = {}) => {
     responseType = "json",
   } = options;
 
-  const url = `${BASE_URL}${endpoint}`;
+  const url = `${BASE_URL}${endpoint.startsWith('/') ? endpoint.slice(1) : endpoint}`;
 
   const isFormEncoded =
     customHeaders["Content-Type"] === "application/x-www-form-urlencoded";
@@ -62,6 +62,6 @@ export const fetchGEU = async (endpoint, req, options = {}) => {
     return res.data;
   } catch (error) {
     console.error(`❌ Error fetching from ${endpoint}:`, error);
-    throw err;
+    throw error;
   }
 };
