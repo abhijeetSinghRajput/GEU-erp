@@ -10,8 +10,9 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Badge } from "./ui/badge";
+import { cn } from "../lib/utils";
 
-const AdmitCard = () => {
+const AdmitCard = ({variant="outline", className}) => {
   const { getAdmitCard, admitCards, loadingAdmitCard } = useExamStore();
 
   const pingAdmitCard = () => {
@@ -31,7 +32,7 @@ const AdmitCard = () => {
   return (
     <Popover>
       <PopoverTrigger>
-        <Button variant="ghost" size="icon" className="relative group">
+        <Button variant={variant} size="icon" className={cn("relative group", className)}>
           <div className="relative">
             <Bell />
             {hasCards && (

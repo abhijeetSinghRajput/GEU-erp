@@ -25,10 +25,15 @@ import {
 } from "./ui/dropdown-menu";
 import AdmitCard from "./AdmitCard";
 import { useCookieStore } from "../stores/useCookieStore";
+import { ThemeToggleButton, useThemeToggle } from "./ui/skipperTheme";
 
 const Header = ({ children }) => {
-  const { theme, setTheme } = useTheme();
-  const toggleMode = () => setTheme(theme === "light" ? "dark" : "light");
+  const { isDark, toggleTheme } = useThemeToggle({
+    variant: "circle",
+    start: "top-right",
+    blur: false,
+    gifUrl: "",
+  });
   const [githubStarsCount, setGithubStarsCount] = useState(0);
   const { logout, loginingOut, authenticated } = useAuthStore();
   const { campus } = useCookieStore();
@@ -47,10 +52,8 @@ const Header = ({ children }) => {
     getGithubStarCount();
   }, []);
 
-  const logo =
-    theme === "dark" ? "/graphic-era-light.svg" : "/graphic-era-dark.svg";
-  const githubLogo =
-    theme === "dark" ? "/github-mark-white.svg" : "/github-mark.svg";
+  const logo = isDark ? "/graphic-era-light.svg" : "/graphic-era-dark.svg";
+  const githubLogo = isDark ? "/github-mark-white.svg" : "/github-mark.svg";
 
   const lastScrollY = useRef(0);
   const y = useMotionValue(0);
@@ -77,98 +80,105 @@ const Header = ({ children }) => {
       style={{ y, opacity }}
       className="flex sticky shadow-sm top-0 left-0 w-full border-b px-4 sm:px-6 bg-background z-50 justify-between items-center h-14 p-2"
     >
-      {/* Logo */}
-      <TooltipWrapper content="Go to homepage">
-        <Link to="/" className="flex items-center gap-2 h-full">
-          <div className="h-full p-1">
-            <img
-              className="w-full h-full object-contain"
-              src={campus === "hill" ? "gehu-circular-logo.png" : "./geu-circular-logo.png"}
-              alt="Graphic Era University Logo"
-            />
-          </div>
-          <div className="w-32">
-            <img
-              className="w-full h-full object-contain"
-              src={logo}
-              alt="Graphic Era Logo"
-            />
-          </div>
-        </Link>
-      </TooltipWrapper>
-
-      {/* Right section */}
-      <div className="flex gap-1 items-center">
-        <TooltipWrapper content="Rate us on GitHub">
-          <Button size="sm" variant="ghost" onClick={handleGithubClick}>
-            {githubStarsCount}
-            <div className="size-5 text-base">
+      <div className="max-w-screen-lg w-full flex justify-between items-center mx-auto h-full">
+        {/* Logo */}
+        <TooltipWrapper content="Go to homepage">
+          <Link to="/" className="flex items-center gap-2 h-full">
+            <div className="h-full p-1">
               <img
                 className="w-full h-full object-contain"
-                src={githubLogo}
-                alt="GitHub Logo"
+                src={
+                  campus === "hill"
+                    ? "gehu-circular-logo.png"
+                    : "./geu-circular-logo.png"
+                }
+                alt="Graphic Era University Logo"
               />
             </div>
-          </Button>
+            <div className="w-32">
+              <img
+                className="w-full h-full object-contain"
+                src={logo}
+                alt="Graphic Era Logo"
+              />
+            </div>
+          </Link>
         </TooltipWrapper>
 
-        {authenticated && <AdmitCard />}
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button size="icon" variant="ghost" className="size-8">
-              <Settings />
+        {/* Right section */}
+        <div className="flex gap-1 items-center">
+          <TooltipWrapper content="Rate us on GitHub">
+            <Button variant="ghost" onClick={handleGithubClick}>
+              {githubStarsCount}
+              <div className="size-5 text-base">
+                <img
+                  className="w-full h-full object-contain"
+                  src={githubLogo}
+                  alt="GitHub Logo"
+                />
+              </div>
             </Button>
-          </DropdownMenuTrigger>
+          </TooltipWrapper>
 
-          <DropdownMenuContent className="min-w-40" align="end">
-            {/* Theme toggle */}
-            <DropdownMenuItem onClick={toggleMode}>
-              {theme === "light" ? <Moon /> : <Sun />}
-              <span>{theme === "light" ? "Dark" : "Light"}</span>
-            </DropdownMenuItem>
+          <ThemeToggleButton start="top-right" className="hidden sm:flex" />
+          {authenticated && <AdmitCard />}
 
-            {/* Docs */}
-            <DropdownMenuItem asChild>
-              <NavLink to="/docs" className="flex items-center gap-2 w-full">
-                <BookOpen className="h-4 w-4" />
-                <span>Docs</span>
-              </NavLink>
-            </DropdownMenuItem>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size="icon" variant="outline">
+                <Settings />
+              </Button>
+            </DropdownMenuTrigger>
 
-            {/* Privacy Policy */}
-            <DropdownMenuItem asChild>
-              <NavLink
-                to="/privacy-policy"
-                className="flex items-center gap-2 w-full"
-              >
-                <FileText className="h-4 w-4" />
-                <span>Privacy Policy</span>
-              </NavLink>
-            </DropdownMenuItem>
+            <DropdownMenuContent className="min-w-40" align="end">
+              {/* Theme toggle */}
+              <DropdownMenuItem onClick={toggleTheme} className="sm:hidden">
+                {isDark === "light" ? <Moon /> : <Sun />}
+                <span>{isDark ? "Dark" : "Light"}</span>
+              </DropdownMenuItem>
 
-            {/* Logout */}
-            {authenticated && (
-              <>
-                <DropdownMenuSeparator className="bg-input" />
-                <DropdownMenuItem
-                  onClick={logout}
-                  disabled={loginingOut}
-                  className="text-red-600 flex items-center gap-2"
+              {/* Docs */}
+              <DropdownMenuItem asChild>
+                <NavLink to="/docs" className="flex items-center gap-2 w-full">
+                  <BookOpen className="h-4 w-4" />
+                  <span>Docs</span>
+                </NavLink>
+              </DropdownMenuItem>
+
+              {/* Privacy Policy */}
+              <DropdownMenuItem asChild>
+                <NavLink
+                  to="/privacy-policy"
+                  className="flex items-center gap-2 w-full"
                 >
-                  {loginingOut ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <LogOut className="h-4 w-4" />
-                  )}
-                  <span>Logout</span>
-                </DropdownMenuItem>
-              </>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
+                  <FileText className="h-4 w-4" />
+                  <span>Privacy Policy</span>
+                </NavLink>
+              </DropdownMenuItem>
 
-        {children}
+              {/* Logout */}
+              {authenticated && (
+                <>
+                  <DropdownMenuSeparator className="bg-input" />
+                  <DropdownMenuItem
+                    onClick={logout}
+                    disabled={loginingOut}
+                    className="text-red-600 flex items-center gap-2"
+                  >
+                    {loginingOut ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <LogOut className="h-4 w-4" />
+                    )}
+                    <span>Logout</span>
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {children}
+        </div>
       </div>
     </motion.nav>
   );

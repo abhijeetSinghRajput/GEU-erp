@@ -10,6 +10,7 @@ import {
   ExternalLink,
   Eye,
   EyeOff,
+  ImageOff,
   Loader2,
   Lock,
   RefreshCw,
@@ -20,6 +21,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CodeBlock } from "@/components/ui/code-block";
 import ExpandableSwitch from "../components/ExpandableSwitch";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 
 export function LoginPage({ className, ...props }) {
   const navigate = useNavigate();
@@ -81,7 +83,7 @@ export function LoginPage({ className, ...props }) {
                   <span className="text-red-500 font-serif">Graphic Era</span>
                 </h1>
                 <div>
-                  <ExpandableSwitch/>
+                  <ExpandableSwitch />
                 </div>
               </div>
 
@@ -160,13 +162,16 @@ export function LoginPage({ className, ...props }) {
                   {loadingCaptcha ? (
                     <Skeleton className={"h-14 rounded-none"} />
                   ) : (
-                    <div className="h-14 border w-full bg-white mx-auto">
-                      <img
+                    <Avatar className="h-14 rounded-none border w-full bg-white mx-auto">
+                      <AvatarImage
                         className="w-full h-full object-contain"
                         src={captchaImage}
                         alt="captchaImage"
                       />
-                    </div>
+                      <AvatarFallback className="text-sm flex gap-2 items-center font-medium text-muted-foreground/50 rounded-none w-full h-full">
+                        Failed To Load Captcha
+                      </AvatarFallback>
+                    </Avatar>
                   )}
 
                   <div className="relative rounded-md">

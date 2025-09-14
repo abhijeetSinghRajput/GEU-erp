@@ -74,7 +74,7 @@ export const getIdCard = async (req, res) => {
     res.status(200).json(jsonData[0]);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error." });
+    res.status(error.status || 500).json({ message: "Internal server error." });
   }
 };
 
@@ -117,7 +117,7 @@ export const updateAvatar = async (req, res) => {
     res.json({ success: true, data: response.data });
   } catch (error) {
     console.error("Error uploading avatar:", error?.response?.data || error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(error.status || 500).json({ message: "Internal server error" });
   }
 };
 
@@ -146,7 +146,7 @@ export const forgotPassword = async (req, res) => {
     });
   } catch (error) {
     console.error("Error uploading avatar:", error?.response?.data || error);
-    return res.status(500).json({
+    return res.status(error.status || 500).json({
       message: "Internal server error",
       error: error?.response?.status || error.message,
     });
@@ -187,7 +187,7 @@ export const getLoginId = async (req, res) => {
     });
   } catch (error) {
     console.error("GetLoginID error:", error?.response?.data || error.message);
-    return res.status(500).json({
+    return res.status(error.status || 500).json({
       message: "Internal server error",
       error: error?.response?.status || error.message,
     });

@@ -29,7 +29,7 @@ export const getCaptcha = async (req, res) => {
     // Step 2: Get captcha as JSON array
     const captchaUrl = $("#imgPhoto").attr("src");
     if (!captchaUrl) {
-      return res.status(500).json({ message: "Captcha image not found" });
+      return res.status(error.status || 500).json({ message: "Captcha image not found" });
     }
 
     // Step 6: Set cookies for frontend
@@ -50,7 +50,7 @@ export const getCaptcha = async (req, res) => {
   } catch (error) {
     // console.log(error);
     res
-      .status(500)
+      .status(error.status || 500)
       .json({ message: errorMap[error.code] || "Something went wrong" });
   }
 };
@@ -142,7 +142,7 @@ export const login = async (req, res) => {
     }
   } catch (error) {
     console.error("Login error:", error);
-    return res.status(500).json({
+    return res.status(error.status || 500).json({
       message: errorMap[error.code] || "Something went wrong during login",
     });
   }
@@ -162,7 +162,7 @@ export const logout = async (req, res) => {
   } catch (error) {
     console.error("Logout error:", error);
     res
-      .status(500)
+      .status(error.status || 500)
       .json({ message: errorMap[error.code] || "Failed to logout" });
   }
 };
@@ -203,7 +203,7 @@ export const checkAuth = async (req, res) => {
   } catch (error) {
     console.error("❌ Error checking auth:", error.message);
     return res
-      .status(500)
+      .status(error.status || 500)
       .json({ message: errorMap[error.code] || "Internal error" });
   }
 };

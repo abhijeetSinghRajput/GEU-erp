@@ -122,6 +122,6 @@ export const getAdmitCard = async (req, res) => {
     res.status(200).json({ admitCard });
   } catch (error) {
     console.error("getAdmitCard error:", error);
-    res.status(500).json({ message: "Failed to fetch admit card" });
+    res.status(error.status || 500).json({ message: "Failed to fetch admit card" });
   }
 };
