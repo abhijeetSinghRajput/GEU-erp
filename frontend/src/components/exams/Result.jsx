@@ -31,7 +31,7 @@ const Result = ({ examSummary }) => {
                   Year/Sem {exam.YearSem}
                 </CardTitle>
                 <Badge
-                  variant={exam.Result === "Pass" ? "default" : "destructive"}
+                  variant={exam.Result === "Fail" ? "destructive" : "default"}
                 >
                   {exam.Result}
                 </Badge>
