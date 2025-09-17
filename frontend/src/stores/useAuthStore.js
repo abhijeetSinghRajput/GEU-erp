@@ -58,6 +58,7 @@ export const useAuthStore = create((set, get) => ({
       console.error("Error fetching auth data:", error);
       set({ authUser: null, authenticated: false });
       toast.error(error?.response?.data.message || "something went wrong");
+      get().getCaptcha();
       return false;
     } finally {
       set({ logningIn: false });

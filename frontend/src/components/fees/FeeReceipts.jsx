@@ -20,6 +20,7 @@ import { useFeeStore } from "@/stores/useFeeStore";
 import TableError from "../table/TableError";
 import FeeSkeleton from "./FeeSkeleton";
 import { motion } from "framer-motion";
+import { Ring } from "ldrs/react";
 
 const FeeReceipts = ({ data }) => {
   const {
@@ -94,7 +95,12 @@ const FeeReceipts = ({ data }) => {
             }
           >
             {downloadingReceipt === row.CombineReceiptNo ? (
-              <Loader2 className="animate-spin" />
+              <Ring
+                size={20}
+                speed={1.5}
+                stroke={2}
+                color="hsl(var(--primary-foreground))"
+              />
             ) : (
               <Download />
             )}
@@ -121,7 +127,7 @@ const FeeReceipts = ({ data }) => {
     }
     return dateString;
   }
-  
+
   return (
     <motion.div
       initial={{ opacity: 0 }}

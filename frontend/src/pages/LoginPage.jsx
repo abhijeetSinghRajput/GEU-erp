@@ -22,6 +22,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { CodeBlock } from "@/components/ui/code-block";
 import ExpandableSwitch from "../components/ExpandableSwitch";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
+import { Ring } from "ldrs/react";
 
 export function LoginPage({ className, ...props }) {
   const navigate = useNavigate();
@@ -213,7 +214,12 @@ export function LoginPage({ className, ...props }) {
                 >
                   Login
                   {logningIn && (
-                    <Loader2 className="animate-spin ml-2" size={16} />
+                    <Ring
+                      size={20}
+                      speed={1.5}
+                      stroke={2}
+                      color="hsl(var(--primary-foreground))"
+                    />
                   )}
                 </Button>
               </div>

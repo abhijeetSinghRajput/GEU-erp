@@ -6,10 +6,11 @@ import CircularProgress from "../ui/circular-progress";
 import { Button } from "../ui/button";
 import TooltipWrapper from "../TooltipWrapper";
 import { useExamStore } from "../../stores/useExamStore";
+import { Ring } from "ldrs/react";
 
 const Result = ({ examSummary }) => {
   const { loadingMarksheet, downloadMarksheet } = useExamStore();
-  
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -43,7 +44,12 @@ const Result = ({ examSummary }) => {
                   onClick={() => downloadMarksheet(exam.YearSem)}
                 >
                   {loadingMarksheet === exam.YearSem ? (
-                    <Loader2 className="animate-spin" />
+                    <Ring
+                      size={20}
+                      speed={1.5}
+                      stroke={2}
+                      color="hsl(var(--primary-foreground))"
+                    />
                   ) : (
                     <Download />
                   )}

@@ -2,17 +2,13 @@ import { useEffect } from "react";
 import { useExamStore } from "../stores/useExamStore";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
+import { Ring, Ring2 } from "ldrs/react";
 import { Bell, Loader2 } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { cn } from "../lib/utils";
 
-const AdmitCard = ({variant="outline", className}) => {
+const AdmitCard = ({ variant = "outline", className }) => {
   const { getAdmitCard, admitCards, loadingAdmitCard } = useExamStore();
 
   const pingAdmitCard = () => {
@@ -32,7 +28,11 @@ const AdmitCard = ({variant="outline", className}) => {
   return (
     <Popover>
       <PopoverTrigger>
-        <Button variant={variant} size="icon" className={cn("relative group", className)}>
+        <Button
+          variant={variant}
+          size="icon"
+          className={cn("relative group", className)}
+        >
           <div className="relative">
             <Bell />
             {hasCards && (
@@ -50,7 +50,12 @@ const AdmitCard = ({variant="outline", className}) => {
         {/* --- Loading state --- */}
         {loadingAdmitCard && (
           <div className="flex items-center justify-center py-6">
-            <Loader2 className="animate-spin text-primary/70" size={20} />
+            <Ring
+              size={20}
+              speed={1.5}
+              stroke={2}
+              color="hsl(var(--foreground))"
+            />
           </div>
         )}
 

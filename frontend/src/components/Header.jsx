@@ -9,10 +9,12 @@ import {
   FileText,
   Github,
   Loader2,
+  Lock,
   LogOut,
   Moon,
   Settings,
   Sun,
+  User2,
 } from "lucide-react";
 import { useAuthStore } from "@/stores/useAuthStore";
 import axios from "axios";
@@ -27,6 +29,7 @@ import {
 import AdmitCard from "./AdmitCard";
 import { useCookieStore } from "../stores/useCookieStore";
 import { ThemeToggleButton, useThemeToggle } from "./ui/skipperTheme";
+import { Ring } from "ldrs/react";
 
 const Header = ({ children }) => {
   const { isDark, toggleTheme } = useThemeToggle({
@@ -130,7 +133,16 @@ const Header = ({ children }) => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="icon" variant="outline">
-                <Settings />
+                {loginingOut ? (
+                  <Ring
+                    size={20}
+                    speed={1.5}
+                    stroke={2}
+                    color="hsl(var(--foreground))"
+                  />
+                ) : (
+                  <Settings />
+                )}
               </Button>
             </DropdownMenuTrigger>
 
@@ -144,7 +156,7 @@ const Header = ({ children }) => {
               {/* Docs */}
               <DropdownMenuItem asChild>
                 <NavLink to="/docs" className="flex items-center gap-2 w-full">
-                  <BookOpen className="h-4 w-4" />
+                  <BookOpen />
                   <span>Docs</span>
                 </NavLink>
               </DropdownMenuItem>
@@ -155,8 +167,30 @@ const Header = ({ children }) => {
                   to="/privacy-policy"
                   className="flex items-center gap-2 w-full"
                 >
-                  <FileText className="h-4 w-4" />
+                  <FileText />
                   <span>Privacy Policy</span>
+                </NavLink>
+              </DropdownMenuItem>
+
+              {/* Privacy Policy */}
+              <DropdownMenuItem asChild>
+                <NavLink
+                  to="/forgot-id"
+                  className="flex items-center gap-2 w-full"
+                >
+                  <User2 />
+                  <span>Forgot ID</span>
+                </NavLink>
+              </DropdownMenuItem>
+
+              {/* Privacy Policy */}
+              <DropdownMenuItem asChild>
+                <NavLink
+                  to="/forgot-password"
+                  className="flex items-center gap-2 w-full"
+                >
+                  <Lock />
+                  <span>Forgot Password</span>
                 </NavLink>
               </DropdownMenuItem>
 
@@ -170,9 +204,14 @@ const Header = ({ children }) => {
                     className="text-red-600 flex items-center gap-2"
                   >
                     {loginingOut ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <Ring
+                        size={20}
+                        speed={1.5}
+                        stroke={2}
+                        color="hsl(var(--foreground))"
+                      />
                     ) : (
-                      <LogOut className="h-4 w-4" />
+                      <LogOut />
                     )}
                     <span>Logout</span>
                   </DropdownMenuItem>

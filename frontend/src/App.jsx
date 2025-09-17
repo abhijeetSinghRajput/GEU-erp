@@ -13,25 +13,33 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ForgotIdPage from "./pages/ForgotIdPage";
 import PrivacyPolicyPage from "./pages/policy/PrivacyPolicyPage";
 import DocsPage from "./pages/docs/DocsPage";
+import "ldrs/react/Ring.css";
+import "ldrs/react/Infinity.css"
+import { Infinity, Mirage, Ring } from "ldrs/react";
 
 const App = () => {
   const { checkingAuth, authenticated, checkAuth } = useAuthStore();
-  const {isOnline, isOffline} = useOnlineStatus();
+  const { isOnline, isOffline } = useOnlineStatus();
 
   useEffect(() => {
-    if(isOnline) {
+    if (isOnline) {
       checkAuth();
     }
   }, []);
 
-  if(isOffline){
-    return <NoInternet/>
+  if (isOffline) {
+    return <NoInternet />;
   }
 
   if (checkingAuth) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <Loader className="animate-spin" />
+        <Infinity
+          size={30}
+          speed={1.5}
+          stroke={3}
+          color="hsl(var(--foreground))"
+        />
       </div>
     );
   }
@@ -39,18 +47,28 @@ const App = () => {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <TooltipProvider>
-          <Routes>
-            <Route path="/login" element={!authenticated ? <LoginPage /> : <Navigate to="/" replace />} />
-            <Route path="/" element={authenticated ? <HomePage /> : <Navigate to="/login" replace />} />
-            
-            {/* public route  */}
-            <Route path="/forgot-password" element={<ForgotPasswordPage/>} />
-            <Route path="/forgot-id" element={<ForgotIdPage/>} />
-            <Route path="/privacy-policy" element={<PrivacyPolicyPage/>} />
-            <Route path="/docs" element={<DocsPage/>} />
-          </Routes>
+        <Routes>
+          <Route
+            path="/login"
+            element={
+              !authenticated ? <LoginPage /> : <Navigate to="/" replace />
+            }
+          />
+          <Route
+            path="/"
+            element={
+              authenticated ? <HomePage /> : <Navigate to="/login" replace />
+            }
+          />
+
+          {/* public route  */}
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/forgot-id" element={<ForgotIdPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/docs" element={<DocsPage />} />
+        </Routes>
       </TooltipProvider>
-      <Toaster expand={true} richColors/>
+      <Toaster expand={true} richColors />
     </ThemeProvider>
   );
 };

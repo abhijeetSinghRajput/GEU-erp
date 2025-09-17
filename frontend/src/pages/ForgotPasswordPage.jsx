@@ -24,6 +24,7 @@ import { useStudentStore } from "../stores/useStudentStore";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Link } from "react-router-dom";
 import { useCookieStore } from "../stores/useCookieStore";
+import { Ring } from "ldrs/react";
 
 const ForgotPasswordPage = ({ className, ...props }) => {
   const { campus } = useCookieStore();
@@ -262,7 +263,12 @@ const ForgotPasswordPage = ({ className, ...props }) => {
                 >
                   {sendingMail ? (
                     <>
-                      <Loader2 className="animate-spin mr-2" size={16} />
+                      <Ring
+                        size={20}
+                        speed={1.5}
+                        stroke={2}
+                        color="hsl(var(--primary-foreground))"
+                      />
                       Please wait...
                     </>
                   ) : (

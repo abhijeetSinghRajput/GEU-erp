@@ -20,6 +20,7 @@ import {
 import imageCompression from "browser-image-compression";
 import { useStudentStore } from "../../stores/useStudentStore";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Ring } from "ldrs/react";
 
 const ProfilePhotoUploader = () => {
   const { idCard, updateAvatar, uploadingAvatar } = useStudentStore();
@@ -156,7 +157,12 @@ const ProfilePhotoUploader = () => {
               >
                 {uploadingAvatar ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />{" "}
+                    <Ring
+                      size={20}
+                      speed={1.5}
+                      stroke={2}
+                      color="hsl(var(--primary-foreground))"
+                    />
                     Uploading...
                   </>
                 ) : (
