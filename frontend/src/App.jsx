@@ -35,7 +35,7 @@ const App = () => {
     return (
       <div className="flex items-center justify-center h-screen">
         <Infinity
-          size={30}
+          size={40}
           speed={1.5}
           stroke={3}
           color="hsl(var(--foreground))"
