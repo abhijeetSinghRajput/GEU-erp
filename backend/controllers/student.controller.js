@@ -26,8 +26,7 @@ export const avatar = async (req, res) => {
     // Extract cookies from the incoming request
     const sessionId = req.cookies["ASP.NET_SessionId"];
     const token = req.cookies["__RequestVerificationToken"];
-    const campus = req.cookies["campus"] || "deemed";
-    const BASE_URL = campus === "hill" ? HILL_BASE_URL : DEEMED_BASE_URL;
+    const BASE_URL = req.BASE_URL;
 
     if (!sessionId || !token) {
       return res.status(401).send("Authentication cookies missing");
@@ -83,8 +82,7 @@ export const updateAvatar = async (req, res) => {
     const { file } = req;
     const sessionId = req.cookies["ASP.NET_SessionId"];
     const token = req.cookies["__RequestVerificationToken"];
-    const campus = req.cookies["campus"] || "deemed";
-    const BASE_URL = campus === "hill" ? HILL_BASE_URL : DEEMED_BASE_URL;
+    const BASE_URL = req.BASE_URL;
     if (!sessionId || !token) {
       throw new Error("Credentials are missing");
     }
@@ -124,8 +122,7 @@ export const updateAvatar = async (req, res) => {
 export const forgotPassword = async (req, res) => {
   try {
     const { studentId, email, DOB } = req.body;
-    const campus = req.cookies["campus"] || "deemed";
-    const BASE_URL = campus === "hill" ? HILL_BASE_URL : DEEMED_BASE_URL;
+    const BASE_URL = req.BASE_URL;
 
     const url = `${BASE_URL}Account/ResetPassword?ID=${studentId}&Mob=${encodeURIComponent(
       email
@@ -154,19 +151,18 @@ export const forgotPassword = async (req, res) => {
 };
 
 
-export const getLoginId = async (req, res) => {
+export const getStudentId = async (req, res) => {
   try {
     const { DOB, email } = req.body; 
     const data = qs.stringify({
       db: DOB,
       Email: email
     });
-    const campus = req.cookies["campus"] || "deemed";
-    const BASE_URL = campus === "hill" ? HILL_BASE_URL : DEEMED_BASE_URL;
+    const BASE_URL = req.BASE_URL;
     
     // Make request to ERP
     const response = await axios.post(
-      `${BASE_URL}Account/GetLoginID`,
+      `${BASE_URL}Account/Getstudentid`,
       data,
       {
         headers: {
@@ -186,7 +182,7 @@ export const getLoginId = async (req, res) => {
       result: response.data, 
     });
   } catch (error) {
-    console.error("GetLoginID error:", error?.response?.data || error.message);
+    console.error("Getstudentid error:", error?.response?.data || error.message);
     return res.status(error.status || 500).json({
       message: "Internal server error",
       error: error?.response?.status || error.message,

@@ -111,7 +111,7 @@ export const useStudentStore = create((set, get) => ({
   getStudentId: async (data) => {
     set({ requestingID: true });
     try {
-      const response = await axiosInstance.post("/get-loginid", data);
+      const response = await axiosInstance.post("/get-studentid", data);
       console.log(response.data);
       return response?.data?.result;
     } catch (error) {

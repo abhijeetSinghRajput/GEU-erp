@@ -19,7 +19,6 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CodeBlock } from "@/components/ui/code-block";
 import ExpandableSwitch from "../components/ExpandableSwitch";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { Ring } from "ldrs/react";
@@ -27,7 +26,7 @@ import { Ring } from "ldrs/react";
 export function LoginPage({ className, ...props }) {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const { captchaImage, loadingCaptcha, getCaptcha, logningIn, login } =
+  const { captchaImage, loadingCaptcha, getCaptcha, loggingIn, login } =
     useAuthStore();
 
   const [formData, setFormData] = useState({
@@ -209,11 +208,11 @@ export function LoginPage({ className, ...props }) {
 
                 <Button
                   type="submit"
-                  disabled={loadingCaptcha || logningIn || !captchaImage}
+                  disabled={loadingCaptcha || loggingIn || !captchaImage}
                   className="w-full h-11 rounded-lg"
                 >
                   Login
-                  {logningIn && (
+                  {loggingIn && (
                     <Ring
                       size={20}
                       speed={1.5}

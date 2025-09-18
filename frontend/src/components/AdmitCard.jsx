@@ -27,7 +27,7 @@ const AdmitCard = ({ variant = "outline", className }) => {
 
   return (
     <Popover>
-      <PopoverTrigger>
+      <PopoverTrigger asChild>
         <Button
           variant={variant}
           size="icon"

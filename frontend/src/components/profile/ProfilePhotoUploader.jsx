@@ -11,10 +11,7 @@ import { Card, CardContent } from "../ui/card";
 import {
   Upload,
   Image as ImageIcon,
-  Loader2,
   X,
-  UserRoundPenIcon,
-  Pen,
   Camera,
 } from "lucide-react";
 import imageCompression from "browser-image-compression";
@@ -22,7 +19,7 @@ import { useStudentStore } from "../../stores/useStudentStore";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Ring } from "ldrs/react";
 
-const ProfilePhotoUploader = () => {
+const ProfilePhotoUploader = ({className}) => {
   const { idCard, updateAvatar, uploadingAvatar } = useStudentStore();
   const [preview, setPreview] = useState(null);
   const [file, setFile] = useState(null);
@@ -93,7 +90,7 @@ const ProfilePhotoUploader = () => {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
+      <DialogTrigger className={className} asChild>
         <Button size="icon" variant="secondary">
           <Camera />
         </Button>

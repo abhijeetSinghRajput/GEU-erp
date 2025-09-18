@@ -31,6 +31,15 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 
+app.use((req, res, next) => {
+  const campus = req.cookies["campus"] || "deemed";
+  const DEEMED_BASE_URL = "https://student.geu.ac.in/";
+  const HILL_BASE_URL = "https://student.gehu.ac.in/";
+  req.BASE_URL = campus === "hill" ? HILL_BASE_URL : DEEMED_BASE_URL;
+  
+  next();
+});
+
 // app.get("/", (req, res) => {
 //   res.status(200).json({ message: "Hello from server" });
 // });

@@ -25,27 +25,25 @@ const ProfileDialog = () => {
         ease: "easeInOut",
       }}
     >
-      <MorphingDialogTrigger>
-        {loadingIdCard ? (
-          <Skeleton className={"size-32 rounded-full"} />
-        ) : (
-          <div className="relative">
-            <Avatar className="size-32">
-              <AvatarImage src={idCard?.Photo} />
-              <AvatarFallback className="text-4xl text-muted-foreground">
-                {student.StudentName[0].toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-
-            <div
-              className="absolute bottom-0 right-0"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <ProfilePhotoUploader />
+      <div className="relative">
+        <MorphingDialogTrigger>
+          {loadingIdCard ? (
+            <div className="size-32 rounded-full overflow-hidden animate-pulse">
+              <img src="/avatar.svg" className="opacity-20" />
             </div>
-          </div>
-        )}
-      </MorphingDialogTrigger>
+          ) : (
+            <div className="relative">
+              <Avatar className="size-32">
+                <AvatarImage src={idCard?.Photo} />
+                <AvatarFallback className="text-4xl text-muted-foreground">
+                  {student.StudentName[0].toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            </div>
+          )}
+        </MorphingDialogTrigger>
+        <ProfilePhotoUploader className={"absolute bottom-0 right-0"} />
+      </div>
       <MorphingDialogContainer>
         <MorphingDialogContent
           className="relative rounded-none"

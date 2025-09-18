@@ -8,7 +8,7 @@ export const useAuthStore = create((set, get) => ({
   captchaImage: null,
   formToken: "",
   loadingCaptcha: false,
-  logningIn: false,
+  loggingIn: false,
   checkingAuth: false,
   authenticated: false,
 
@@ -43,7 +43,7 @@ export const useAuthStore = create((set, get) => ({
   },
 
   login: async (data) => {
-    set({ logningIn: true });
+    set({ loggingIn: true });
     const { formToken } = get();
     try {
       await axiosInstance.post("/auth/login", { ...data, formToken });
@@ -61,7 +61,7 @@ export const useAuthStore = create((set, get) => ({
       get().getCaptcha();
       return false;
     } finally {
-      set({ logningIn: false });
+      set({ loggingIn: false });
     }
   },
   

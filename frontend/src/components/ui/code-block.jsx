@@ -1,10 +1,12 @@
-"use client";
+// code-block.tsx
 import React from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { atomDark, prism } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { IconCheck, IconCopy } from "@tabler/icons-react";
 import { Button } from "./button";
 import { ScrollArea, ScrollBar } from "./scroll-area";
+import { useTheme } from "../theme-provider";
+
 
 export const CodeBlock = ({
   language,
@@ -15,6 +17,7 @@ export const CodeBlock = ({
 }) => {
   const [copied, setCopied] = React.useState(false);
   const [activeTab, setActiveTab] = React.useState(0);
+  const { theme } = useTheme();
 
   const tabsExist = tabs.length > 0;
 
@@ -35,10 +38,11 @@ export const CodeBlock = ({
     ? tabs[activeTab].highlightLines || []
     : highlightLines;
 
+  const prismTheme = theme === "dark" ? atomDark : prism;
+
   return (
-    <div className="codeblock relative w-full my-2 rounded-lg bg-zinc-900 p-4 pb-1 font-mono text-sm">
+    <div className="codeblock relative w-full my-2 rounded-lg bg-zinc-100 dark:bg-zinc-900 p-4 pb-1 font-mono text-sm">
       <div className="flex justify-between items-center pb-2">
-        {/* Tabs OR filename */}
         <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide">
           {tabsExist
             ? tabs.map((tab, index) => (
@@ -47,15 +51,15 @@ export const CodeBlock = ({
                   onClick={() => setActiveTab(index)}
                   className={`px-3 py-1 text-xs transition-colors font-sans rounded-md ${
                     activeTab === index
-                      ? "bg-zinc-800 text-white"
-                      : "text-zinc-400 hover:text-zinc-200"
+                      ? "bg-zinc-200 dark:bg-zinc-800 text-black dark:text-white"
+                      : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200"
                   }`}
                 >
                   {tab.name}
                 </button>
               ))
             : filename && (
-                <div className="text-xs text-zinc-400">{filename}</div>
+                <div className="text-xs text-zinc-500 dark:text-zinc-400">{filename}</div>
               )}
         </div>
       </div>
@@ -75,7 +79,7 @@ export const CodeBlock = ({
           <div className="min-w-max pb-3">
             <SyntaxHighlighter
               language={activeLanguage}
-              style={atomDark}
+              style={prismTheme}
               customStyle={{
                 margin: 0,
                 padding: 0,
@@ -89,7 +93,7 @@ export const CodeBlock = ({
               lineProps={(lineNumber) => ({
                 style: {
                   backgroundColor: activeHighlightLines.includes(lineNumber)
-                    ? "rgba(255,255,255,0.1)"
+                    ? "rgba(0,0,0,0.05)"
                     : "transparent",
                   display: "block",
                   width: "100%",
@@ -100,7 +104,7 @@ export const CodeBlock = ({
               {String(activeCode)}
             </SyntaxHighlighter>
           </div>
-          <ScrollBar orientation="horizontal" />
+          <ScrollBar orientation="horizontal" className={undefined} />
         </ScrollArea>
       </div>
     </div>

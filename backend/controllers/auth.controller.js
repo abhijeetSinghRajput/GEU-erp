@@ -6,12 +6,9 @@ import { load } from "cheerio";
 import { fetchGEU } from "../utils/geuApi.js";
 import { errorMap } from "../constants/error.js";
 
-const DEEMED_BASE_URL = "https://student.geu.ac.in/";
-const HILL_BASE_URL = "https://student.gehu.ac.in/";
 export const getCaptcha = async (req, res) => {
   try {
-    const campus = req.cookies["campus"] || "deemed";
-    const BASE_URL = campus === "hill" ? HILL_BASE_URL : DEEMED_BASE_URL;
+    const BASE_URL = req.BASE_URL;
     const jar = new CookieJar();
     const client = wrapper(
       axios.create({
@@ -90,9 +87,7 @@ export const login = async (req, res) => {
         withCredentials: true,
       })
     );
-
-    const campus = req.cookies["campus"] || "deemed";
-    const BASE_URL = campus === "hill" ? HILL_BASE_URL : DEEMED_BASE_URL;
+    const BASE_URL = req.BASE_URL;
     // Use the same client instance that maintains cookies
     const response = await client.post(
       BASE_URL,
@@ -171,8 +166,7 @@ export const checkAuth = async (req, res) => {
   try {
     const sessionId = req.cookies["ASP.NET_SessionId"];
     const token = req.cookies["__RequestVerificationToken"];
-    const campus = req.cookies["campus"] || "deemed";
-    const BASE_URL = campus === "hill" ? HILL_BASE_URL : DEEMED_BASE_URL;
+    const BASE_URL = req.BASE_URL;
 
     if (!sessionId || !token) {
       return res.status(401).json({ message: "Session or token missing" });

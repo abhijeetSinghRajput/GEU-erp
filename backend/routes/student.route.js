@@ -5,14 +5,14 @@ import {
   getIdCard,
   updateAvatar,
   forgotPassword,
-  getLoginId,
+  getStudentId,
 } from "../controllers/student.controller.js";
 import { checkSession } from "../middlewares/checkSession.middleware.js";
 import { upload } from "../middlewares/upload.middleware.js";
 const router = express.Router();
 
 router.post("/forgot-password", forgotPassword);
-router.post("/get-loginid", getLoginId);
+router.post("/get-studentid", getStudentId);
 
 router.get("/", checkSession, profile);
 router.get("/avatar", checkSession, avatar);

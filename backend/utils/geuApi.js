@@ -1,14 +1,10 @@
 import axios from "axios";
 import qs from "qs"; // make sure this is installed: npm i qs
 
-const DEEMED_BASE_URL = "https://student.geu.ac.in/";
-const HILL_BASE_URL = "https://student.gehu.ac.in/";
-
 export const fetchGEU = async (endpoint, req, options = {}) => {
   const sessionId = req.cookies["ASP.NET_SessionId"];
   const token = req.cookies["__RequestVerificationToken"];
-  const campus = req.cookies["campus"] || "deemed"; 
-  const BASE_URL = campus === "hill" ? HILL_BASE_URL : DEEMED_BASE_URL;
+  const BASE_URL = req.BASE_URL;
 
   if (!sessionId || !token) {
     throw new Error("Credentials are missing");

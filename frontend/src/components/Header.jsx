@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { ModeToggle } from "./mode-toggle";
-import { useTheme } from "./theme-provider";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { Link, NavLink } from "react-router-dom";
 import { Button } from "./ui/button";
@@ -149,7 +147,7 @@ const Header = ({ children }) => {
             <DropdownMenuContent className="min-w-40" align="end">
               {/* Theme toggle */}
               <DropdownMenuItem onClick={toggleTheme} className="sm:hidden">
-                {isDark === "light" ? <Moon /> : <Sun />}
+                {isDark ? <Moon /> : <Sun />}
                 <span>{isDark ? "Dark" : "Light"}</span>
               </DropdownMenuItem>
 
