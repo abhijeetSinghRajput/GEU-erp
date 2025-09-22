@@ -24,7 +24,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import AdmitCard from "./AdmitCard";
+import AdmitCard from "./Notification";
 import { useCookieStore } from "../stores/useCookieStore";
 import { ThemeToggleButton, useThemeToggle } from "./ui/skipperTheme";
 import { Ring } from "ldrs/react";
@@ -97,7 +97,7 @@ const Header = ({ children }) => {
                 alt="Graphic Era University Logo"
               />
             </div>
-            <div className="w-32">
+            <div className="w-28 sm:w-32">
               <img
                 className="w-full h-full object-contain"
                 src={logo}

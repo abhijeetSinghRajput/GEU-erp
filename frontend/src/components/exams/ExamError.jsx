@@ -7,7 +7,8 @@ import { Button } from "../ui/button";
 
 const ExamError = ({ heading = "Exam Summary", onReload, description }) => {
   return (
-    <div className="max-w-screen-lg mx-auto p-6 flex justify-center">
+    
+    <div className="max-w-screen-lg mx-auto px-2 sm:px-4 md:px-6 py-2 mt-6">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

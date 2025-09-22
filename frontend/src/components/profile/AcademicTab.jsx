@@ -90,7 +90,7 @@ const AcademicTab = ({ tabContentVariants, textVariants }) => {
                     href={`mailto:${student.OfficialMailID}`}
                     className="text-primary hover:underline"
                   >
-                    {student.OfficialMailID}
+                    {student.OfficialMailID?.toLowerCase()}
                   </Link>
                 </dd>
               </motion.div>

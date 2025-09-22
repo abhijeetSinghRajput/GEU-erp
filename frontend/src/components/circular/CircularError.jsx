@@ -12,13 +12,8 @@ const CircularError = ({
   description,
 }) => {
   return (
-    <div className="max-w-screen-lg mx-auto p-6">
-      <Skeleton
-        className={cn(
-          variant === "destructive" && "bg-destructive/10 ",
-          "animate-none h-7 w-28 mb-2"
-        )}
-      />
+    <div className="max-w-screen-lg mx-auto px-2 sm:px-4 md:px-6 py-2 mt-6">
+      <h2 className="text-2xl sm:text-3xl font-bold mb-2">Notices</h2>
       <div className="space-y-4 relative">
         <div className="absolute inset-0 bg-background/70 flex items-center justify-center">
           <div className="text-center space-y-4">

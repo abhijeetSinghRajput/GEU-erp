@@ -54,7 +54,6 @@ export function StudentProfile() {
     isFetchingProfile,
     fetchProfile,
     errors,
-    loadAvatar,
     getIdCard,
   } = useStudentStore();
   const { authenticated } = useAuthStore();

@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { create } from "zustand";
 
 export const useNoticeStore = create((set, get) => ({
+  popupCirculars: [],
   circulars: [],
   allCirculars: [],
   isLoadingCirculars: false,
@@ -20,6 +21,7 @@ export const useNoticeStore = create((set, get) => ({
     try {
       const res = await axiosInstance.get("/circular");
       const { circular } = res.data;
+      set({popupCirculars : circular.filter(c=>c.ShowAsAPopup)});
       set({ circulars: circular || [] });
     } catch (error) {
       const message = error?.response?.data.message || "failed to fetch circular";
