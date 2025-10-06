@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 5000;
 app.use(
   cors({
     origin: [
-      "https://student-geu.netlify.app",
+      "http://localhost:8081",
       "http://localhost:5173",
       "http://localhost:5174",
       "http://localhost:5175",

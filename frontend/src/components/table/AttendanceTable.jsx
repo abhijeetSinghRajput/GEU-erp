@@ -196,11 +196,11 @@ const AttendanceTable = () => {
                 <div className="space-y-2 text-sm">
                   <div className="flex gap-2 items-center">
                     <Clipboard className="text-muted-foreground size-5" />
-                    <p className="font-medium">{selectedSubject.SubjectCode}</p>
+                    <p className="font-medium m-0">{selectedSubject.SubjectCode}</p>
                   </div>
                   <div className="flex gap-2 items-center">
                     <User2 className="text-muted-foreground size-5" />
-                    <p className="font-medium">{selectedSubject.EMPNAME}</p>
+                    <p className="font-medium m-0">{selectedSubject.EMPNAME}</p>
                   </div>
                 </div>
 

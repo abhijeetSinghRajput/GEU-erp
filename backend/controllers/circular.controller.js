@@ -1,6 +1,4 @@
 import { fetchGEU } from "../utils/geuApi.js";
-const DEEMED_BASE_URL = "https://student.geu.ac.in/";
-const HILL_BASE_URL = "https://student.gehu.ac.in/";
 
 export const circulars = async (req, res) => {
   try {

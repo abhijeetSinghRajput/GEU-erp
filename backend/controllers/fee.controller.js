@@ -10,7 +10,7 @@ export const getFeeSubmissions = async (req, res) => {
     const payload = qs.stringify({ FeeType: feeType, duration });
 
     const response = await fetchGEU("/Web_StudentFinance/FillHead", req, {
-      method: "POST",
+      method: "post",
       customHeaders: {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         "X-Requested-With": "XMLHttpRequest",
@@ -37,7 +37,7 @@ export const getFeeReceipts = async (req, res) => {
       "/Web_StudentFinance/GetStudentFeeReceipt_ostulgn",
       req,
       {
-        method: "POST",
+        method: "post",
       }
     );
 

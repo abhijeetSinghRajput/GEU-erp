@@ -1,12 +1,6 @@
 import { useExamStore } from "@/stores/useExamStore";
-import { Download, Loader2 } from "lucide-react";
 import React, { useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Badge } from "../ui/badge";
 import { motion } from "framer-motion";
-import CircularProgress from "../ui/circular-progress";
-import { Button } from "../ui/button";
-import TooltipWrapper from "../TooltipWrapper";
 import ExamSkeleton from "./ExamSkeleton";
 import ExamError from "./ExamError";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";

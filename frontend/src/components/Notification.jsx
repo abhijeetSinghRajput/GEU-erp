@@ -60,7 +60,7 @@ const Notification = ({ variant = "outline", className }) => {
         >
           <Bell className="h-5 w-5" />
           {hasNotifications && (
-            <div className="absolute -top-1 -right-1 rounded-full flex justify-center items-center text-xs h-5 min-w-5 px-1 bg-red-500 border border-background group-hover:border-accent transition-colors">
+            <div className="absolute -top-1 -right-1 rounded-full flex justify-center items-center text-xs h-5 min-w-5 px-1 bg-red-500 border-2 border-background group-hover:border-accent transition-colors">
               {notifications.length > 9 ? "9+" : notifications.length}
             </div>
           )}
