@@ -13,15 +13,26 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { AlertCircleIcon, CheckCircleIcon, ChevronDown, FileTextIcon, InfoIcon, WalletIcon } from "lucide-react";
+import {
+  AlertCircleIcon,
+  CheckCircleIcon,
+  ChevronDown,
+  FileTextIcon,
+  InfoIcon,
+  WalletIcon,
+} from "lucide-react";
 import React, { useState } from "react";
 import DataTable from "../table/Table";
 import FeeError from "./FeeError";
 import { motion } from "framer-motion";
 import { Progress } from "../ui/progress";
 import FeeSummaryCards from "./FeeSummaryCards";
+import { useFeeStore } from "../../stores/useFeeStore";
+import TableError from "../table/TableError";
+import FeeSkeleton from "./FeeSkeleton";
 
 const CourseFee = ({ data, totals, columns }) => {
+  const { getFeeSubmissions, errors, loadingFeeSubmissions} = useFeeStore();
   const [visibleColumns, setVisibleColumns] = useState({
     FeeHead: true,
     DueAmount: true,
@@ -30,8 +41,18 @@ const CourseFee = ({ data, totals, columns }) => {
     status: true,
   });
 
-  if (!Array.isArray(data)) {
-    return <FeeError description="Something went wrong" />;
+  if (loadingFeeSubmissions) {
+    return <FeeSkeleton className={"mt-0"} />;
+  }
+
+  if (errors.getFeeSubmissions || !Array.isArray(data)) {
+    return (
+      <TableError
+        className={"px-0 sm:px-0 md:px-0"}
+        description={errors.getFeeSubmissions}
+        onReload={getFeeSubmissions}
+      />
+    );
   }
 
   const toggleColumnVisibility = (columnId) => {
@@ -134,6 +155,5 @@ const CourseFee = ({ data, totals, columns }) => {
     </motion.div>
   );
 };
-
 
 export default CourseFee;

@@ -82,6 +82,7 @@ export const useFeeStore = create((set, get) => ({
       link.click();
       link.remove();
       window.URL.revokeObjectURL(url);
+      toast.success("Receipt downloading...");
     } catch (error) {
       const message =
         error?.response?.data?.message || "Failed to download receipt";

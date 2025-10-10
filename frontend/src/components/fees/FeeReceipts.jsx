@@ -42,8 +42,8 @@ const FeeReceipts = ({ data }) => {
     TotalAmount: true,
   });
 
-  if (loadingFeeReceipts) {
-    return <FeeSkeleton header={"Fee Submissions"} />;
+  if (loadingFeeReceipts ) {
+    return <FeeSkeleton className={"mt-0"} />;
   }
 
   if (errors.getFeeReceipts || !Array.isArray(data)) {
@@ -99,7 +99,7 @@ const FeeReceipts = ({ data }) => {
                 size={20}
                 speed={1.5}
                 stroke={2}
-                color="hsl(var(--primary-foreground))"
+                color="hsl(var(--primary))"
               />
             ) : (
               <Download />

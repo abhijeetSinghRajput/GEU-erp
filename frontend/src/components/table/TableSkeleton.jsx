@@ -20,7 +20,9 @@ const TableSkeleton = ({ className, heading }) => {
         className
       )}
     >
-      <h2 className="text-2xl sm:text-3xl font-bold mb-2">{heading}</h2>
+      {heading && (
+        <h2 className="text-2xl sm:text-3xl font-bold mb-2">{heading}</h2>
+      )}
 
       <Card className="overflow-hidden">
         <div className="sticky top-0 z-10 bg-muted">

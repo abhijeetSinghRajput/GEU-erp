@@ -6,7 +6,6 @@ import {
   Card,
   CardHeader,
   CardTitle,
-  CardDescription,
   CardContent,
 } from "@/components/ui/card";
 import { motion } from "framer-motion";
@@ -14,24 +13,19 @@ import {
   HomeIcon,
   FileTextIcon,
   WalletIcon,
-  AlertCircleIcon,
-  CheckCircleIcon,
 } from "lucide-react";
 import { useFeeStore } from "@/stores/useFeeStore";
 
-import TableError from "@/components/table/TableError";
 import FeeSkeleton from "./FeeSkeleton";
 import CourseFee from "./CourseFee";
 import HostelFee from "./HostelFee";
 import FeeReceipts from "./FeeReceipts";
 import FeeError from "./FeeError";
-import { Progress } from "../ui/progress";
 
 const FeeSubmissions = () => {
   const {
     getFeeSubmissions,
     feeSubmissions,
-    loadingFeeSubmissions,
     getFeeReceipts,
     feeReceipts,
     errors,
@@ -41,10 +35,6 @@ const FeeSubmissions = () => {
     getFeeSubmissions();
     getFeeReceipts();
   }, []);
-
-  if (loadingFeeSubmissions) {
-    return <FeeSkeleton header={"Fee Submissios"} />;
-  }
 
   if (errors.getFeeSubmissions || !feeSubmissions) {
     return (

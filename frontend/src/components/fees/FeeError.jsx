@@ -2,10 +2,17 @@ import React from "react";
 import TableError from "../table/TableError";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { FileTextIcon, HomeIcon, WalletIcon } from "lucide-react";
+import { cn } from "../../lib/utils";
 
-const FeeError = (props) => {
+const FeeError = ({ className, ...props }) => {
   return (
-    <div className="max-w-screen-lg mx-auto px-2 sm:px-4 md:px-6 py-2">
+    <div
+      className={cn(
+        "max-w-screen-lg mx-auto px-2 sm:px-4 md:px-6 py-2",
+        className
+      )}
+      {...props}
+    >
       <h2 className="text-2xl sm:text-3xl font-bold mb-2">Fee Submissions</h2>
 
       <Tabs defaultValue="course" className="w-full">

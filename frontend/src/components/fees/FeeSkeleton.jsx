@@ -8,11 +8,12 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
+import { cn } from "../../lib/utils";
 
-const FeeSkeleton = ({ heading = "Fee Submissions" }) => {
+const FeeSkeleton = ({ className, heading }) => {
   return (
-    <div className="max-w-screen-lg mx-auto px-2 sm:px-4 md:px-6 space-y-6">
-      <TableSkeleton className={"max-w-full md:p-0 sm:p-0 p-0"} heading={heading} />
+    <div className={("max-w-screen-lg mx-auto space-y-6")}>
+      <TableSkeleton className={cn("max-w-full md:p-0 sm:p-0 p-0", className)} heading={heading} />
       <FeeSummaryCards />
       <PaymentSummary />
     </div>

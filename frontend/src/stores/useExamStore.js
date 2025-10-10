@@ -68,6 +68,7 @@ export const useExamStore = create((set, get) => ({
       // Clean up
       a.remove();
       window.URL.revokeObjectURL(url);
+      toast.success("Marksheet downloading...");
     } catch (error) {
       const message =
         error?.response?.data?.message || "Failed to download marksheet";
