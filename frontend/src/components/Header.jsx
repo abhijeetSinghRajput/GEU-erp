@@ -5,14 +5,10 @@ import { Button } from "./ui/button";
 import {
   BookOpen,
   FileText,
-  Github,
-  Loader2,
   Lock,
   LogOut,
-  Moon,
   Settings,
-  Sun,
-  User2,
+  UserRoundSearch,
 } from "lucide-react";
 import { useAuthStore } from "@/stores/useAuthStore";
 import axios from "axios";
@@ -80,12 +76,12 @@ const Header = ({ children }) => {
   return (
     <motion.nav
       style={{ y, opacity }}
-      className="flex sticky shadow-sm top-0 left-0 w-full border-b px-4 sm:px-6 bg-background z-50 justify-between items-center h-14 p-2"
+      className="flex sticky shadow-sm top-0 left-0 w-full border-b px-2 sm:px-4 md:px-6 bg-background z-50 justify-between items-center h-14 p-2"
     >
       <div className="max-w-screen-lg w-full flex justify-between items-center mx-auto h-full">
         {/* Logo */}
         <TooltipWrapper content="Go to homepage">
-          <Link to="/" className="flex items-center gap-2 h-full">
+          <Link to="/" className="flex items-center gap-0 h-full">
             <div className="h-full p-1">
               <img
                 className="w-full h-full object-contain"
@@ -110,7 +106,7 @@ const Header = ({ children }) => {
         {/* Right section */}
         <div className="flex gap-1 items-center">
           <TooltipWrapper content="Star us on GitHub">
-            <Button variant="ghost" onClick={handleGithubClick}>
+            <Button variant="ghost" onClick={handleGithubClick} className="px-2.5">
               {githubStarsCount}
 
               <svg
@@ -125,7 +121,7 @@ const Header = ({ children }) => {
             </Button>
           </TooltipWrapper>
 
-          <ThemeToggleButton start="top-right" className="hidden sm:flex" />
+          <ThemeToggleButton start="top-right" className="" />
           {authenticated && <AdmitCard />}
 
           <DropdownMenu>
@@ -145,10 +141,27 @@ const Header = ({ children }) => {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent className="min-w-40" align="end">
-              {/* Theme toggle */}
-              <DropdownMenuItem onClick={toggleTheme} className="sm:hidden">
-                {isDark ? <Moon /> : <Sun />}
-                <span>{isDark ? "Dark" : "Light"}</span>
+          
+              {/* Forgot ID */}
+              <DropdownMenuItem asChild>
+                <NavLink
+                  to="/forgot-id"
+                  className="flex items-center gap-2 w-full"
+                >
+                  <UserRoundSearch />
+                  <span>Forgot ID</span>
+                </NavLink>
+              </DropdownMenuItem>
+
+              {/* Forgot Password */}
+              <DropdownMenuItem asChild>
+                <NavLink
+                  to="/forgot-password"
+                  className="flex items-center gap-2 w-full"
+                >
+                  <Lock />
+                  <span>Forgot Password</span>
+                </NavLink>
               </DropdownMenuItem>
 
               {/* Docs */}
@@ -170,27 +183,6 @@ const Header = ({ children }) => {
                 </NavLink>
               </DropdownMenuItem>
 
-              {/* Privacy Policy */}
-              <DropdownMenuItem asChild>
-                <NavLink
-                  to="/forgot-id"
-                  className="flex items-center gap-2 w-full"
-                >
-                  <User2 />
-                  <span>Forgot ID</span>
-                </NavLink>
-              </DropdownMenuItem>
-
-              {/* Privacy Policy */}
-              <DropdownMenuItem asChild>
-                <NavLink
-                  to="/forgot-password"
-                  className="flex items-center gap-2 w-full"
-                >
-                  <Lock />
-                  <span>Forgot Password</span>
-                </NavLink>
-              </DropdownMenuItem>
 
               {/* Logout */}
               {authenticated && (
