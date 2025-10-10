@@ -51,7 +51,6 @@ const Header = ({ children }) => {
   }, []);
 
   const logo = isDark ? "/graphic-era-light.svg" : "/graphic-era-dark.svg";
-  const githubLogo = isDark ? "/github-mark-white.svg" : "/github-mark.svg";
 
   const lastScrollY = useRef(0);
   const y = useMotionValue(0);
@@ -76,9 +75,9 @@ const Header = ({ children }) => {
   return (
     <motion.nav
       style={{ y, opacity }}
-      className="flex sticky shadow-sm top-0 left-0 w-full border-b px-2 sm:px-4 md:px-6 bg-background z-50 justify-between items-center h-14 p-2"
+      className="flex sticky shadow-sm top-0 left-0 w-full border-b  bg-background z-50 justify-between items-center h-14"
     >
-      <div className="max-w-screen-lg w-full flex justify-between items-center mx-auto h-full">
+      <div className="max-w-screen-lg w-full flex justify-between items-center mx-auto h-full p-2 px-2 sm:px-4 md:px-6">
         {/* Logo */}
         <TooltipWrapper content="Go to homepage">
           <Link to="/" className="flex items-center gap-0 h-full">
