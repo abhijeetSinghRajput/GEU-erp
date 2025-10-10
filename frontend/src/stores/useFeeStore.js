@@ -1,6 +1,7 @@
 import { axiosInstance } from "@/lib/axios";
 import { toast } from "sonner";
 import { create } from "zustand";
+import { downloadBlob } from "../lib/utils";
 
 export const useFeeStore = create((set, get) => ({
   feeSubmissions: null,
@@ -55,12 +56,13 @@ export const useFeeStore = create((set, get) => ({
     }
   },
 
-  // Download receipt
+  // Download Receipt
   downloadReceipt: async (ReceiptModeID, BookID, CombineReceiptNo) => {
     set({
       downloadingReceipt: CombineReceiptNo,
       errors: { ...get().errors, downloadReceipt: null },
     });
+
     try {
       const res = await axiosInstance.get("/fee/download", {
         params: { ReceiptModeID, BookID, CombineReceiptNo },
@@ -73,15 +75,9 @@ export const useFeeStore = create((set, get) => ({
         contentDisposition?.match(/filename="?(.+)"?/)?.[1] ||
         `${CombineReceiptNo}-receipt.pdf`;
 
-      // Trigger download
-      const url = window.URL.createObjectURL(new Blob([res.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", filename);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(url);
+      const blob = new Blob([res.data], { type: "application/pdf" });
+      downloadBlob(blob, filename);
+
       toast.success("Receipt downloading...");
     } catch (error) {
       const message =

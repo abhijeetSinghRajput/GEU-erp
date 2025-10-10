@@ -80,3 +80,36 @@ export const formatRelativeDate = (dateString) => {
     return dateString; // Return the original string if formatting fails
   }
 };
+
+// Helper function to download blob
+export const  downloadBlob = (blob, filename) => {
+  // Helper function to detect Android WebView
+  const isAndroidWebView = () => {
+    return (
+      window.Android && typeof window.Android.downloadBase64 === "function"
+    );
+  };
+  if (isAndroidWebView()) {
+    // Android WebView download
+    const reader = new FileReader();
+    reader.onload = function () {
+      const base64Data = reader.result.split(",")[1];
+      window.Android.downloadBase64(
+        base64Data,
+        blob.type || "application/octet-stream",
+        filename
+      );
+    };
+    reader.readAsDataURL(blob);
+  } else {
+    // Web browser download
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  }
+};

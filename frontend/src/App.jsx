@@ -14,7 +14,7 @@ import ForgotIdPage from "./pages/ForgotIdPage";
 import PrivacyPolicyPage from "./pages/policy/PrivacyPolicyPage";
 import DocsPage from "./pages/docs/DocsPage";
 import "ldrs/react/Ring.css";
-import "ldrs/react/Infinity.css"
+import "ldrs/react/Infinity.css";
 import { Infinity, Mirage, Ring } from "ldrs/react";
 
 const App = () => {
@@ -34,12 +34,15 @@ const App = () => {
   if (checkingAuth) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <Infinity
-          size={50}
-          speed={1.5}
-          stroke={4}
-          color="hsl(var(--foreground))"
-        />
+        <div className="text-center space-y-6">
+          <Infinity
+            size={50}
+            speed={1.5}
+            stroke={4}
+            color="hsl(var(--foreground))"
+          />
+          <div className="font-serif text-2xl font-bold">Graphic Era</div>
+        </div>
       </div>
     );
   }

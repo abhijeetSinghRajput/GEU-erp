@@ -1,6 +1,7 @@
 import { axiosInstance } from "@/lib/axios";
 import { toast } from "sonner";
 import { create } from "zustand";
+import { downloadBlob } from "../lib/utils";
 
 export const useExamStore = create((set, get) => ({
   examSummary: [],
@@ -42,6 +43,7 @@ export const useExamStore = create((set, get) => ({
     }
   },
 
+  // Download Marksheet
   downloadMarksheet: async (yearSem) => {
     set({
       loadingMarksheet: yearSem,
@@ -51,23 +53,12 @@ export const useExamStore = create((set, get) => ({
     try {
       const res = await axiosInstance.get(`/exam/get-marksheet`, {
         params: { yearSem },
-        responseType: "blob", // 👈 important: tells axios to treat it as binary
+        responseType: "blob",
       });
 
-      // Create a URL for the Blob
       const blob = new Blob([res.data], { type: "application/pdf" });
-      const url = window.URL.createObjectURL(blob);
+      downloadBlob(blob, `marksheet_${yearSem}.pdf`);
 
-      // Create a temporary link element
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `marksheet_${yearSem}.pdf`; // suggested filename
-      document.body.appendChild(a);
-      a.click();
-
-      // Clean up
-      a.remove();
-      window.URL.revokeObjectURL(url);
       toast.success("Marksheet downloading...");
     } catch (error) {
       const message =
