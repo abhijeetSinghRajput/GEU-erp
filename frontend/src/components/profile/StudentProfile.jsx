@@ -55,8 +55,10 @@ export function StudentProfile() {
     fetchProfile,
     errors,
     getIdCard,
+    loadAvatar,
   } = useStudentStore();
   const { authenticated } = useAuthStore();
+  const {idCard} = useStudentStore();
 
   useEffect(() => {
     if (authenticated) {
@@ -64,6 +66,12 @@ export function StudentProfile() {
       getIdCard();
     }
   }, [authenticated]);
+
+  useEffect(()=>{
+    if(!idCard?.photo){
+      loadAvatar();
+    }
+  }, [idCard])
 
   const TABS = [
     { id: 0, title: "Academic", icon: <GraduationCap className="h-4 w-4" /> },

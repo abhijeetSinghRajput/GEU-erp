@@ -6,7 +6,6 @@ import {
   MorphingDialogContent,
   MorphingDialogClose,
 } from "../ui/morphing-dialog";
-import { Skeleton } from "../ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useStudentStore } from "../../stores/useStudentStore";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
@@ -15,8 +14,7 @@ import { XIcon } from "lucide-react";
 import ProfilePhotoUploader from "./ProfilePhotoUploader";
 
 const ProfileDialog = () => {
-  const { student } = useStudentStore();
-  const { idCard, loadingIdCard } = useStudentStore();
+  const { student, avatarBlobUrl, idCard, loadingIdCard } = useStudentStore();
 
   return (
     <MorphingDialog
@@ -34,7 +32,7 @@ const ProfileDialog = () => {
           ) : (
             <div className="relative">
               <Avatar className="size-32">
-                <AvatarImage src={idCard?.Photo} />
+                <AvatarImage src={idCard?.Photo || avatarBlobUrl} />
                 <AvatarFallback className="text-4xl text-muted-foreground">
                   {student.StudentName[0].toUpperCase()}
                 </AvatarFallback>
@@ -52,7 +50,6 @@ const ProfileDialog = () => {
           }}
         >
           <ScrollArea>
-            {/* <img src={avatarBlobUrl} /> */}
             <IdCard />
             <ScrollBar orientation="horizontal" />
           </ScrollArea>

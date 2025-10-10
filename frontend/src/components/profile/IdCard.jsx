@@ -1,12 +1,10 @@
-import React from "react";
 import { useStudentStore } from "../../stores/useStudentStore";
 import { cn } from "../../lib/utils";
 import { Skeleton } from "../ui/skeleton";
-import { id } from "date-fns/locale";
 import { useCookieStore } from "../../stores/useCookieStore";
 
 const IdCard = () => {
-  const { idCard, loadingIdCard } = useStudentStore();
+  let { idCard, loadingIdCard, student, avatarBlobUrl } = useStudentStore();
   const { campus } = useCookieStore();
 
   if (loadingIdCard || 0) {
@@ -22,18 +20,21 @@ const IdCard = () => {
       <IdCardFront
         campus={campus}
         idCard={idCard}
+        student={student}
+        avatarBlobUrl={avatarBlobUrl}
         className={"w-[350px] sm:w-[400px]"}
       />
       <IdCardBack
         campus={campus}
         idCard={idCard}
+        student={student}
         className={"w-[350px] sm:w-[400px]"}
       />
     </div>
   );
 };
 
-const IdCardFront = ({ idCard, className, campus }) => {
+const IdCardFront = ({ idCard, avatarBlobUrl, student, className, campus }) => {
   const banner = campus === "hill" ? "/gehu-banner.jpeg" : "/geu-banner.jpeg";
   return (
     <div
@@ -66,9 +67,9 @@ const IdCardFront = ({ idCard, className, campus }) => {
             {/* Student Photo */}
             <td className="w-24 p-2">
               <div className="w-20 h-24 bg-gray-50 flex items-center justify-center">
-                {idCard?.Photo ? (
+                {idCard?.Photo || avatarBlobUrl ? (
                   <img
-                    src={idCard?.Photo}
+                    src={idCard?.Photo || avatarBlobUrl}
                     alt="Student"
                     className="w-full h-full object-cover"
                   />
@@ -86,7 +87,7 @@ const IdCardFront = ({ idCard, className, campus }) => {
                 <div className="space-y-0.5 ">
                   <div className="flex gap-2">
                     <span className="font-bold w-20">ADMISSION NO.</span>
-                    <span className="ml-1">{idCard?.StudentID}</span>
+                    <span className="ml-1">{idCard?.StudentID || student?.StudentID}</span>
                   </div>
 
                   <div className="flex gap-2">
@@ -98,7 +99,7 @@ const IdCardFront = ({ idCard, className, campus }) => {
                     <span className="font-bold whitespace-nowrap">
                       FATHER'S NAME
                     </span>
-                    <span className="ml-1">{idCard?.FatherName}</span>
+                    <span className="ml-1">{idCard?.FatherName || student?.FatherHusName}</span>
                   </div>
                 </div>
               </div>
@@ -107,7 +108,7 @@ const IdCardFront = ({ idCard, className, campus }) => {
           <tr>
             <td colSpan={3}>
               <div className="text-center  pb-2 font-semibold">
-                {idCard?.StudentID}
+                {idCard?.StudentID || student?.StudentID}
               </div>
             </td>
           </tr>
@@ -117,7 +118,7 @@ const IdCardFront = ({ idCard, className, campus }) => {
   );
 };
 
-const IdCardBack = ({ idCard, className, campus }) => {
+const IdCardBack = ({ idCard, student, className, campus }) => {
   const website = campus === "hill" ? "www.gehu.ac.in" : "www.geu.ac.in";
   const phoneNo = campus === "hill" ? "0135-2645843" : "+91-135-2643421, 2642727";
   return (
@@ -136,18 +137,18 @@ const IdCardBack = ({ idCard, className, campus }) => {
                 <div className="flex">
                   <span className="font-bold w-20">Contact No.</span>
                   <span>:</span>
-                  <span className="ml-1">{idCard?.MobileNo}</span>
+                  <span className="ml-1">{idCard?.MobileNo || student?.MobileNO}</span>
                 </div>
                 <div className="flex">
                   <span className="font-bold w-20">Blood Group</span>
                   <span>:</span>
-                  <span className="ml-1">{idCard?.BloodGroup}</span>
+                  <span className="ml-1">{idCard?.BloodGroup || "N/A"}</span>
                 </div>
                 <div className="flex">
                   <span className="font-bold w-20">E-mail</span>
                   <span>:</span>
                   <span className="ml-1 break-all">
-                    {idCard?.EmailID?.toLowerCase()}
+                    {idCard?.EmailID?.toLowerCase() || student?.Email?.toLowerCase()}
                   </span>
                 </div>
                 <div className="flex">
@@ -156,7 +157,7 @@ const IdCardBack = ({ idCard, className, campus }) => {
                   </span>
                   <span>:</span>
                   <span className="ml-1  leading-tight">
-                    {idCard?.PermanentAddress}
+                    {idCard?.PermanentAddress || student?.PAddress}
                   </span>
                 </div>
                 <div className="flex">
@@ -170,7 +171,7 @@ const IdCardBack = ({ idCard, className, campus }) => {
                       Emergency Contact
                     </span>
                     <span>:</span>
-                    <span className="ml-1">{idCard?.EmergencyContactNo}</span>
+                    <span className="ml-1">{idCard?.EmergencyContactNo || student?.FMobileNo}</span>
                   </div>
 
                   {/* Authority Signature */}
