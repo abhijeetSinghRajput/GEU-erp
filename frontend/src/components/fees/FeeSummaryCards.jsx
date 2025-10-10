@@ -14,6 +14,7 @@ import {
   WalletIcon,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { cn } from "../../lib/utils";
 
 const FeeSummaryCards = ({ totals }) => {
   const paymentProgress = (totals.ReceivedAmount / totals.DueAmount) * 100;
@@ -92,7 +93,7 @@ const FeeSummaryCards = ({ totals }) => {
       >
         <Card className="h-full border border-rose-100 dark:border-rose-900/50 bg-rose-50/50 dark:bg-rose-900/10">
           <CardHeader className="pb-2">
-            <CardDescription className="flex items-center gap-2 text-rose-600 dark:text-rose-300">
+            <CardDescription className={cn("flex items-center gap-2", isFullyPaid ? "text-emerald-600 dark:text-emerald-300":"text-rose-600 dark:text-rose-300" )}>
               <AlertCircleIcon className="w-4 h-4" />
               {isFullyPaid ? "Fully Paid" : "Pending Amount"}
             </CardDescription>

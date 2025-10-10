@@ -35,7 +35,7 @@ export const useExamStore = create((set, get) => ({
       // console.log(message, error);
       toast.error(message);
       set({
-        examSummary: [],
+        examSummary: null,
         errors: { ...get().errors, getExamSummary: message },
       });
     } finally {
