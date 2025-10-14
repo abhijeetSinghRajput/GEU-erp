@@ -8,8 +8,8 @@ import { useAuthStore } from "../stores/useAuthStore";
 import { useCookieStore } from "../stores/useCookieStore";
 
 const campus = [
-  { name: "Deemed", value: "deemed", icon: GraduationCap },
-  { name: "Hill", value: "hill", icon: TreePine },
+  { name: "Deemed", value: "deemed", icon: "/D.svg" },
+  { name: "Hill", value: "hill", icon: "/H.svg" },
 ];
 
 const ExpandableSwitch = () => {
@@ -19,7 +19,7 @@ const ExpandableSwitch = () => {
 
   // Call captcha only when user switches (not on first render)
   useEffect(() => {
-    if(firstRender.current){
+    if (firstRender.current) {
       firstRender.current = false;
       return;
     }
@@ -29,7 +29,7 @@ const ExpandableSwitch = () => {
   return (
     <div className="w-full max-w-md">
       <div className="flex gap-2 rounded-xl p-1 border bg-muted/50">
-        {campus.map(({ icon: Icon, name, value }) => {
+        {campus.map(({ icon, name, value }) => {
           const isActive = activeCampus === value;
           return (
             <motion.div
@@ -50,7 +50,7 @@ const ExpandableSwitch = () => {
                 exit={{ filter: "blur(2px)" }}
                 transition={{ duration: 0.25, ease: "easeOut" }}
               >
-                <Icon className="aspect-square size-4 flex-shrink-0" />
+                <img src={icon} width={32} height={32} alt="icon" />
                 <AnimatePresence initial={false}>
                   {isActive && (
                     <motion.span
