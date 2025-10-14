@@ -30,14 +30,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
+import { Alert, AlertTitle } from "@/components/ui/alert";
 
 export function LoginPage({ className, ...props }) {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [savedAccounts, setSavedAccounts] = useState([]);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
-  
-  const { captchaImage, loadingCaptcha, getCaptcha, loggingIn, login } =
+
+  const { captchaImage, loadingCaptcha, getCaptcha, loggingIn, login, error } =
     useAuthStore();
 
   const [formData, setFormData] = useState({
@@ -45,7 +46,7 @@ export function LoginPage({ className, ...props }) {
     password: "",
     captcha: "",
   });
-  
+
   const [errors, setErrors] = useState({
     studentId: "",
     password: "",
@@ -126,9 +127,13 @@ export function LoginPage({ className, ...props }) {
   };
 
   const handleAccountSelect = (username) => {
-    if (window.CredentialManager && window.CredentialManager.getPasswordForUsername) {
-      const password = window.CredentialManager.getPasswordForUsername(username);
-      
+    if (
+      window.CredentialManager &&
+      window.CredentialManager.getPasswordForUsername
+    ) {
+      const password =
+        window.CredentialManager.getPasswordForUsername(username);
+
       setFormData((prev) => ({
         ...prev,
         studentId: username,
@@ -146,12 +151,12 @@ export function LoginPage({ className, ...props }) {
 
   const handleDeleteAccount = (username, e) => {
     e.stopPropagation();
-    
+
     if (window.confirm(`Delete saved credentials for ${username}?`)) {
       if (window.CredentialManager && window.CredentialManager.deleteAccount) {
         window.CredentialManager.deleteAccount(username);
         loadSavedAccounts();
-        
+
         // Clear form if deleted account was selected
         if (formData.studentId === username) {
           setFormData({
@@ -166,7 +171,10 @@ export function LoginPage({ className, ...props }) {
 
   const handleClearAllAccounts = () => {
     if (window.confirm("Delete all saved credentials?")) {
-      if (window.CredentialManager && window.CredentialManager.clearAllCredentials) {
+      if (
+        window.CredentialManager &&
+        window.CredentialManager.clearAllCredentials
+      ) {
         window.CredentialManager.clearAllCredentials();
         setSavedAccounts([]);
         setFormData({
@@ -200,6 +208,11 @@ export function LoginPage({ className, ...props }) {
                   <ExpandableSwitch />
                 </div>
               </div>
+              {(error.login || error.getCaptcha) && (
+                <Alert variant="destructive" className="text-center">
+                  <AlertTitle>{error.login || error.getCaptcha}</AlertTitle>
+                </Alert>
+              )}
 
               <div className="flex flex-col gap-4">
                 {/* Student ID Field with Account Selector */}
@@ -213,7 +226,7 @@ export function LoginPage({ className, ...props }) {
                       Forgot your id?
                     </Link>
                   </div>
-                  
+
                   <div className="flex gap-2">
                     <div className="relative rounded-md flex-1">
                       <span className="absolute top-0 text-muted-foreground h-full border-r left-0 flex items-center justify-center w-8">
@@ -229,10 +242,13 @@ export function LoginPage({ className, ...props }) {
                         }`}
                       />
                     </div>
-                    
+
                     {/* Account Dropdown */}
                     {savedAccounts.length > 0 && (
-                      <DropdownMenu open={showAccountMenu} onOpenChange={setShowAccountMenu}>
+                      <DropdownMenu
+                        open={showAccountMenu}
+                        onOpenChange={setShowAccountMenu}
+                      >
                         <DropdownMenuTrigger asChild>
                           <Button
                             type="button"
@@ -248,29 +264,35 @@ export function LoginPage({ className, ...props }) {
                             <span>Saved Accounts ({savedAccounts.length})</span>
                           </DropdownMenuLabel>
                           <DropdownMenuSeparator />
-                          
+
                           {savedAccounts.map((account) => (
                             <DropdownMenuItem
                               key={account.username}
-                              onClick={() => handleAccountSelect(account.username)}
+                              onClick={() =>
+                                handleAccountSelect(account.username)
+                              }
                               className="flex items-center justify-between cursor-pointer"
                             >
                               <div className="flex items-center gap-2">
                                 <User2 className="size-4" />
-                                <span className="font-medium">{account.username}</span>
+                                <span className="font-medium">
+                                  {account.username}
+                                </span>
                               </div>
                               <Button
                                 type="button"
                                 variant="ghost"
                                 size="sm"
                                 className="h-6 w-6 p-0 hover:bg-destructive/10 hover:text-destructive"
-                                onClick={(e) => handleDeleteAccount(account.username, e)}
+                                onClick={(e) =>
+                                  handleDeleteAccount(account.username, e)
+                                }
                               >
                                 <Trash2 className="size-3" />
                               </Button>
                             </DropdownMenuItem>
                           ))}
-                          
+
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             onClick={handleClearAllAccounts}
@@ -283,7 +305,7 @@ export function LoginPage({ className, ...props }) {
                       </DropdownMenu>
                     )}
                   </div>
-                  
+
                   {errors.studentId && (
                     <p className="text-red-500 text-xs">{errors.studentId}</p>
                   )}
