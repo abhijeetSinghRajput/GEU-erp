@@ -124,6 +124,12 @@ export function LoginPage({ className, ...props }) {
 
       navigate("/");
     }
+    else{
+      setFormData(prev=>({
+        ...prev,
+        captcha: '',
+      }))
+    }
   };
 
   const handleAccountSelect = (username) => {

@@ -8,7 +8,7 @@ import { Button } from "../ui/button";
 const ExamError = ({ heading = "Exam Summary", onReload, description }) => {
   return (
     
-    <div className="max-w-screen-lg mx-auto px-2 sm:px-4 md:px-6 py-2 mt-6">
+    <div className="max-w-screen-lg mx-auto">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -31,7 +31,6 @@ const ExamError = ({ heading = "Exam Summary", onReload, description }) => {
             )}
           </div>
         </div>
-        <h2 className="text-2xl sm:text-3xl font-bold mb-6">{heading}</h2>
         {[...Array(2)].map((_, index) => (
           <motion.div
             key={index}

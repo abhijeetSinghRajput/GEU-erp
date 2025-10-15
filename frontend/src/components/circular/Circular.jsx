@@ -60,6 +60,7 @@ const Circular = () => {
   if (errors.getCirculars || !circulars || circulars.length === 0) {
     return (
       <CircularError
+        heading="Failed to load Circular"
         description={errors.getCirculars}
         onReload={getCirculars}
       />

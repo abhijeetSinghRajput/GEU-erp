@@ -7,9 +7,20 @@ import { Button } from "../ui/button";
 import TooltipWrapper from "../TooltipWrapper";
 import { useExamStore } from "../../stores/useExamStore";
 import { Ring } from "ldrs/react";
+import ExamError from "./ExamError";
 
 const Result = ({ examSummary }) => {
-  const { loadingMarksheet, downloadMarksheet } = useExamStore();
+  const { loadingMarksheet, downloadMarksheet, errors, getExamSummary } =
+    useExamStore();
+
+  if (errors.getExamSummary || !Array.isArray(examSummary)) {
+    return (
+      <ExamError
+        description={errors.getExamSummary}
+        onReload={getExamSummary}
+      />
+    );
+  }
 
   return (
     <motion.div

@@ -31,7 +31,7 @@ const TableError = ({
               {heading}
             </h3>
             <p className="text-destructive max-w-md">
-              {description || "We couldn't load the attendance records. Please check your connection and try again."}
+              {description || "Failed to load Data. Please check your connection and try again."}
             </p>
             {onReload && (
               <Button

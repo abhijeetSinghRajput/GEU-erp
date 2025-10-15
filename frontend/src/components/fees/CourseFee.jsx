@@ -48,6 +48,7 @@ const CourseFee = ({ data, totals, columns }) => {
   if (errors.getFeeSubmissions || !Array.isArray(data)) {
     return (
       <TableError
+        heading="Failed to load Fees"
         className={"px-0 sm:px-0 md:px-0"}
         description={errors.getFeeSubmissions}
         onReload={getFeeSubmissions}

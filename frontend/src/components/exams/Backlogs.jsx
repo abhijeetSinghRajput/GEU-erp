@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DataTable from "../table/Table";
-import { ChevronDown, ClipboardCheck, InfoIcon, Smile } from "lucide-react";
+import { AlertTriangle, ChevronDown, ClipboardCheck, InfoIcon, RefreshCw, Smile } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -16,8 +16,11 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
+import { useExamStore } from "../../stores/useExamStore";
+import { Ring } from "ldrs/react";
 
 const Backlogs = ({ backlogs }) => {
+  const { getBacklogs, loadingBacklogs, errors } = useExamStore();
   backlogs = backlogs.map((log) => ({
     ...log,
     PaperType: log.SubjectCode.startsWith("TMC") ? "Theory" : "Lab",
@@ -98,12 +101,36 @@ const Backlogs = ({ backlogs }) => {
           </div>
         ) : (
           <div className="flex h-[60vh] flex-col items-center justify-center py-12">
-
-            <ClipboardCheck className="w-12 h-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium mb-1">No Backlogs Found</h3>
-            <p className="text-muted-foreground text-center max-w-md">
-              You have cleared all your subjects. Great job!
-            </p>
+            {loadingBacklogs ? (
+              <Ring
+                size={32}
+                speed={1.4}
+                stroke={4}
+                color="hsl(var(--foreground))"
+              />
+            ) :( errors.getBacklogs || !Array.isArray(backlogs)) ? (
+              <div className="text-center space-y-4">
+                <AlertTriangle className="h-12 w-12 mx-auto text-destructive" />
+                <h3 className="text-2xl font-medium text-destructive">
+                  Failed to load Backlogs' Data
+                </h3>
+                <p className="text-destructive max-w-md">
+                  {errors.getBacklogs}
+                </p>
+                <Button onClick={getBacklogs} className="mt-4 gap-2">
+                  <RefreshCw />
+                  Retry
+                </Button>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center">
+                <ClipboardCheck className="w-12 h-12 text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium mb-1">No Backlogs Found</h3>
+                <p className="text-muted-foreground text-center max-w-md">
+                  You have cleared all your subjects. Great job!
+                </p>
+              </div>
+            )}
           </div>
         )}
       </CardContent>

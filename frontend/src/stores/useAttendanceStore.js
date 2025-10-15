@@ -14,8 +14,16 @@ export const useAttendanceStore = create((set, get) => ({
   },
 
   getAllAttendanceSubjects: async ({ RegID }) => {
-    if (!RegID) return;
-
+    if (!RegID) {
+      set({
+        attendance: null,
+        errors: {
+          ...get().errors,
+          getAllAttendanceSubjects: "RdgID not provided",
+        },
+      });
+      return;
+    }
     set({
       isLoadingSubjects: true,
       errors: { ...get().errors, getAllAttendanceSubjects: null },
@@ -26,7 +34,9 @@ export const useAttendanceStore = create((set, get) => ({
       });
       set({ attendance: res.data });
     } catch (error) {
-      const message = error?.response?.data.message || "Something went wrong while fetching attendance.";
+      const message =
+        error?.response?.data.message ||
+        "Something went wrong while fetching attendance.";
       toast.error(message);
       // console.log(message, error);
       set({
@@ -67,10 +77,12 @@ export const useAttendanceStore = create((set, get) => ({
 
       return res.data;
     } catch (error) {
-      const message = error?.response?.data.message || "Something went wrong while fetching attendance details.";
+      const message =
+        error?.response?.data.message ||
+        "Something went wrong while fetching attendance details.";
       toast.error(message);
       // console.log(message, error);
-      set({errors : {...get().errors, getAttendanceBySubject : message}});
+      set({ errors: { ...get().errors, getAttendanceBySubject: message } });
       return null;
     } finally {
       set({ isLoadingSubjectDetails: false });

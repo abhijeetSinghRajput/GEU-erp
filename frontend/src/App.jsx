@@ -38,7 +38,7 @@ const App = () => {
           <Infinity
             size={50}
             speed={1.5}
-            stroke={4}
+            stroke={6}
             color="hsl(var(--foreground))"
           />
           <div className="font-serif text-2xl font-bold">Graphic Era</div>

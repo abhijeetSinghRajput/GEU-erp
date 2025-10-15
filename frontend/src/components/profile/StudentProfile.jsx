@@ -58,7 +58,7 @@ export function StudentProfile() {
     loadAvatar,
   } = useStudentStore();
   const { authenticated } = useAuthStore();
-  const {idCard} = useStudentStore();
+  const { idCard } = useStudentStore();
 
   useEffect(() => {
     if (authenticated) {
@@ -67,11 +67,11 @@ export function StudentProfile() {
     }
   }, [authenticated]);
 
-  useEffect(()=>{
-    if(!idCard?.photo){
+  useEffect(() => {
+    if (!idCard?.photo) {
       loadAvatar();
     }
-  }, [idCard])
+  }, [idCard]);
 
   const TABS = [
     { id: 0, title: "Academic", icon: <GraduationCap className="h-4 w-4" /> },
@@ -85,7 +85,11 @@ export function StudentProfile() {
 
   if (errors.fetchProfile || !student) {
     return (
-      <ProfileError description={errors.fetchProfile} onReload={fetchProfile} />
+      <ProfileError
+        heading="Failed to load profile"
+        description={errors.fetchProfile}
+        onReload={fetchProfile}
+      />
     );
   }
 
@@ -112,7 +116,7 @@ export function StudentProfile() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                <ProfileDialog/>
+                <ProfileDialog />
 
                 <div className="text-center md:text-left space-y-2">
                   <CardTitle className="text-3xl font-bold tracking-tight">

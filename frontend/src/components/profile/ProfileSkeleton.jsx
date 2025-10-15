@@ -98,6 +98,14 @@ const ProfileSkeleton = () => {
                           <Skeleton className="h-5 w-24" />
                         </dd>
                       </div>
+                      <div className="flex items-start">
+                        <dt className="w-40 flex-shrink-0 text-sm font-medium text-muted-foreground">
+                          Registration Id
+                        </dt>
+                        <dd className="text-s font-mono">
+                          <Skeleton className="h-5 w-24" />
+                        </dd>
+                      </div>
                     </dl>
                   </div>
                 </div>
