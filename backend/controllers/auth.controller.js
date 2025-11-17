@@ -9,6 +9,7 @@ import { errorMap } from "../constants/error.js";
 export const getCaptcha = async (req, res) => {
   try {
     const BASE_URL = req.BASE_URL;
+
     const jar = new CookieJar();
     const client = wrapper(
       axios.create({
@@ -16,20 +17,33 @@ export const getCaptcha = async (req, res) => {
         withCredentials: true,
       })
     );
-    // Step 1: Get initial page to establish session and get tokens
+
+    // STEP 1: GET login page (this sets cookies + gives token)
     const initialResponse = await client.get(BASE_URL);
 
-    // Parse the HTML to get the form's verification token
+    // STEP 2: extract token
     const $ = load(initialResponse.data);
-    const formToken = $('input[name="__RequestVerificationToken"]').val();
+    const token = $('input[name="__RequestVerificationToken"]').attr("value");
 
-    // Step 2: Get captcha as JSON array
-    const captchaUrl = $("#imgPhoto").attr("src");
-    if (!captchaUrl) {
-      return res.status(error.status || 500).json({ message: "Captcha image not found" });
+    if (!token) {
+      return res.status(500).json({ message: "Token not found on login page" });
     }
 
-    // Step 6: Set cookies for frontend
+    // STEP 3: POST request to captcha API
+    const captchaRes = await client.post(
+      BASE_URL + "/Account/showcaptchaImage",
+      {}, // empty body
+      {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          "RequestVerificationToken": token,
+        },
+      }
+    );
+
+    const base64Image = Buffer.from(captchaRes.data).toString("base64");
+
+    // STEP 4: forward cookies to frontend
     const cookies = await jar.getCookies(BASE_URL);
     cookies.forEach(({ key, value }) => {
       res.cookie(key, value, {
@@ -39,18 +53,16 @@ export const getCaptcha = async (req, res) => {
       });
     });
 
-    // Also send the form token to the frontend
-    res.status(200).json({
-      image: captchaUrl,
-      formToken, // Send this to frontend to include in login
+    return res.status(200).json({
+      formToken: token,
+      image: `data:image/png;base64,${base64Image}`,
     });
-  } catch (error) {
-    // console.log(error);
-    res
-      .status(error.status || 500)
-      .json({ message: errorMap[error.code] || "Something went wrong" });
+  } catch (err) {
+    console.error("Captcha error:", err);
+    return res.status(500).json({ error: err.message });
   }
 };
+
 
 export const login = async (req, res) => {
   try {
@@ -104,6 +116,12 @@ export const login = async (req, res) => {
       }
     );
 
+    // console.log({
+    //   BASE_URL,
+    //   response: response.data,
+    //   formData,
+    // });
+
     // Login is successful if server redirects to student dashboard
     const isSuccess =
       response.status === 302 &&
@@ -136,7 +154,7 @@ export const login = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error("Login error:", error);
+    // console.error("Login error:", error);
     return res.status(error.status || 500).json({
       message: errorMap[error.code] || "Something went wrong during login",
     });
