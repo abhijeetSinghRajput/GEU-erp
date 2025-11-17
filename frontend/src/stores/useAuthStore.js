@@ -54,7 +54,6 @@ export const useAuthStore = create((set, get) => ({
       const res = await axiosInstance.get("/auth");
       const { image, formToken } = res.data;
       if (!image || !formToken) throw new Error("Invalid captcha response");
-      console.log(image);
       set({
         captchaImage: image,
         formToken,
