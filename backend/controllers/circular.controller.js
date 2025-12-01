@@ -1,3 +1,4 @@
+import { errorMap } from "../constants/error.js";
 import { fetchGEU } from "../utils/geuApi.js";
 
 export const circulars = async (req, res) => {

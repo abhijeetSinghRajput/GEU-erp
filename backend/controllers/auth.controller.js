@@ -63,15 +63,12 @@ export const getCaptcha = async (req, res) => {
   }
 };
 
-
 export const login = async (req, res) => {
   try {
-    // Extract user input and cookies from the request
     const { studentId, password, captcha, formToken } = req.body;
     const sessionId = req.cookies["ASP.NET_SessionId"];
     const cookieToken = req.cookies["__RequestVerificationToken"];
 
-    // Validate input presence
     if (
       !studentId ||
       !password ||
@@ -86,76 +83,78 @@ export const login = async (req, res) => {
     const formData = new URLSearchParams();
     formData.append("hdnMsg", "GEU");
     formData.append("checkOnline", "0");
-    formData.append("__RequestVerificationToken", formToken); // Use form token here
+    formData.append("__RequestVerificationToken", formToken);
     formData.append("UserName", studentId);
     formData.append("Password", password);
     formData.append("clientIP", "");
     formData.append("captcha", captcha);
 
-    const jar = new CookieJar();
-    const client = wrapper(
-      axios.create({
-        jar,
-        withCredentials: true,
-      })
-    );
     const BASE_URL = req.BASE_URL;
-    // Use the same client instance that maintains cookies
-    const response = await client.post(
+    
+    const response = await axios.post(
       BASE_URL,
-      formData,
+      formData.toString(),
       {
         maxRedirects: 0,
         validateStatus: (status) => status >= 200 && status < 400,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
-          Referer: BASE_URL,
-          Origin: BASE_URL,
-          Cookie: `ASP.NET_SessionId=${sessionId}; __RequestVerificationToken=${cookieToken}`,
+          "Referer": BASE_URL,
+          "Origin": BASE_URL,
+          "Cookie": `ASP.NET_SessionId=${sessionId}; __RequestVerificationToken=${cookieToken}`,
         },
       }
     );
 
+    const redirectLocation = response.headers.location || response.headers.Location;
+    const setCookies = response.headers["set-cookie"];
+    
     // console.log({
-    //   BASE_URL,
-    //   response: response.data,
-    //   formData,
+    //   status: response.status,
+    //   location: redirectLocation,
+    //   hasCookies: !!setCookies,
+    //   cookies: setCookies,
     // });
 
-    // Login is successful if server redirects to student dashboard
+    // ✅ Login is successful if:
+    // 1. Status is 302 (redirect)
+    // 2. Server sends new authentication cookies
+    // 3. NOT redirecting back to root/login page
     const isSuccess =
       response.status === 302 &&
-      response.headers.location === "/Account/Cyborg_StudentMenu";
+      setCookies &&
+      setCookies.length > 0 &&
+      redirectLocation &&
+      redirectLocation !== "/" &&
+      !redirectLocation.toLowerCase().includes("login");
 
     if (!isSuccess) {
+      // Try to extract error message from response
       return res.status(401).json({
-        message: extractLoginError(response.data),
+        message: extractLoginError(response.data) || "Invalid credentials or captcha",
       });
     }
 
-    // Set Cookies
-    const setCookies = response.headers["set-cookie"];
-    if (setCookies) {
-      setCookies.forEach((cookie) => {
-        const parts = cookie.split(";")[0].split("=");
-        const key = parts[0];
-        const value = parts[1];
+    // ✅ Set new authentication cookies
+    setCookies.forEach((cookie) => {
+      const [keyValue] = cookie.split(";");
+      const [key, value] = keyValue.split("=");
 
-        // Set each cookie in client with secure attributes
-        res.cookie(key, value, {
-          httpOnly: true,
-          sameSite: "None",
-          secure: true,
-        });
+      res.cookie(key, value, {
+        httpOnly: true,
+        sameSite: "None",
+        secure: true,
       });
+    });
 
-      return res.status(200).json({
-        message: "✅ Login successful",
-      });
-    }
+    return res.status(200).json({
+      message: "✅ Login successful",
+      redirectTo: redirectLocation,
+    });
+
   } catch (error) {
-    // console.error("Login error:", error);
-    return res.status(error.status || 500).json({
+    console.error("Login error:", error.message);
+    return res.status(error.response?.status || 500).json({
       message: errorMap[error.code] || "Something went wrong during login",
     });
   }
